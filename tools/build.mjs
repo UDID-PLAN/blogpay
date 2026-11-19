@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lintCss } from './lint-css.mjs';
+import { checkLayout } from './check-layout.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -235,6 +236,9 @@ function cmdIndex() {
   assertSelfContained(html, 'index');
   fs.writeFileSync(P('index.html'), html);
   console.log(`✔ 인덱스 생성: index.html (요청 건 ${reqs.length}개)`);
+  const layout = checkLayout();
+  if (layout.errors.length) { console.error('✖ 레이아웃 넘침 발견 (열 너비 토큰·패딩을 조정하세요)\n' + layout.errors.map((e) => '  ' + e).join('\n')); process.exit(1); }
+  if (!layout.skipped) console.log('✔ 레이아웃 검사 통과');
 }
 
 const cssErrors = lintCss(fs.readFileSync(P('src', 'doc.css'), 'utf8'));
