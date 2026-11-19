@@ -130,9 +130,38 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   .card, .table-wrap, figure { break-inside: avoid; }
 }
 
-/* 인덱스 표 */
+/* 인덱스 표 — 열 너비 규칙
+   열 너비는 아래 5개 토큰만 쓴다. (xs·sm·md·lg는 고정폭, fluid는 남는 폭을 모두 차지)
+     xs 80px   : 이슈 번호, 플로우 등 짧은 값
+     sm 120px  : 요청일, 프로젝트 태그
+     md 160px  : 제목
+     lg 192px  : 기획서(버전 버튼), 비고(링크)
+     fluid     : 내용 (최소 280px)
+   표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
+:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 280px; }
 .shell.wide { max-width: 1440px; }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 2 + var(--col-md) + var(--col-lg) * 2 + var(--col-fluid-min)); }
+.index-table col.w-xs { width: var(--col-xs); }
+.index-table col.w-sm { width: var(--col-sm); }
+.index-table col.w-md { width: var(--col-md); }
+.index-table col.w-lg { width: var(--col-lg); }
+.index-table th, .index-table td { padding: 10px 12px; overflow-wrap: break-word; }
 .index-table td.nowrap { white-space: nowrap; }
-.index-table td.col-content { min-width: 280px; max-width: 420px; }
 .cell-content summary { margin: 0; color: var(--body); font-size: 13px; }
 .cell-content div { margin-top: 8px; white-space: pre-line; font-size: 13px; word-break: break-all; }
+.index-table .btn { padding: 0 8px; line-height: 26px; font-size: 12px; }
+
+/* 프로젝트 태그 (site.json의 projectTags에서 이름→색상 지정, 미지정은 neutral) */
+.ptag { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 22px; font-weight: 500; white-space: nowrap; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); }
+.ptag.tone-blue { color: var(--link); border-color: var(--link-soft); background: #f5f9ff; }
+.ptag.tone-green { color: #0a7d4f; border-color: #c9efdd; background: #f1fbf6; }
+.ptag.tone-violet { color: #7928ca; border-color: #d8ccf1; background: #f8f5fd; }
+.ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: #fff9ec; }
+.ptag.tone-red { color: var(--error); border-color: #ffd6d6; background: #fff5f5; }
+
+@media (max-width: 640px) {
+  .topbar { padding: 0 16px; }
+  .shell { padding: 24px 16px 64px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 19px; margin-top: 40px; }
+}

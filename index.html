@@ -138,42 +138,67 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   .card, .table-wrap, figure { break-inside: avoid; }
 }
 
-/* 인덱스 표 */
+/* 인덱스 표 — 열 너비 규칙
+   열 너비는 아래 5개 토큰만 쓴다. (xs·sm·md·lg는 고정폭, fluid는 남는 폭을 모두 차지)
+     xs 80px   : 이슈 번호, 플로우 등 짧은 값
+     sm 120px  : 요청일, 프로젝트 태그
+     md 160px  : 제목
+     lg 192px  : 기획서(버전 버튼), 비고(링크)
+     fluid     : 내용 (최소 280px)
+   표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
+:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 280px; }
 .shell.wide { max-width: 1440px; }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 2 + var(--col-md) + var(--col-lg) * 2 + var(--col-fluid-min)); }
+.index-table col.w-xs { width: var(--col-xs); }
+.index-table col.w-sm { width: var(--col-sm); }
+.index-table col.w-md { width: var(--col-md); }
+.index-table col.w-lg { width: var(--col-lg); }
+.index-table th, .index-table td { padding: 10px 12px; overflow-wrap: break-word; }
 .index-table td.nowrap { white-space: nowrap; }
-.index-table td.col-content { min-width: 280px; max-width: 420px; }
 .cell-content summary { margin: 0; color: var(--body); font-size: 13px; }
 .cell-content div { margin-top: 8px; white-space: pre-line; font-size: 13px; word-break: break-all; }
+.index-table .btn { padding: 0 8px; line-height: 26px; font-size: 12px; }
+
+/* 프로젝트 태그 (site.json의 projectTags에서 이름→색상 지정, 미지정은 neutral) */
+.ptag { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 22px; font-weight: 500; white-space: nowrap; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); }
+.ptag.tone-blue { color: var(--link); border-color: var(--link-soft); background: #f5f9ff; }
+.ptag.tone-green { color: #0a7d4f; border-color: #c9efdd; background: #f1fbf6; }
+.ptag.tone-violet { color: #7928ca; border-color: #d8ccf1; background: #f8f5fd; }
+.ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: #fff9ec; }
+.ptag.tone-red { color: var(--error); border-color: #ffd6d6; background: #fff5f5; }
+
+@media (max-width: 640px) {
+  .topbar { padding: 0 16px; }
+  .shell { padding: 24px 16px 64px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 19px; margin-top: 40px; }
+}
 
 </style>
 </head>
 <body>
 <header class="topbar">
-  <span class="brand">BlogPay<small>기획서 인덱스</small></span>
+  <span class="brand">BlogPay</span>
   <span class="topbar-meta">updated 2026-11-19</span>
 </header>
 <div class="shell wide">
   <main class="content">
     <div class="eyebrow">BlogPay · Planning Docs</div>
     <h1>블로그페이 기획서</h1>
-    <p class="meta">요청 건별 기획서와 공유 버전을 모아둔 인덱스입니다. 각 버전은 공유 당시 상태 그대로 고정되며, 파일 1개로 단독 전달할 수 있습니다.</p>
+    <p class="meta">블로그페이 기획서를 아카이빙해 둔 곳입니다.</p>
 
     <h2>서비스 공통 링크</h2>
-<div class="card"><div class="links"><a class="btn" href="https://docs.google.com/spreadsheets/d/1C3m7kCTFUsG5W4HaEhWHsYV11MGNMs2WmcWD5x1brsY/edit?usp=drive_link" target="_blank" rel="noopener noreferrer">IA (V0.2)</a>
-<a class="btn" href="https://bean701.shop.blogpay.co.kr/controller/main" target="_blank" rel="noopener noreferrer">블로그페이 관리자</a>
-<a class="btn" href="https://docs.google.com/spreadsheets/d/1KqcZjmv2obnjHZFXwX9C2frbKiH1MiXt72KHiD488Rw/edit?gid=1775355266#gid=1775355266" target="_blank" rel="noopener noreferrer">개선기획 요청서(시트)</a>
-<span class="btn disabled">서비스 정책서 (미등록)</span>
-<span class="btn disabled">이용약관 · 개인정보처리방침 (미등록)</span>
-<span class="btn disabled">Figma (미등록)</span>
-<span class="btn disabled">Drive 폴더 (미등록)</span></div><p class="mute" style="margin-top:12px">URL을 등록하면 '서비스 공통 링크'에 표시됩니다. 관리자 계정·키 같은 접속 정보는 넣지 않습니다.</p></div>
+<div class="links"><a class="btn" href="https://docs.google.com/spreadsheets/d/1C3m7kCTFUsG5W4HaEhWHsYV11MGNMs2WmcWD5x1brsY/edit?usp=drive_link" target="_blank" rel="noopener noreferrer">IA</a>
+<a class="btn" href="https://bean701.shop.blogpay.co.kr/controller/main" target="_blank" rel="noopener noreferrer">블로그페이 관리자</a></div>
 
-    <h2>요청 건 리스트</h2>
+    <h2>요청 리스트</h2>
 <div class="table-wrap"><table class="index-table">
-<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고 · QA · 참고자료</th></tr></thead>
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
 <tbody><tr>
   <td class="nowrap">2026.11.03</td>
   <td class="nowrap">-</td>
-  <td class="nowrap">기능 업데이트</td>
+  <td><span class="ptag tone-blue">기능 업데이트</span></td>
   <td><strong style="color:var(--ink)">네이버 스마트 스토어 연동 서비스 분석</strong></td>
   <td class="col-content"><details class="cell-content"><summary>1. 작업명 / 네이버 스마트 스토어 연동 서비스 분석</summary><div>1. 작업명
 네이버 스마트 스토어 연동 서비스 분석
@@ -192,7 +217,7 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 <tr>
   <td class="nowrap">2026.11.03</td>
   <td class="nowrap">-</td>
-  <td class="nowrap">기능 업데이트</td>
+  <td><span class="ptag tone-blue">기능 업데이트</span></td>
   <td><strong style="color:var(--ink)">카카오싱크 연동 개발 요청</strong></td>
   <td class="col-content"><details class="cell-content"><summary>카카오싱크 연동 개발 요청 드립니다. / 카카오싱크 개발가이드</summary><div>카카오싱크 연동 개발 요청 드립니다.
 

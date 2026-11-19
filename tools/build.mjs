@@ -148,8 +148,9 @@ function linkBtn(label, url, primary) {
 
 function cmdIndex() {
   const site = readJson(P('site.json'));
-  const common = `<div class="card"><div class="links">${(site.commonLinks || []).map((l) => linkBtn(l.label, l.url)).join('\n')}</div>${
-    site.note ? `<p class="mute" style="margin-top:12px">${esc(site.note)}</p>` : ''}</div>`;
+  const common = `<div class="links">${(site.commonLinks || []).filter((l) => l.url).map((l) => linkBtn(l.label, l.url)).join('\n')}</div>`;
+  const tones = Object.fromEntries((site.projectTags || []).map((t) => [t.name, t.tone || 'neutral']));
+  const projectTag = (name) => name ? `<span class="ptag tone-${esc(tones[name] || 'neutral')}">${esc(name)}</span>` : '<span class="mute">-</span>';
 
   const reqDir = P('requests');
   const slugs = fs.existsSync(reqDir)
@@ -195,7 +196,7 @@ function cmdIndex() {
     return `<tr>
   <td class="nowrap">${esc(r.requestedAt || '-')}</td>
   <td class="nowrap">${esc(r.issue || '-')}</td>
-  <td class="nowrap">${esc(r.project || '-')}</td>
+  <td>${projectTag(r.project)}</td>
   <td><strong style="color:var(--ink)">${esc(r.title)}</strong></td>
   <td class="col-content">${contentCell(r.content)}</td>
   <td class="nowrap">${r.flow ? aLink({ label: '플로우', url: r.flow }) : '<span class="mute">-</span>'}</td>
@@ -203,7 +204,8 @@ function cmdIndex() {
   <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
   });
   const table = `<div class="table-wrap"><table class="index-table">
-<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고 · QA · 참고자료</th></tr></thead>
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
 <tbody>${rows.join('\n') || '<tr><td colspan="8" class="mute">등록된 요청 건이 없습니다.</td></tr>'}</tbody></table></div>`;
 
   const html = fill(read(P('src', 'index-frame.html')), {
