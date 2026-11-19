@@ -88,7 +88,7 @@
   --w-search: 256px;
 
   /* 인덱스 표 열 너비 — 이 5개만 쓴다 */
-  --col-xs: 80px;
+  --col-xs: 96px;
   --col-sm: 120px;
   --col-md: 160px;
   --col-lg: 192px;
@@ -205,7 +205,7 @@ a.btn:hover { text-decoration: none; border-color: var(--ink); }
 details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body); }
 
 /* 인덱스 표 — 열 너비는 --col-* 5개 토큰만 쓴다 (xs·sm·md·lg는 고정폭, fluid는 남는 폭)
-     xs 80  : 이슈 번호, 진행상태, 플로우
+     xs 96  : 이슈 번호, 진행상태, 플로우
      sm 120 : 요청일, 프로젝트
      md 160 : 제목, 기획서(버전 버튼)
      lg 192 : 비고(링크 목록)
