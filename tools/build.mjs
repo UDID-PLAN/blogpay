@@ -213,7 +213,7 @@ function cmdIndex() {
   <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
   });
   const table = `<div class="table-wrap"><table class="index-table">
-<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"></colgroup>
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"></colgroup>
 <thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
 <tbody>${rows.join('\n') || '<tr><td colspan="9" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
 
