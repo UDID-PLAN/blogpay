@@ -171,29 +171,25 @@ function cmdIndex() {
 
   const rows = reqs.map((r) => {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
+    // 기획서 열: 버전 버튼만 표시 (변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다)
     const chip = (v, i) => {
       const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
       const hasHtml = fs.existsSync(P(f));
-      const label = `${v.version}${v.date ? ' · ' + v.date : ''}`;
       const cls = `btn${i === 0 ? ' primary' : ''}`;
-      let btn;
-      if (hasHtml) btn = `<a class="${cls}" href="${esc(f)}">${esc(label)}</a>${v.url ? ` <a class="mute" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">PPT</a>` : ''}`;
-      else if (v.url) btn = `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
-      else btn = `<span class="btn disabled">${esc(label)} (미공유)</span>`;
-      return `<div style="margin:4px 0">${btn}<div class="mute" style="font-size:12px;line-height:1.5">${esc(v.summary || '')}</div></div>`;
+      const tip = esc([v.date, v.summary].filter(Boolean).join(' · '));
+      if (hasHtml) return `<a class="${cls}" href="${esc(f)}" title="${tip}">${esc(v.version)}</a>`;
+      if (v.url) return `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
+      return `<span class="btn disabled" title="${tip}">${esc(v.version)}</span>`;
     };
     const parts = [];
-    if (vs.length) {
-      parts.push(chip(vs[0], 0));
-      if (vs.length > 1) parts.push(`<details><summary>이전 버전 ${vs.length - 1}개</summary>${vs.slice(1).map((v, i) => chip(v, i + 1)).join('')}</details>`);
-    }
-    if ((r.planLinks || []).length) parts.push(`<div style="margin-top:6px">${r.planLinks.map(aLink).join(' · ')}</div>`);
+    if (vs.length) parts.push(`<div class="vbtns">${vs.map(chip).join('')}</div>`);
     const planCell = parts.join('') || '<span class="mute">작성 전</span>';
 
     const extra = [];
     if (r.qa) extra.push(aLink({ label: 'QA', url: r.qa }));
     for (const l of r.references || []) extra.push(aLink(l));
-    const noteCell = [r.note ? esc(r.note) : '', extra.join(' · ')].filter(Boolean).join('<br>');
+    const refList = extra.length ? `<ul class="reflist">${extra.map((x) => `<li>${x}</li>`).join('')}</ul>` : '';
+    const noteCell = [r.note ? `<div>${esc(r.note)}</div>` : '', refList].filter(Boolean).join('');
 
     return `<tr>
   <td class="nowrap">${esc(r.requestedAt || '-')}</td>
