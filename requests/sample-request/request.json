@@ -1,0 +1,18 @@
+{
+  "title": "샘플 요청 건 (삭제 가능)",
+  "requestedAt": "2026-11-19",
+  "status": "샘플",
+  "note": "형식 확인용 샘플입니다. 실제 요청 건을 추가한 뒤 이 폴더를 삭제하세요.",
+  "links": [],
+  "versions": [
+    {
+      "version": "v1.0",
+      "date": "2026-11-19",
+      "reason": "-",
+      "changes": "최초 작성",
+      "summary": "최초 작성",
+      "author": "작성자",
+      "reviewer": "-"
+    }
+  ]
+}

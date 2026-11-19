@@ -1,0 +1,4 @@
+# 초안은 공유 전 작업물이므로 커밋하지 않는다
+draft/
+node_modules/
+.DS_Store

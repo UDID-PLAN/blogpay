@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>샘플 요청 건 (삭제 가능) v1.0 · BlogPay 기획서</title>
+<style>
+/* BlogPay 기획서 공통 스타일 — 이 파일 하나만 관리한다.
+   빌드 시 각 HTML에 인라인으로 합쳐지므로, 공유한 버전은 이후 CSS를 고쳐도 달라지지 않는다.
+   토큰은 Vercel(Geist) 디자인 분석 문서에서 문서용으로 필요한 것만 차용했다. (그라데이션·pill 버튼 등 마케팅 요소 제외) */
+
+:root {
+  --ink: #171717;
+  --body: #4d4d4d;
+  --mute: #8f8f8f;
+  --faint: #a1a1a1;
+  --hairline: #ebebeb;
+  --hairline-soft: #f2f2f2;
+  --canvas: #fafafa;
+  --surface: #ffffff;
+  --link: #0070f3;
+  --link-soft: #d3e5ff;
+  --error: #ee0000;
+  --warning: #f5a623;
+  --warning-soft: #ffefcf;
+  --warning-deep: #ab570a;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  /* 외부 폰트를 링크하지 않는다(단일 파일 전달 시 깨짐 방지, Mac/Windows 모두 대응) */
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--body);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, pre { font-family: var(--font-mono); font-size: 13px; }
+code { background: var(--hairline-soft); border-radius: 4px; padding: 1px 5px; color: var(--ink); }
+pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 16px; overflow: auto; }
+
+/* 상단바 */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; padding: 0 24px;
+  background: var(--canvas); border-bottom: 1px solid var(--hairline);
+}
+.brand { color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+.brand small { margin-left: 8px; color: var(--mute); font-weight: 400; font-size: 12px; }
+.topbar-meta { color: var(--mute); font-family: var(--font-mono); font-size: 12px; }
+
+/* 레이아웃 */
+.shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px 96px; display: grid; grid-template-columns: 1fr; gap: 32px; }
+@media (min-width: 1024px) { .shell.has-toc { grid-template-columns: 220px minmax(0, 1fr); } }
+.toc { display: none; }
+@media (min-width: 1024px) {
+  .toc { display: block; position: sticky; top: 76px; align-self: start; max-height: calc(100vh - 100px); overflow: auto; font-size: 13px; }
+}
+.toc .toc-title { font-family: var(--font-mono); font-size: 12px; color: var(--mute); text-transform: uppercase; margin-bottom: 8px; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0; }
+.toc a { display: block; padding: 4px 8px; color: var(--body); border-radius: var(--radius-sm); }
+.toc a:hover { background: var(--hairline-soft); text-decoration: none; }
+.toc ol ol a { padding-left: 20px; color: var(--mute); }
+.content { min-width: 0; }
+
+/* 타이포그래피 — 굵기는 600/400 두 단계, 한글이라 자간은 약하게만 조인다 */
+.eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--mute); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+h1 { margin: 0 0 8px; color: var(--ink); font-size: 32px; line-height: 1.3; font-weight: 600; letter-spacing: -0.02em; }
+h2 { margin: 56px 0 16px; padding-top: 24px; border-top: 1px solid var(--hairline); color: var(--ink); font-size: 22px; line-height: 1.4; font-weight: 600; letter-spacing: -0.015em; scroll-margin-top: 72px; }
+h2:first-of-type { margin-top: 32px; }
+h3 { margin: 32px 0 12px; color: var(--ink); font-size: 16px; line-height: 1.5; font-weight: 600; scroll-margin-top: 72px; }
+h4 { margin: 24px 0 8px; color: var(--ink); font-size: 14px; font-weight: 600; }
+p { margin: 0 0 12px; }
+ul, ol { margin: 0 0 12px; padding-left: 20px; }
+li { margin: 2px 0; }
+.meta { color: var(--mute); font-size: 13px; margin-bottom: 24px; }
+.mute { color: var(--mute); }
+hr { border: 0; border-top: 1px solid var(--hairline); margin: 32px 0; }
+
+/* 표 */
+.table-wrap { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--hairline); }
+th { background: var(--hairline-soft); color: var(--ink); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td ul, td ol { margin: 0; }
+
+/* 카드 / 안내 */
+.card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 20px 24px; margin: 0 0 16px; }
+.card > :last-child { margin-bottom: 0; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 16px; }
+.grid .card { margin: 0; }
+.callout { border: 1px solid var(--hairline); border-left: 3px solid var(--ink); border-radius: var(--radius-sm); background: var(--surface); padding: 12px 16px; margin: 0 0 16px; }
+.callout.warn { border-left-color: var(--warning); background: var(--warning-soft); color: var(--warning-deep); }
+.callout.risk { border-left-color: var(--error); }
+.callout > :last-child { margin-bottom: 0; }
+
+/* 상태 태그 — 업무 지침의 사실·정책·제안·미정 구분용 */
+.tag { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; font-weight: 500; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); white-space: nowrap; }
+.tag.fact { color: var(--ink); }
+.tag.policy { background: var(--ink); border-color: var(--ink); color: #fff; }
+.tag.proposal { color: var(--link); border-color: var(--link-soft); background: #f5f9ff; }
+.tag.tbd { color: var(--warning-deep); border-color: var(--warning-soft); background: var(--warning-soft); }
+.tag.check { color: var(--error); border-color: #ffd6d6; background: #fff5f5; }
+
+/* 화면 캡처 */
+figure { margin: 0 0 16px; }
+figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--hairline); border-radius: var(--radius-sm); background: var(--surface); }
+figcaption { margin-top: 6px; color: var(--mute); font-size: 12px; }
+
+/* 인덱스 전용 */
+.btn { display: inline-block; padding: 0 10px; line-height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 500; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.disabled { color: var(--faint); background: var(--hairline-soft); pointer-events: none; }
+a.btn:hover { text-decoration: none; border-color: var(--ink); }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin-top: 6px; }
+.status { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); white-space: nowrap; }
+
+@media print {
+  body { background: #fff; }
+  .topbar, .toc { display: none; }
+  .shell { display: block; padding: 0; max-width: none; }
+  h2 { break-after: avoid; }
+  .card, .table-wrap, figure { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <span class="brand">BlogPay<small>기획서</small></span>
+  <span class="topbar-meta">v1.0 · 2026-11-19</span>
+</header>
+<div class="shell has-toc">
+  <nav class="toc" aria-label="목차">
+    <div class="toc-title">Contents</div>
+    <ol><li><a href="#sec-1">개정이력</a></li><li><a href="#sec-2">개요</a><ol><li><a href="#sec-3">서비스 목적</a></li><li><a href="#sec-4">적용 범위</a></ol></li><li><a href="#sec-5">유저 플로우</a></li><li><a href="#sec-6">화면별 정책</a><ol><li><a href="#sec-7">목록 화면</a></li><li><a href="#sec-8">상세 화면</a></ol></li><li><a href="#sec-9">확인 필요 사항</a></li></ol>
+  </nav>
+  <main class="content">
+    <div class="eyebrow">BlogPay · 요청 건 기획서</div>
+    <h1>샘플 요청 건 (삭제 가능)</h1>
+    <p class="meta">버전 v1.0 · 업데이트 2026-11-19</p>
+    <h2 id="sec-1">개정이력</h2>
+    <div class="table-wrap"><table>
+<thead><tr><th>버전</th><th>변경일자</th><th>변경사유</th><th>변경내용</th><th>작성자</th><th>검토자</th></tr></thead>
+<tbody><tr>
+  <td>v1.0</td><td>2026-11-19</td><td>-</td>
+  <td>최초 작성</td><td>작성자</td><td>-</td></tr></tbody></table></div>
+
+    <h2 id="sec-2">개요</h2>
+    <div class="grid">
+      <div class="card"><h3 style="margin-top:0" id="sec-3">서비스 목적</h3><p>이 영역에 요청 배경과 해결할 문제를 한두 문장으로 적습니다.</p></div>
+      <div class="card"><h3 style="margin-top:0" id="sec-4">적용 범위</h3><p>이번 범위와 비범위를 구분해 적습니다.</p></div>
+    </div>
+    <div class="callout">
+      <p><span class="tag fact">확인된 사실</span> <span class="tag policy">기존 정책</span> <span class="tag proposal">제안</span> <span class="tag tbd">미정</span> <span class="tag check">확인 필요</span></p>
+      <p>상태 태그는 사실·정책·제안·미정을 한눈에 구분하기 위한 용도이며, 필요한 곳에만 사용합니다.</p>
+    </div>
+
+    <h2 id="sec-5">유저 플로우</h2>
+    <figure>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgMTIwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjEyMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLsg5jtlIwg7ZSM66Gc7JqwIj4KICA8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxnIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iIzE3MTcxNyIgc3Ryb2tlLXdpZHRoPSIxIj4KICAgIDxyZWN0IHg9IjIwIiB5PSI0MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI0MCIgcng9IjYiLz4KICAgIDxyZWN0IHg9IjI0NSIgeT0iNDAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNDAiIHJ4PSI2Ii8+CiAgICA8cmVjdCB4PSI0NzAiIHk9IjQwIiB3aWR0aD0iMTUwIiBoZWlnaHQ9IjQwIiByeD0iNiIvPgogIDwvZz4KICA8ZyBmaWxsPSIjMTcxNzE3IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgPHRleHQgeD0iOTUiIHk9IjY1Ij7si5zsnpE8L3RleHQ+CiAgICA8dGV4dCB4PSIzMjAiIHk9IjY1Ij7sspjrpqw8L3RleHQ+CiAgICA8dGV4dCB4PSI1NDUiIHk9IjY1Ij7smYTro4w8L3RleHQ+CiAgPC9nPgogIDxnIHN0cm9rZT0iIzhmOGY4ZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIGZpbGw9Im5vbmUiPgogICAgPHBhdGggZD0iTTE3MCA2MCBIMjQ1Ii8+PHBhdGggZD0iTTM5NSA2MCBINDcwIi8+CiAgPC9nPgo8L3N2Zz4K" alt="샘플 플로우">
+      <figcaption>그림 1. 이미지는 빌드 시 파일 안에 내장됩니다. (용량 절감을 위해 webp 권장)</figcaption>
+    </figure>
+
+    <h2 id="sec-6">화면별 정책</h2>
+    <h3 id="sec-7">목록 화면</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>조건</td><td>노출 대상</td><td>조건에 맞는 항목만 노출한다.</td></tr>
+        <tr><td>동작</td><td>선택 후 저장</td><td>저장 시 필수 항목을 확인하고, 누락되면 안내 후 중단한다.</td></tr>
+        <tr><td>예외</td><td>처리 실패</td><td>실패 사유를 안내하고 재시도할 수 있게 한다.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="sec-8">상세 화면</h3>
+    <ul>
+      <li>화면 디스크립션은 사용자의 조작에 따라 기능이 어떻게 동작하는지 중심으로 간결하게 적는다.</li>
+      <li>상태·조건·예외는 표 또는 목록으로 정리한다.</li>
+    </ul>
+
+    <h2 id="sec-9">확인 필요 사항</h2>
+    <div class="callout warn">
+      <p><strong>개발 확인</strong> — 개발팀에 확인이 필요한 항목을 이 영역에 모읍니다.</p>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

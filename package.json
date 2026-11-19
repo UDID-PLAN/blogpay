@@ -1,0 +1,10 @@
+{
+  "name": "blogpay-planning-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "doc": "node tools/build.mjs doc",
+    "publish": "node tools/build.mjs publish",
+    "index": "node tools/build.mjs index"
+  }
+}

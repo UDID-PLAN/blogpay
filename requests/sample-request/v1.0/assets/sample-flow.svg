@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120" role="img" aria-label="샘플 플로우">
+  <rect width="640" height="120" fill="#ffffff"/>
+  <g fill="#ffffff" stroke="#171717" stroke-width="1">
+    <rect x="20" y="40" width="150" height="40" rx="6"/>
+    <rect x="245" y="40" width="150" height="40" rx="6"/>
+    <rect x="470" y="40" width="150" height="40" rx="6"/>
+  </g>
+  <g fill="#171717" font-family="Arial, sans-serif" font-size="13" text-anchor="middle">
+    <text x="95" y="65">시작</text>
+    <text x="320" y="65">처리</text>
+    <text x="545" y="65">완료</text>
+  </g>
+  <g stroke="#8f8f8f" stroke-width="1.5" fill="none">
+    <path d="M170 60 H245"/><path d="M395 60 H470"/>
+  </g>
+</svg>
