@@ -173,12 +173,14 @@ function cmdIndex() {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
     const chip = (v, i) => {
       const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
-      const exists = fs.existsSync(P(f));
+      const hasHtml = fs.existsSync(P(f));
       const label = `${v.version}${v.date ? ' · ' + v.date : ''}`;
-      return `<div style="margin:4px 0">${exists
-        ? `<a class="btn${i === 0 ? ' primary' : ''}" href="${esc(f)}">${esc(label)}</a>`
-        : `<span class="btn disabled">${esc(label)} (미공유)</span>`}
-        <span class="mute">${esc(v.summary || '')}</span></div>`;
+      const cls = `btn${i === 0 ? ' primary' : ''}`;
+      let btn;
+      if (hasHtml) btn = `<a class="${cls}" href="${esc(f)}">${esc(label)}</a>${v.url ? ` <a class="mute" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">PPT</a>` : ''}`;
+      else if (v.url) btn = `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
+      else btn = `<span class="btn disabled">${esc(label)} (미공유)</span>`;
+      return `<div style="margin:4px 0">${btn}<div class="mute" style="font-size:12px;line-height:1.5">${esc(v.summary || '')}</div></div>`;
     };
     const parts = [];
     if (vs.length) {

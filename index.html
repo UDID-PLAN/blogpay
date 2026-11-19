@@ -10,6 +10,16 @@
    빌드 시 각 HTML에 인라인으로 합쳐지므로, 공유한 버전은 이후 CSS를 고쳐도 달라지지 않는다.
    토큰은 Vercel(Geist) 디자인 분석 문서에서 문서용으로 필요한 것만 차용했다. (그라데이션·pill 버튼 등 마케팅 요소 제외) */
 
+/* ── 색상 규칙 (Vercel DESIGN.md 기준) ────────────────────────────────
+   1. 색은 :root의 토큰만 쓴다. 규칙·컴포넌트 안에 hex를 직접 쓰지 않는다. (md에 없는 색을 새로 만들지 않는다)
+   2. 기본 화면은 잉크(ink)·회색 사다리(body → mute → faint)·헤어라인·캔버스의 흑백이다.
+      텍스트 사다리: ink(제목·강조) → body(본문) → mute(보조) → faint(placeholder·비활성)
+   3. 유채색(blue·amber·violet·cyan)은 태그·상태 표시 같은 작은 요소에만 쓰고, 큰 면(배경·카드)에는 채우지 않는다.
+   4. 상태 의미: blue = 정상·진행·안내 / amber = 주의 / red = 오류·확인 필요 / violet·cyan = 구분용 분류색
+   5. 태그는 soft 배경 + 진한 글자색 조합이다. blue(link-soft/link-deep), amber(warning-soft/warning-deep),
+      violet(violet-soft/violet), cyan(cyan-soft/ink). red는 md에 soft 톤이 없어 흰 배경 + error 테두리·글자로 쓴다.
+   6. 그라데이션, pink·magenta, develop/preview/ship 그라데이션은 문서에서 사용하지 않는다. (홍보 페이지용)
+   ─────────────────────────────────────────────────────────────── */
 :root {
   --ink: #171717;
   --body: #4d4d4d;
@@ -19,12 +29,19 @@
   --hairline-soft: #f2f2f2;
   --canvas: #fafafa;
   --surface: #ffffff;
+  --on-primary: #ffffff;
   --link: #0070f3;
+  --link-deep: #0761d1;
   --link-soft: #d3e5ff;
   --error: #ee0000;
+  --error-deep: #c50000;
   --warning: #f5a623;
   --warning-soft: #ffefcf;
   --warning-deep: #ab570a;
+  --violet: #7928ca;
+  --violet-soft: #d8ccf1;
+  --cyan: #50e3c2;
+  --cyan-soft: #aaffec;
   --radius-sm: 6px;
   --radius-md: 12px;
   /* 외부 폰트를 링크하지 않는다(단일 파일 전달 시 깨짐 방지, Mac/Windows 모두 대응) */
@@ -111,10 +128,10 @@ td ul, td ol { margin: 0; }
 /* 상태 태그 — 업무 지침의 사실·정책·제안·미정 구분용 */
 .tag { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; font-weight: 500; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); white-space: nowrap; }
 .tag.fact { color: var(--ink); }
-.tag.policy { background: var(--ink); border-color: var(--ink); color: #fff; }
-.tag.proposal { color: var(--link); border-color: var(--link-soft); background: #f5f9ff; }
+.tag.policy { background: var(--ink); border-color: var(--ink); color: var(--on-primary); }
+.tag.proposal { color: var(--link-deep); border-color: var(--link-soft); background: var(--link-soft); }
 .tag.tbd { color: var(--warning-deep); border-color: var(--warning-soft); background: var(--warning-soft); }
-.tag.check { color: var(--error); border-color: #ffd6d6; background: #fff5f5; }
+.tag.check { color: var(--error); border-color: var(--error); background: var(--surface); }
 
 /* 화면 캡처 */
 figure { margin: 0 0 16px; }
@@ -123,7 +140,7 @@ figcaption { margin-top: 6px; color: var(--mute); font-size: 12px; }
 
 /* 인덱스 전용 */
 .btn { display: inline-block; padding: 0 10px; line-height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 500; }
-.btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-primary); }
 .btn.disabled { color: var(--faint); background: var(--hairline-soft); pointer-events: none; }
 a.btn:hover { text-decoration: none; border-color: var(--ink); }
 .links { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -131,7 +148,7 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 .status { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); white-space: nowrap; }
 
 @media print {
-  body { background: #fff; }
+  body { background: var(--surface); }
   .topbar, .toc { display: none; }
   .shell { display: block; padding: 0; max-width: none; }
   h2 { break-after: avoid; }
@@ -161,11 +178,11 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 
 /* 프로젝트 태그 (site.json의 projectTags에서 이름→색상 지정, 미지정은 neutral) */
 .ptag { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 22px; font-weight: 500; white-space: nowrap; border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); }
-.ptag.tone-blue { color: var(--link); border-color: var(--link-soft); background: #f5f9ff; }
-.ptag.tone-green { color: #0a7d4f; border-color: #c9efdd; background: #f1fbf6; }
-.ptag.tone-violet { color: #7928ca; border-color: #d8ccf1; background: #f8f5fd; }
-.ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: #fff9ec; }
-.ptag.tone-red { color: var(--error); border-color: #ffd6d6; background: #fff5f5; }
+.ptag.tone-blue { color: var(--link-deep); border-color: var(--link-soft); background: var(--link-soft); }
+.ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: var(--warning-soft); }
+.ptag.tone-violet { color: var(--violet); border-color: var(--violet-soft); background: var(--violet-soft); }
+.ptag.tone-cyan { color: var(--ink); border-color: var(--cyan-soft); background: var(--cyan-soft); }
+.ptag.tone-red { color: var(--error); border-color: var(--error); background: var(--surface); }
 
 @media (max-width: 640px) {
   .topbar { padding: 0 16px; }
@@ -185,7 +202,7 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   <main class="content">
     <div class="eyebrow">BlogPay · Planning Docs</div>
     <h1>블로그페이 기획서</h1>
-    <p class="meta">블로그페이 기획서를 아카이빙해 둔 곳입니다.</p>
+    <p class="meta">블로그페이 관련 기획 문서를 보관하고 관리하는 공간입니다.</p>
 
     <h2>서비스 공통 링크</h2>
 <div class="links"><a class="btn" href="https://docs.google.com/spreadsheets/d/1C3m7kCTFUsG5W4HaEhWHsYV11MGNMs2WmcWD5x1brsY/edit?usp=drive_link" target="_blank" rel="noopener noreferrer">IA</a>
@@ -212,8 +229,8 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 
 이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요</div></details></td>
   <td class="nowrap"><a href="https://flow.team/l/QLo76" target="_blank" rel="noopener noreferrer">플로우</a></td>
-  <td><div style="margin-top:6px"><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">기획서(PPT·Google Slides)</a></div></td>
-  <td><span class="mute">-</span></td></tr>
+  <td><div style="margin:4px 0"><a class="btn primary" href="https://drive.google.com/file/d/1idyfI_jUp8LT7Pi0sNi7Jd-pe5vF7RXj/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">v1.1 · 2026-11-19</a><div class="mute" style="font-size:12px;line-height:1.5">주문관리 제외, 재고·템플릿 삭제, 배송비 매칭 신설</div></div><details><summary>이전 버전 1개</summary><div style="margin:4px 0"><a class="btn" href="https://drive.google.com/file/d/1u-8wMBgc82k0zaqv7KqmyAv56T0seNFR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">v1.0 · 2026-11-16</a><div class="mute" style="font-size:12px;line-height:1.5">최초 작성</div></div></details></td>
+  <td><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">자료조사</a></td></tr>
 <tr>
   <td class="nowrap">2026.11.03</td>
   <td class="nowrap">-</td>

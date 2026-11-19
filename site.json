@@ -13,6 +13,14 @@
     {
       "name": "기능 업데이트",
       "tone": "blue"
+    },
+    {
+      "name": "이슈사항",
+      "tone": "amber"
+    },
+    {
+      "name": "1본부 개발",
+      "tone": "violet"
     }
   ]
 }

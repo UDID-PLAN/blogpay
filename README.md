@@ -57,4 +57,21 @@ blogpay/
 | lg | 192px | 기획서(버전 버튼), 비고(관련 자료 링크) |
 | fluid | 남는 폭 (최소 280px) | 내용 |
 
-프로젝트 태그 색상은 `site.json`의 `projectTags`에서 이름별로 지정합니다. (blue / green / violet / amber / red, 미지정은 neutral)
+프로젝트 태그 색상은 `site.json`의 `projectTags`에서 이름별로 지정합니다. (blue / amber / violet / cyan / red, 미지정은 neutral)
+
+## 색상 규칙
+
+Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상단 주석에 있습니다. CSS 규칙 안에는 hex를 직접 쓰지 않고 `:root` 토큰(`var(--…)`)만 씁니다.
+
+| 구분 | 토큰 | 용도 |
+| --- | --- | --- |
+| 텍스트 | ink → body → mute → faint | 제목·강조 → 본문 → 보조 → 비활성 |
+| 면·선 | canvas, surface, hairline | 배경, 카드·입력, 1px 테두리 |
+| 상태 | link(blue) / warning(amber) / error(red) | 정상·안내 / 주의 / 오류·확인 필요 |
+| 분류 | violet, cyan | 구분용 태그 |
+
+- 유채색은 태그·상태 같은 작은 요소에만 쓰고 큰 면에는 채우지 않습니다.
+- 태그는 soft 배경 + 진한 글자색이며, red만 흰 배경 + error 테두리입니다.
+- 그라데이션, pink·magenta는 사용하지 않습니다.
+
+현재 프로젝트 태그: 기능 업데이트 = blue, 이슈사항 = amber, 1본부 개발 = violet
