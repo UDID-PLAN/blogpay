@@ -10,7 +10,8 @@
    4. 상태 의미: blue = 정상·진행·안내 / amber = 주의 / red = 오류·확인 필요 / violet·cyan = 구분용 분류색
    5. 태그는 soft 배경 + 진한 글자색 조합이다. blue(link-soft/link-deep), amber(warning-soft/warning-deep),
       violet(violet-soft/violet), cyan(cyan-soft/ink). red는 md에 soft 톤이 없어 흰 배경 + error 테두리·글자로 쓴다.
-   6. 그라데이션, pink·magenta, develop/preview/ship 그라데이션은 문서에서 사용하지 않는다. (홍보 페이지용)
+   6. 진행상태 태그: 대기 = mute(회색) / 진행 = blue / 보류 = amber / 완료 = ink(검정 채움)
+   7. 그라데이션, pink·magenta, develop/preview/ship 그라데이션은 문서에서 사용하지 않는다. (홍보 페이지용)
    ─────────────────────────────────────────────────────────────── */
 :root {
   --ink: #171717;
@@ -150,13 +151,14 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
    열 너비는 아래 5개 토큰만 쓴다. (xs·sm·md·lg는 고정폭, fluid는 남는 폭을 모두 차지)
      xs 80px   : 이슈 번호, 플로우 등 짧은 값
      sm 120px  : 요청일, 프로젝트 태그
-     md 160px  : 제목
-     lg 192px  : 기획서(버전 버튼), 비고(링크)
-     fluid     : 내용 (최소 280px)
+     md 160px  : 제목, 기획서(버전 버튼)
+     lg 192px  : 비고(링크 목록)
+     fluid     : 내용 (최소 240px)
+   (현재 열 구성: sm 요청일 · xs 이슈 번호 · sm 프로젝트 · xs 진행상태 · md 제목 · fluid 내용 · xs 플로우 · md 기획서 · lg 비고)
    표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
-:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 280px; }
+:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 240px; }
 .shell.wide { max-width: 1440px; }
-.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 2 + var(--col-md) + var(--col-lg) * 2 + var(--col-fluid-min)); }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 3 + var(--col-md) * 2 + var(--col-lg) + var(--col-fluid-min)); }
 .index-table col.w-xs { width: var(--col-xs); }
 .index-table col.w-sm { width: var(--col-sm); }
 .index-table col.w-md { width: var(--col-md); }
@@ -177,7 +179,20 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 .ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: var(--warning-soft); }
 .ptag.tone-violet { color: var(--violet); border-color: var(--violet-soft); background: var(--violet-soft); }
 .ptag.tone-cyan { color: var(--ink); border-color: var(--cyan-soft); background: var(--cyan-soft); }
+.ptag.tone-ink { color: var(--on-primary); border-color: var(--ink); background: var(--ink); }
+.ptag.tone-mute { color: var(--mute); border-color: var(--hairline); background: var(--surface); }
 .ptag.tone-red { color: var(--error); border-color: var(--error); background: var(--surface); }
+
+/* 필터 */
+.filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.filter-label { min-width: 56px; color: var(--mute); font-family: var(--font-mono); font-size: 12px; }
+.fchip { appearance: none; cursor: pointer; padding: 0 12px; line-height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; font-weight: 500; }
+.fchip:hover { border-color: var(--ink); }
+.fchip.active { background: var(--ink); border-color: var(--ink); color: var(--on-primary); }
+.search { width: 260px; max-width: 100%; padding: 6px 12px; line-height: 20px; border: 1px solid var(--hairline); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; }
+.search:focus { outline: 2px solid var(--link); outline-offset: -1px; border-color: var(--link); }
+tr[hidden] { display: none; }
 
 @media (max-width: 640px) {
   .topbar { padding: 0 16px; }

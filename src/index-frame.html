@@ -27,5 +27,41 @@
 {{REQUESTS}}
   </main>
 </div>
+<script>
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('.index-table tbody tr[data-status]'));
+  var state = { status: '', project: '', q: '' };
+  var count = document.getElementById('result-count');
+  var empty = document.getElementById('empty-row');
+  function apply() {
+    var shown = 0;
+    rows.forEach(function (tr) {
+      var ok = (!state.status || tr.dataset.status === state.status) &&
+               (!state.project || tr.dataset.project === state.project) &&
+               (!state.q || tr.dataset.q.indexOf(state.q) > -1);
+      tr.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = '총 ' + shown + '건' + (shown !== rows.length ? ' (전체 ' + rows.length + '건)' : '');
+    empty.hidden = shown !== 0;
+  }
+  [].slice.call(document.querySelectorAll('.fchip')).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var g = btn.dataset.group;
+      [].slice.call(document.querySelectorAll('.fchip[data-group="' + g + '"]')).forEach(function (x) {
+        x.classList.toggle('active', x === btn);
+        x.setAttribute('aria-pressed', x === btn ? 'true' : 'false');
+      });
+      state[g] = btn.dataset.value;
+      apply();
+    });
+  });
+  document.getElementById('q').addEventListener('input', function (e) {
+    state.q = e.target.value.trim().toLowerCase();
+    apply();
+  });
+  apply();
+})();
+</script>
 </body>
 </html>

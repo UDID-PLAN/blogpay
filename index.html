@@ -18,7 +18,8 @@
    4. 상태 의미: blue = 정상·진행·안내 / amber = 주의 / red = 오류·확인 필요 / violet·cyan = 구분용 분류색
    5. 태그는 soft 배경 + 진한 글자색 조합이다. blue(link-soft/link-deep), amber(warning-soft/warning-deep),
       violet(violet-soft/violet), cyan(cyan-soft/ink). red는 md에 soft 톤이 없어 흰 배경 + error 테두리·글자로 쓴다.
-   6. 그라데이션, pink·magenta, develop/preview/ship 그라데이션은 문서에서 사용하지 않는다. (홍보 페이지용)
+   6. 진행상태 태그: 대기 = mute(회색) / 진행 = blue / 보류 = amber / 완료 = ink(검정 채움)
+   7. 그라데이션, pink·magenta, develop/preview/ship 그라데이션은 문서에서 사용하지 않는다. (홍보 페이지용)
    ─────────────────────────────────────────────────────────────── */
 :root {
   --ink: #171717;
@@ -158,13 +159,14 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
    열 너비는 아래 5개 토큰만 쓴다. (xs·sm·md·lg는 고정폭, fluid는 남는 폭을 모두 차지)
      xs 80px   : 이슈 번호, 플로우 등 짧은 값
      sm 120px  : 요청일, 프로젝트 태그
-     md 160px  : 제목
-     lg 192px  : 기획서(버전 버튼), 비고(링크)
-     fluid     : 내용 (최소 280px)
+     md 160px  : 제목, 기획서(버전 버튼)
+     lg 192px  : 비고(링크 목록)
+     fluid     : 내용 (최소 240px)
+   (현재 열 구성: sm 요청일 · xs 이슈 번호 · sm 프로젝트 · xs 진행상태 · md 제목 · fluid 내용 · xs 플로우 · md 기획서 · lg 비고)
    표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
-:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 280px; }
+:root { --col-xs: 80px; --col-sm: 120px; --col-md: 160px; --col-lg: 192px; --col-fluid-min: 240px; }
 .shell.wide { max-width: 1440px; }
-.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 2 + var(--col-md) + var(--col-lg) * 2 + var(--col-fluid-min)); }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) * 2 + var(--col-xs) * 3 + var(--col-md) * 2 + var(--col-lg) + var(--col-fluid-min)); }
 .index-table col.w-xs { width: var(--col-xs); }
 .index-table col.w-sm { width: var(--col-sm); }
 .index-table col.w-md { width: var(--col-md); }
@@ -185,7 +187,20 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 .ptag.tone-amber { color: var(--warning-deep); border-color: var(--warning-soft); background: var(--warning-soft); }
 .ptag.tone-violet { color: var(--violet); border-color: var(--violet-soft); background: var(--violet-soft); }
 .ptag.tone-cyan { color: var(--ink); border-color: var(--cyan-soft); background: var(--cyan-soft); }
+.ptag.tone-ink { color: var(--on-primary); border-color: var(--ink); background: var(--ink); }
+.ptag.tone-mute { color: var(--mute); border-color: var(--hairline); background: var(--surface); }
 .ptag.tone-red { color: var(--error); border-color: var(--error); background: var(--surface); }
+
+/* 필터 */
+.filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.filter-label { min-width: 56px; color: var(--mute); font-family: var(--font-mono); font-size: 12px; }
+.fchip { appearance: none; cursor: pointer; padding: 0 12px; line-height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; font-weight: 500; }
+.fchip:hover { border-color: var(--ink); }
+.fchip.active { background: var(--ink); border-color: var(--ink); color: var(--on-primary); }
+.search { width: 260px; max-width: 100%; padding: 6px 12px; line-height: 20px; border: 1px solid var(--hairline); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; }
+.search:focus { outline: 2px solid var(--link); outline-offset: -1px; border-color: var(--link); }
+tr[hidden] { display: none; }
 
 @media (max-width: 640px) {
   .topbar { padding: 0 16px; }
@@ -212,13 +227,50 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 <a class="btn" href="https://bean701.shop.blogpay.co.kr/controller/main" target="_blank" rel="noopener noreferrer">블로그페이 관리자</a></div>
 
     <h2>요청 리스트</h2>
-<div class="table-wrap"><table class="index-table">
-<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
-<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
-<tbody><tr>
+<div class="filters">
+  <div class="filter-row"><span class="filter-label">진행상태</span><button type="button" class="fchip active" data-group="status" data-value="" aria-pressed="true">전체</button><button type="button" class="fchip" data-group="status" data-value="대기" aria-pressed="false">대기</button><button type="button" class="fchip" data-group="status" data-value="진행" aria-pressed="false">진행</button><button type="button" class="fchip" data-group="status" data-value="보류" aria-pressed="false">보류</button><button type="button" class="fchip" data-group="status" data-value="완료" aria-pressed="false">완료</button></div>
+  <div class="filter-row"><span class="filter-label">프로젝트</span><button type="button" class="fchip active" data-group="project" data-value="" aria-pressed="true">전체</button><button type="button" class="fchip" data-group="project" data-value="기능 업데이트" aria-pressed="false">기능 업데이트</button><button type="button" class="fchip" data-group="project" data-value="이슈사항" aria-pressed="false">이슈사항</button><button type="button" class="fchip" data-group="project" data-value="1본부 개발" aria-pressed="false">1본부 개발</button></div>
+  <div class="filter-row"><span class="filter-label">검색</span><input id="q" class="search" type="search" placeholder="제목·내용·이슈 번호 검색" autocomplete="off"><span id="result-count" class="mute"></span></div>
+</div><div class="table-wrap"><table class="index-table">
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"></colgroup>
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
+<tbody><tr data-status="진행" data-project="기능 업데이트" data-q="카카오싱크 연동 개발 요청 카카오싱크 연동 개발 요청 드립니다.
+
+카카오싱크 개발가이드
+https://developers.kakao.com/docs/latest/ko/kakaosync/common
+
+카카오싱크 개발자 문의 게시판
+https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
   <td class="nowrap">2026.11.03</td>
   <td class="nowrap">-</td>
   <td><span class="ptag tone-blue">기능 업데이트</span></td>
+  <td><span class="ptag tone-blue">진행</span></td>
+  <td><strong style="color:var(--ink)">카카오싱크 연동 개발 요청</strong></td>
+  <td class="col-content"><details class="cell-content"><summary>카카오싱크 연동 개발 요청 드립니다. / 카카오싱크 개발가이드</summary><div>카카오싱크 연동 개발 요청 드립니다.
+
+카카오싱크 개발가이드
+<a href="https://developers.kakao.com/docs/latest/ko/kakaosync/common" target="_blank" rel="noopener noreferrer">https://developers.kakao.com/docs/latest/ko/kakaosync/common</a>
+
+카카오싱크 개발자 문의 게시판
+<a href="https://devtalk.kakao.com/c/kakao-sync/115" target="_blank" rel="noopener noreferrer">https://devtalk.kakao.com/c/kakao-sync/115</a></div></details></td>
+  <td class="nowrap"><a href="https://flow.team/l/Q5tmr" target="_blank" rel="noopener noreferrer">플로우</a></td>
+  <td><span class="mute">작성 전</span></td>
+  <td><span class="mute">-</span></td></tr>
+<tr data-status="완료" data-project="기능 업데이트" data-q="네이버 스마트 스토어 연동 서비스 분석 1. 작업명
+네이버 스마트 스토어 연동 서비스 분석
+
+2. 작업내용
+- 연동 상품 가져오기
+- 상품 내보내기
+- 리뷰내용 가져오기 [ 리뷰 내용 가져오기는 스크래핑 및 유료 솔루션 ]
+
+===
+
+이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요 - 2026.11.03 기능 업데이트">
+  <td class="nowrap">2026.11.03</td>
+  <td class="nowrap">-</td>
+  <td><span class="ptag tone-blue">기능 업데이트</span></td>
+  <td><span class="ptag tone-ink">완료</span></td>
   <td><strong style="color:var(--ink)">네이버 스마트 스토어 연동 서비스 분석</strong></td>
   <td class="col-content"><details class="cell-content"><summary>1. 작업명 / 네이버 스마트 스토어 연동 서비스 분석</summary><div>1. 작업명
 네이버 스마트 스토어 연동 서비스 분석
@@ -233,23 +285,44 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
 이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요</div></details></td>
   <td class="nowrap"><a href="https://flow.team/l/QLo76" target="_blank" rel="noopener noreferrer">플로우</a></td>
   <td><div class="vbtns"><a class="btn primary" href="https://drive.google.com/file/d/1idyfI_jUp8LT7Pi0sNi7Jd-pe5vF7RXj/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-19 · 주문관리 제외, 재고·템플릿 삭제, 배송비 매칭 신설">v1.1</a><a class="btn" href="https://drive.google.com/file/d/1u-8wMBgc82k0zaqv7KqmyAv56T0seNFR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-16 · 최초 작성">v1.0</a></div></td>
-  <td><ul class="reflist"><li><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">자료조사</a></li><li><a href="https://docs.google.com/spreadsheets/d/1o0Dy55emC7KasMEDpt5TespjSIzzQgTyCjCYUeDsPJI/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">상품 API 정리</a></li><li><a href="https://docs.google.com/spreadsheets/d/10w2IR9UbVSn9n004jyQyybupC-c3pDnaTX691Sg6eGw/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">주문 API 정리</a></li></ul></td></tr>
-<tr>
-  <td class="nowrap">2026.11.03</td>
-  <td class="nowrap">-</td>
-  <td><span class="ptag tone-blue">기능 업데이트</span></td>
-  <td><strong style="color:var(--ink)">카카오싱크 연동 개발 요청</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>카카오싱크 연동 개발 요청 드립니다. / 카카오싱크 개발가이드</summary><div>카카오싱크 연동 개발 요청 드립니다.
-
-카카오싱크 개발가이드
-<a href="https://developers.kakao.com/docs/latest/ko/kakaosync/common" target="_blank" rel="noopener noreferrer">https://developers.kakao.com/docs/latest/ko/kakaosync/common</a>
-
-카카오싱크 개발자 문의 게시판
-<a href="https://devtalk.kakao.com/c/kakao-sync/115" target="_blank" rel="noopener noreferrer">https://devtalk.kakao.com/c/kakao-sync/115</a></div></details></td>
-  <td class="nowrap"><a href="https://flow.team/l/Q5tmr" target="_blank" rel="noopener noreferrer">플로우</a></td>
-  <td><span class="mute">작성 전</span></td>
-  <td><span class="mute">-</span></td></tr></tbody></table></div>
+  <td><ul class="reflist"><li><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">자료조사</a></li><li><a href="https://docs.google.com/spreadsheets/d/1o0Dy55emC7KasMEDpt5TespjSIzzQgTyCjCYUeDsPJI/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">상품 API 정리</a></li><li><a href="https://docs.google.com/spreadsheets/d/10w2IR9UbVSn9n004jyQyybupC-c3pDnaTX691Sg6eGw/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">주문 API 정리</a></li></ul></td></tr><tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>
   </main>
 </div>
+<script>
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('.index-table tbody tr[data-status]'));
+  var state = { status: '', project: '', q: '' };
+  var count = document.getElementById('result-count');
+  var empty = document.getElementById('empty-row');
+  function apply() {
+    var shown = 0;
+    rows.forEach(function (tr) {
+      var ok = (!state.status || tr.dataset.status === state.status) &&
+               (!state.project || tr.dataset.project === state.project) &&
+               (!state.q || tr.dataset.q.indexOf(state.q) > -1);
+      tr.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = '총 ' + shown + '건' + (shown !== rows.length ? ' (전체 ' + rows.length + '건)' : '');
+    empty.hidden = shown !== 0;
+  }
+  [].slice.call(document.querySelectorAll('.fchip')).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var g = btn.dataset.group;
+      [].slice.call(document.querySelectorAll('.fchip[data-group="' + g + '"]')).forEach(function (x) {
+        x.classList.toggle('active', x === btn);
+        x.setAttribute('aria-pressed', x === btn ? 'true' : 'false');
+      });
+      state[g] = btn.dataset.value;
+      apply();
+    });
+  });
+  document.getElementById('q').addEventListener('input', function (e) {
+    state.q = e.target.value.trim().toLowerCase();
+    apply();
+  });
+  apply();
+})();
+</script>
 </body>
 </html>

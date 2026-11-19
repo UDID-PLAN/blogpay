@@ -22,5 +22,23 @@
       "name": "1본부 개발",
       "tone": "violet"
     }
+  ],
+  "statuses": [
+    {
+      "name": "대기",
+      "tone": "mute"
+    },
+    {
+      "name": "진행",
+      "tone": "blue"
+    },
+    {
+      "name": "보류",
+      "tone": "amber"
+    },
+    {
+      "name": "완료",
+      "tone": "ink"
+    }
   ]
 }

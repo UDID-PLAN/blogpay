@@ -150,6 +150,10 @@ function cmdIndex() {
   const site = readJson(P('site.json'));
   const common = `<div class="links">${(site.commonLinks || []).filter((l) => l.url).map((l) => linkBtn(l.label, l.url)).join('\n')}</div>`;
   const tones = Object.fromEntries((site.projectTags || []).map((t) => [t.name, t.tone || 'neutral']));
+  const statusDefs = site.statuses || [];
+  const statusNames = statusDefs.map((x) => x.name);
+  const statusTones = Object.fromEntries(statusDefs.map((x) => [x.name, x.tone || 'neutral']));
+  const statusTag = (name) => `<span class="ptag tone-${esc(statusTones[name] || 'neutral')}">${esc(name)}</span>`;
   const projectTag = (name) => name ? `<span class="ptag tone-${esc(tones[name] || 'neutral')}">${esc(name)}</span>` : '<span class="mute">-</span>';
 
   const reqDir = P('requests');
@@ -157,7 +161,7 @@ function cmdIndex() {
     ? fs.readdirSync(reqDir).filter((s) => !s.startsWith('_') && fs.existsSync(P('requests', s, 'request.json')))
     : [];
   const reqs = slugs.map((slug) => ({ slug, ...loadRequest(slug) }))
-    .sort((a, b) => String(b.requestedAt).localeCompare(String(a.requestedAt)) || (a.no ?? 999) - (b.no ?? 999)); // 최신 요청일 우선, 같은 날이면 시트 번호(no) 순
+    .sort((a, b) => String(b.requestedAt).localeCompare(String(a.requestedAt)) || (b.no ?? 0) - (a.no ?? 0)); // 신규 요청이 위: 요청일 내림차순, 같은 날이면 번호(no)가 큰 순
 
   const aLink = (l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`;
   const linkify = (t) => esc(t).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
@@ -168,6 +172,10 @@ function cmdIndex() {
     if (head.length > 60) head = head.slice(0, 60) + '…';
     return `<details class="cell-content"><summary>${esc(head)}</summary><div>${linkify(String(text).trim())}</div></details>`;
   };
+
+  for (const r of reqs) {
+    if (!statusNames.includes(r.status)) fail(`requests/${r.slug}/request.json의 status가 올바르지 않습니다: "${r.status ?? ''}" (허용: ${statusNames.join(' / ')})`);
+  }
 
   const rows = reqs.map((r) => {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
@@ -191,10 +199,12 @@ function cmdIndex() {
     const refList = extra.length ? `<ul class="reflist">${extra.map((x) => `<li>${x}</li>`).join('')}</ul>` : '';
     const noteCell = [r.note ? `<div>${esc(r.note)}</div>` : '', refList].filter(Boolean).join('');
 
-    return `<tr>
+    const q = esc([r.title, r.content, r.issue, r.requestedAt, r.project].join(' ')).toLowerCase();
+    return `<tr data-status="${esc(r.status)}" data-project="${esc(r.project || '')}" data-q="${q}">
   <td class="nowrap">${esc(r.requestedAt || '-')}</td>
   <td class="nowrap">${esc(r.issue || '-')}</td>
   <td>${projectTag(r.project)}</td>
+  <td>${statusTag(r.status)}</td>
   <td><strong style="color:var(--ink)">${esc(r.title)}</strong></td>
   <td class="col-content">${contentCell(r.content)}</td>
   <td class="nowrap">${r.flow ? aLink({ label: '플로우', url: r.flow }) : '<span class="mute">-</span>'}</td>
@@ -202,15 +212,24 @@ function cmdIndex() {
   <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
   });
   const table = `<div class="table-wrap"><table class="index-table">
-<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
-<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
-<tbody>${rows.join('\n') || '<tr><td colspan="8" class="mute">등록된 요청 건이 없습니다.</td></tr>'}</tbody></table></div>`;
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"></colgroup>
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
+<tbody>${rows.join('\n') || '<tr><td colspan="9" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
+
+  // 필터: 진행상태·프로젝트(선택형) + 키워드 검색(제목·내용·이슈 번호·요청일)
+  const chips = (group, names) => `<button type="button" class="fchip active" data-group="${group}" data-value="" aria-pressed="true">전체</button>`
+    + names.map((n) => `<button type="button" class="fchip" data-group="${group}" data-value="${esc(n)}" aria-pressed="false">${esc(n)}</button>`).join('');
+  const filters = `<div class="filters">
+  <div class="filter-row"><span class="filter-label">진행상태</span>${chips('status', statusNames)}</div>
+  <div class="filter-row"><span class="filter-label">프로젝트</span>${chips('project', (site.projectTags || []).map((t) => t.name))}</div>
+  <div class="filter-row"><span class="filter-label">검색</span><input id="q" class="search" type="search" placeholder="제목·내용·이슈 번호 검색" autocomplete="off"><span id="result-count" class="mute"></span></div>
+</div>`;
 
   const html = fill(read(P('src', 'index-frame.html')), {
     CSS: read(P('src', 'doc.css')),
     UPDATED: new Date().toISOString().slice(0, 10),
     COMMON: common,
-    REQUESTS: table,
+    REQUESTS: filters + table,
   });
   assertSelfContained(html, 'index');
   fs.writeFileSync(P('index.html'), html);

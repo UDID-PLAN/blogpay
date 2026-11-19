@@ -4,6 +4,7 @@
   "requestedAt": "2026.11.03",
   "issue": "-",
   "project": "기능 업데이트",
+  "status": "진행",
   "content": "카카오싱크 연동 개발 요청 드립니다.\n\n카카오싱크 개발가이드\nhttps://developers.kakao.com/docs/latest/ko/kakaosync/common\n\n카카오싱크 개발자 문의 게시판\nhttps://devtalk.kakao.com/c/kakao-sync/115",
   "flow": "https://flow.team/l/Q5tmr",
   "qa": "",
