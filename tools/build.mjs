@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lintCss } from './lint-css.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -153,8 +154,8 @@ function cmdIndex() {
   const statusDefs = site.statuses || [];
   const statusNames = statusDefs.map((x) => x.name);
   const statusTones = Object.fromEntries(statusDefs.map((x) => [x.name, x.tone || 'neutral']));
-  const statusTag = (name) => `<span class="ptag tone-${esc(statusTones[name] || 'neutral')}">${esc(name)}</span>`;
-  const projectTag = (name) => name ? `<span class="ptag tone-${esc(tones[name] || 'neutral')}">${esc(name)}</span>` : '<span class="mute">-</span>';
+  const statusTag = (name) => `<span class="tag tone-${esc(statusTones[name] || 'neutral')}">${esc(name)}</span>`;
+  const projectTag = (name) => name ? `<span class="tag tone-${esc(tones[name] || 'neutral')}">${esc(name)}</span>` : '<span class="mute">-</span>';
 
   const reqDir = P('requests');
   const slugs = fs.existsSync(reqDir)
@@ -205,7 +206,7 @@ function cmdIndex() {
   <td class="nowrap">${esc(r.issue || '-')}</td>
   <td>${projectTag(r.project)}</td>
   <td>${statusTag(r.status)}</td>
-  <td><strong style="color:var(--ink)">${esc(r.title)}</strong></td>
+  <td><strong>${esc(r.title)}</strong></td>
   <td class="col-content">${contentCell(r.content)}</td>
   <td class="nowrap">${r.flow ? aLink({ label: '플로우', url: r.flow }) : '<span class="mute">-</span>'}</td>
   <td>${planCell}</td>
@@ -235,6 +236,9 @@ function cmdIndex() {
   fs.writeFileSync(P('index.html'), html);
   console.log(`✔ 인덱스 생성: index.html (요청 건 ${reqs.length}개)`);
 }
+
+const cssErrors = lintCss(fs.readFileSync(P('src', 'doc.css'), 'utf8'));
+if (cssErrors.length) { console.error('✖ CSS 단일 규격 위반 (src/doc.css)\n' + cssErrors.map((e) => '  ' + e).join('\n')); process.exit(1); }
 
 const [cmd, a, b, ...rest] = process.argv.slice(2);
 const force = [a, b, ...rest].includes('--force');
