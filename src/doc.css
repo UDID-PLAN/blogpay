@@ -129,3 +129,10 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   h2 { break-after: avoid; }
   .card, .table-wrap, figure { break-inside: avoid; }
 }
+
+/* 인덱스 표 */
+.shell.wide { max-width: 1440px; }
+.index-table td.nowrap { white-space: nowrap; }
+.index-table td.col-content { min-width: 280px; max-width: 420px; }
+.cell-content summary { margin: 0; color: var(--body); font-size: 13px; }
+.cell-content div { margin-top: 8px; white-space: pre-line; font-size: 13px; word-break: break-all; }

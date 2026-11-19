@@ -153,10 +153,20 @@ function cmdIndex() {
 
   const reqDir = P('requests');
   const slugs = fs.existsSync(reqDir)
-    ? fs.readdirSync(reqDir).filter((s) => fs.existsSync(P('requests', s, 'request.json')))
+    ? fs.readdirSync(reqDir).filter((s) => !s.startsWith('_') && fs.existsSync(P('requests', s, 'request.json')))
     : [];
   const reqs = slugs.map((slug) => ({ slug, ...loadRequest(slug) }))
-    .sort((a, b) => String(b.requestedAt).localeCompare(String(a.requestedAt)));
+    .sort((a, b) => String(b.requestedAt).localeCompare(String(a.requestedAt)) || (a.no ?? 999) - (b.no ?? 999)); // 최신 요청일 우선, 같은 날이면 시트 번호(no) 순
+
+  const aLink = (l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`;
+  const linkify = (t) => esc(t).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  const contentCell = (text) => {
+    const lines = String(text || '').split('\n').map((x) => x.trim()).filter((x) => x && x !== '===');
+    if (!lines.length) return '<span class="mute">-</span>';
+    let head = lines.slice(0, 2).join(' / ');
+    if (head.length > 60) head = head.slice(0, 60) + '…';
+    return `<details class="cell-content"><summary>${esc(head)}</summary><div>${linkify(String(text).trim())}</div></details>`;
+  };
 
   const rows = reqs.map((r) => {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
@@ -169,20 +179,32 @@ function cmdIndex() {
         : `<span class="btn disabled">${esc(label)} (미공유)</span>`}
         <span class="mute">${esc(v.summary || '')}</span></div>`;
     };
-    const latest = chip(vs[0], 0);
-    const older = vs.slice(1).map((v, i) => chip(v, i + 1)).join('');
-    const versionsCell = latest + (older ? `<details><summary>이전 버전 ${vs.length - 1}개</summary>${older}</details>` : '');
-    const extra = (r.links || []).map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`).join(' · ');
+    const parts = [];
+    if (vs.length) {
+      parts.push(chip(vs[0], 0));
+      if (vs.length > 1) parts.push(`<details><summary>이전 버전 ${vs.length - 1}개</summary>${vs.slice(1).map((v, i) => chip(v, i + 1)).join('')}</details>`);
+    }
+    if ((r.planLinks || []).length) parts.push(`<div style="margin-top:6px">${r.planLinks.map(aLink).join(' · ')}</div>`);
+    const planCell = parts.join('') || '<span class="mute">작성 전</span>';
+
+    const extra = [];
+    if (r.qa) extra.push(aLink({ label: 'QA', url: r.qa }));
+    for (const l of r.references || []) extra.push(aLink(l));
+    const noteCell = [r.note ? esc(r.note) : '', extra.join(' · ')].filter(Boolean).join('<br>');
+
     return `<tr>
-  <td>${esc(r.requestedAt || '-')}</td>
+  <td class="nowrap">${esc(r.requestedAt || '-')}</td>
+  <td class="nowrap">${esc(r.issue || '-')}</td>
+  <td class="nowrap">${esc(r.project || '-')}</td>
   <td><strong style="color:var(--ink)">${esc(r.title)}</strong></td>
-  <td><span class="status">${esc(r.status || '-')}</span></td>
-  <td>${versionsCell}</td>
-  <td>${esc(r.note || '')}${r.note && extra ? '<br>' : ''}${extra}</td></tr>`;
+  <td class="col-content">${contentCell(r.content)}</td>
+  <td class="nowrap">${r.flow ? aLink({ label: '플로우', url: r.flow }) : '<span class="mute">-</span>'}</td>
+  <td>${planCell}</td>
+  <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
   });
-  const table = `<div class="table-wrap"><table>
-<thead><tr><th>요청일</th><th>요청 건</th><th>상태</th><th>공유 버전</th><th>비고 · 관련 링크</th></tr></thead>
-<tbody>${rows.join('\n') || '<tr><td colspan="5" class="mute">등록된 요청 건이 없습니다.</td></tr>'}</tbody></table></div>`;
+  const table = `<div class="table-wrap"><table class="index-table">
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고 · QA · 참고자료</th></tr></thead>
+<tbody>${rows.join('\n') || '<tr><td colspan="8" class="mute">등록된 요청 건이 없습니다.</td></tr>'}</tbody></table></div>`;
 
   const html = fill(read(P('src', 'index-frame.html')), {
     CSS: read(P('src', 'doc.css')),

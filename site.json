@@ -1,10 +1,11 @@
 {
-  "note": "URL을 등록하면 인덱스의 '서비스 공통 링크'에 표시됩니다. 관리자 계정·키 같은 접속 정보는 넣지 않습니다.",
+  "note": "URL을 등록하면 '서비스 공통 링크'에 표시됩니다. 관리자 계정·키 같은 접속 정보는 넣지 않습니다.",
   "commonLinks": [
-    { "label": "IA", "url": "" },
+    { "label": "IA (V0.2)", "url": "https://docs.google.com/spreadsheets/d/1C3m7kCTFUsG5W4HaEhWHsYV11MGNMs2WmcWD5x1brsY/edit?usp=drive_link" },
+    { "label": "블로그페이 관리자", "url": "https://bean701.shop.blogpay.co.kr/controller/main" },
+    { "label": "개선기획 요청서(시트)", "url": "https://docs.google.com/spreadsheets/d/1KqcZjmv2obnjHZFXwX9C2frbKiH1MiXt72KHiD488Rw/edit?gid=1775355266#gid=1775355266" },
     { "label": "서비스 정책서", "url": "" },
     { "label": "이용약관 · 개인정보처리방침", "url": "" },
-    { "label": "관리자 화면", "url": "" },
     { "label": "Figma", "url": "" },
     { "label": "Drive 폴더", "url": "" }
   ]

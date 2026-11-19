@@ -138,6 +138,13 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   .card, .table-wrap, figure { break-inside: avoid; }
 }
 
+/* 인덱스 표 */
+.shell.wide { max-width: 1440px; }
+.index-table td.nowrap { white-space: nowrap; }
+.index-table td.col-content { min-width: 280px; max-width: 420px; }
+.cell-content summary { margin: 0; color: var(--body); font-size: 13px; }
+.cell-content div { margin-top: 8px; white-space: pre-line; font-size: 13px; word-break: break-all; }
+
 </style>
 </head>
 <body>
@@ -145,30 +152,58 @@ details > summary { cursor: pointer; color: var(--mute); font-size: 12px; margin
   <span class="brand">BlogPay<small>기획서 인덱스</small></span>
   <span class="topbar-meta">updated 2026-11-19</span>
 </header>
-<div class="shell">
+<div class="shell wide">
   <main class="content">
     <div class="eyebrow">BlogPay · Planning Docs</div>
     <h1>블로그페이 기획서</h1>
     <p class="meta">요청 건별 기획서와 공유 버전을 모아둔 인덱스입니다. 각 버전은 공유 당시 상태 그대로 고정되며, 파일 1개로 단독 전달할 수 있습니다.</p>
 
     <h2>서비스 공통 링크</h2>
-<div class="card"><div class="links"><span class="btn disabled">IA (미등록)</span>
+<div class="card"><div class="links"><a class="btn" href="https://docs.google.com/spreadsheets/d/1C3m7kCTFUsG5W4HaEhWHsYV11MGNMs2WmcWD5x1brsY/edit?usp=drive_link" target="_blank" rel="noopener noreferrer">IA (V0.2)</a>
+<a class="btn" href="https://bean701.shop.blogpay.co.kr/controller/main" target="_blank" rel="noopener noreferrer">블로그페이 관리자</a>
+<a class="btn" href="https://docs.google.com/spreadsheets/d/1KqcZjmv2obnjHZFXwX9C2frbKiH1MiXt72KHiD488Rw/edit?gid=1775355266#gid=1775355266" target="_blank" rel="noopener noreferrer">개선기획 요청서(시트)</a>
 <span class="btn disabled">서비스 정책서 (미등록)</span>
 <span class="btn disabled">이용약관 · 개인정보처리방침 (미등록)</span>
-<span class="btn disabled">관리자 화면 (미등록)</span>
 <span class="btn disabled">Figma (미등록)</span>
-<span class="btn disabled">Drive 폴더 (미등록)</span></div><p class="mute" style="margin-top:12px">URL을 등록하면 인덱스의 '서비스 공통 링크'에 표시됩니다. 관리자 계정·키 같은 접속 정보는 넣지 않습니다.</p></div>
+<span class="btn disabled">Drive 폴더 (미등록)</span></div><p class="mute" style="margin-top:12px">URL을 등록하면 '서비스 공통 링크'에 표시됩니다. 관리자 계정·키 같은 접속 정보는 넣지 않습니다.</p></div>
 
     <h2>요청 건 리스트</h2>
-<div class="table-wrap"><table>
-<thead><tr><th>요청일</th><th>요청 건</th><th>상태</th><th>공유 버전</th><th>비고 · 관련 링크</th></tr></thead>
+<div class="table-wrap"><table class="index-table">
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고 · QA · 참고자료</th></tr></thead>
 <tbody><tr>
-  <td>2026-11-19</td>
-  <td><strong style="color:var(--ink)">샘플 요청 건 (삭제 가능)</strong></td>
-  <td><span class="status">샘플</span></td>
-  <td><div style="margin:4px 0"><a class="btn primary" href="published/sample-request/sample-request_v1.0.html">v1.0 · 2026-11-19</a>
-        <span class="mute">최초 작성</span></div></td>
-  <td>형식 확인용 샘플입니다. 실제 요청 건을 추가한 뒤 이 폴더를 삭제하세요.</td></tr></tbody></table></div>
+  <td class="nowrap">2026.11.03</td>
+  <td class="nowrap">-</td>
+  <td class="nowrap">기능 업데이트</td>
+  <td><strong style="color:var(--ink)">네이버 스마트 스토어 연동 서비스 분석</strong></td>
+  <td class="col-content"><details class="cell-content"><summary>1. 작업명 / 네이버 스마트 스토어 연동 서비스 분석</summary><div>1. 작업명
+네이버 스마트 스토어 연동 서비스 분석
+
+2. 작업내용
+- 연동 상품 가져오기
+- 상품 내보내기
+- 리뷰내용 가져오기 [ 리뷰 내용 가져오기는 스크래핑 및 유료 솔루션 ]
+
+===
+
+이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요</div></details></td>
+  <td class="nowrap"><a href="https://flow.team/l/QLo76" target="_blank" rel="noopener noreferrer">플로우</a></td>
+  <td><div style="margin-top:6px"><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">기획서(PPT·Google Slides)</a></div></td>
+  <td><span class="mute">-</span></td></tr>
+<tr>
+  <td class="nowrap">2026.11.03</td>
+  <td class="nowrap">-</td>
+  <td class="nowrap">기능 업데이트</td>
+  <td><strong style="color:var(--ink)">카카오싱크 연동 개발 요청</strong></td>
+  <td class="col-content"><details class="cell-content"><summary>카카오싱크 연동 개발 요청 드립니다. / 카카오싱크 개발가이드</summary><div>카카오싱크 연동 개발 요청 드립니다.
+
+카카오싱크 개발가이드
+<a href="https://developers.kakao.com/docs/latest/ko/kakaosync/common" target="_blank" rel="noopener noreferrer">https://developers.kakao.com/docs/latest/ko/kakaosync/common</a>
+
+카카오싱크 개발자 문의 게시판
+<a href="https://devtalk.kakao.com/c/kakao-sync/115" target="_blank" rel="noopener noreferrer">https://devtalk.kakao.com/c/kakao-sync/115</a></div></details></td>
+  <td class="nowrap"><a href="https://flow.team/l/Q5tmr" target="_blank" rel="noopener noreferrer">플로우</a></td>
+  <td><span class="mute">작성 전</span></td>
+  <td><span class="mute">-</span></td></tr></tbody></table></div>
   </main>
 </div>
 </body>

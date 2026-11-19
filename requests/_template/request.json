@@ -1,0 +1,23 @@
+{
+  "title": "템플릿 요청 건 (복사해서 사용)",
+  "requestedAt": "2026.11.19",
+  "issue": "-",
+  "project": "기능 업데이트",
+  "content": "요청 시트의 '내용' 칸을 그대로 붙여 넣습니다.\n여러 줄과 URL도 그대로 표시됩니다.",
+  "flow": "",
+  "qa": "",
+  "references": [],
+  "planLinks": [],
+  "note": "",
+  "versions": [
+    {
+      "version": "v1.0",
+      "date": "2026-11-19",
+      "reason": "-",
+      "changes": "최초 작성",
+      "summary": "최초 작성",
+      "author": "작성자",
+      "reviewer": "-"
+    }
+  ]
+}

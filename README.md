@@ -14,8 +14,9 @@ blogpay/
 │  ├─ doc-frame.html           # 문서 틀(상단바·목차·본문 영역)
 │  └─ index-frame.html         # 인덱스 틀
 ├─ requests/
+│  ├─ _template/               # 새 요청 건을 만들 때 복사하는 템플릿 (인덱스에는 표시 안 됨)
 │  └─ <slug>/                  # 요청 건 1개 = 폴더 1개 (영문 slug)
-│     ├─ request.json          # 건명·상태·비고·관련 링크·버전별 개정이력
+│     ├─ request.json          # 요청 시트 항목(요청일·이슈 번호·프로젝트·제목·내용·플로우…) + 버전별 개정이력
 │     └─ v1.0/
 │        ├─ content.html       # 본문만 작성 (스타일·목차·개정이력은 빌드가 채움)
 │        └─ assets/            # 이 버전에서 쓰는 이미지 (webp 권장)
@@ -28,7 +29,7 @@ blogpay/
 
 필요한 것: Node.js 18 이상 (외부 패키지 없음)
 
-1. 새 요청 건: `requests/<slug>/request.json` 작성 (`requests/sample-request` 복사)
+1. 새 요청 건: `requests/_template`을 `requests/<slug>`로 복사하고 `request.json`에 요청 시트(개선기획 요청서)의 행을 옮겨 적습니다. 인덱스 표의 컬럼은 이 시트를 따릅니다.
 2. 새 버전: `request.json`의 `versions`에 항목 추가 → `requests/<slug>/<버전>/content.html` 작성
 3. 미리보기: `node tools/build.mjs doc <slug> <버전>` → `draft/<slug>/<slug>_<버전>.html`을 브라우저로 열어 확인
 4. 공유 확정: `node tools/build.mjs publish <slug> <버전>` → `published/`에 생성
