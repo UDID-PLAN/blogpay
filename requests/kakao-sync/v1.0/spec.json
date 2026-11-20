@@ -600,7 +600,11 @@
           ]
         }
       ],
-      "noteHtml": "manual/order.html"
+      "noteHtml": "manual/order.html",
+      "badge": {
+        "label": "기획참고용",
+        "tone": "mute"
+      }
     },
     {
       "id": "ch-privacy",

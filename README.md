@@ -130,7 +130,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 ### spec.json 구조
 
 - 최상위: `title` · `version` · `date` · `revisions[]` · `chapters[]`
-- 챕터: `{ id, title, sheets[], policyHtml?, flow? }` — 챕터 `flow`는 사용자 흐름 칩 목록
+- 챕터: `{ id, title, sheets[], policyHtml?, flow?, badge?, noteHtml? }` — 챕터 `flow`는 사용자 흐름 칩 목록, `badge`는 1차 탭 옆 태그(`{ label, tone }`, 예: 이용매뉴얼 `기획참고용`)
 - 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
 - 화면 시트: `{ id, tab, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
   - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.

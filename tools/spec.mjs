@@ -160,7 +160,7 @@ ${drawers}${bar}</section>`;
   };
 
   const chapters = spec.chapters || [];
-  const nav = chapters.map((c, i) => `<button type="button" class="tab${i === 0 ? ' active' : ''}" data-chapter-btn="${esc(c.id)}">${esc(c.title)}</button>`).join('');
+  const nav = chapters.map((c, i) => `<button type="button" class="tab${i === 0 ? ' active' : ''}" data-chapter-btn="${esc(c.id)}">${esc(c.title)}${c.badge ? ' ' + badge(c.badge) : ''}</button>`).join('');
   const body = chapters.map((c, i) => {
     uniq(c.id);
     const sheets = c.sheets || [];
