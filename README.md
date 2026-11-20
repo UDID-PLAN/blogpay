@@ -20,7 +20,7 @@ blogpay/
 │     └─ v1.0/
 │        ├─ content.html       # 본문만 작성 (스타일·목차·개정이력은 빌드가 채움)
 │        └─ assets/            # 이 버전에서 쓰는 이미지 (webp 권장)
-├─ docs/<slug>/                # 기획서 본문. doc 빌드 때마다 <slug>_<버전>.html 을 덮어씀 (인덱스 버전 버튼·기획 추출이 이 파일 사용)
+├─ docs/<slug>/                # 기획서. doc 빌드 때마다 <slug>_<버전>.html 을 덮어씀. CSS는 src/doc.css 링크 → CSS 수정이 바로 반영 (인덱스 버전 버튼이 새 탭으로 염)
 ├─ published/<slug>/           # 요청 건당 폴더 1개. publish 때마다 <slug>_<버전>.html 이 새 파일로 추가됨 (덮어쓰기 거부)
 │                              #   샘플은 <slug>_<버전>_sample.html 로 별도 생성 (덮어써도 됨)
 └─ tools/
@@ -40,13 +40,13 @@ blogpay/
 2. 새 버전: `request.json`의 `versions`에 항목 추가 → `requests/<slug>/<버전>/content.html` 작성
 3. 기획서 생성: `node tools/build.mjs doc <slug> <버전>` → `docs/<slug>/<slug>_<버전>.html` (수정할 때마다 다시 빌드해 덮어씀)
 4. 인덱스 갱신: `node tools/build.mjs index` → 버전 버튼이 `docs/` 기획서로 연결
-5. 커밋 후 인덱스의 [기획 추출]로 내려받은 HTML 1개를 개발팀에 전달
+5. 커밋·푸시하면 GitHub Pages에 배포됨. 인덱스 [기획 추출]이 CSS를 내장한 단일 HTML(공유본)로 내려받아 주므로 그 파일 1개를 개발팀에 전달
 6. (선택) 고정 사본이 필요하면 `node tools/build.mjs publish <slug> <버전>` → `published/`에 덮어쓰기 불가 사본 생성
 
 ## 규칙
 
 - **공유한 버전은 수정하지 않습니다.** 변경이 생기면 새 버전(v1.1 → v1.2)을 만듭니다. `publish`는 이미 있는 파일을 덮어쓰지 않습니다.
-- 스타일 수정은 `src/doc.css`에서만 합니다. 이미 공유한 파일에는 영향이 없고, 이후 빌드하는 문서부터 반영됩니다.
+- 스타일 수정은 `src/doc.css`에서만 합니다. `docs/` 기획서에는 바로 반영되고, 이미 내려받은 공유본에는 영향이 없습니다.
 - 외부 링크(CDN·외부 폰트·외부 이미지)를 쓰지 않습니다. 쓰면 빌드가 실패합니다.
 - 폴더명(slug)은 영문 소문자와 하이픈으로 합니다. (예: `smartstore-integration`)
 - 개정이력 표는 `request.json`에서 자동 생성됩니다. `content.html`에는 `{{REVISIONS}}`만 넣습니다.

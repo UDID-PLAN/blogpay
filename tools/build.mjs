@@ -110,7 +110,7 @@ function revisionsTable(versions, idx) {
 <tbody>${rows.join('\n')}</tbody></table></div>`;
 }
 
-function renderDoc(slug, version) {
+function renderDoc(slug, version, opts = {}) {
   const req = loadRequest(slug);
   const idx = (req.versions || []).findIndex((v) => v.version === version);
   if (idx < 0) fail(`request.json의 versions에 ${version}이(가) 없습니다.`);
@@ -124,7 +124,7 @@ function renderDoc(slug, version) {
     assertSelfContained(html, `${slug} ${version}`);
     const size = Buffer.byteLength(html);
     if (size > MAX_BYTES) console.warn(`⚠ 파일 용량이 ${kb(size)}입니다. 이미지를 webp로 압축하세요. (권장 상한 ${kb(MAX_BYTES)})`);
-    return { html, size };
+    return { html: opts.linkCss ? linkCss(html) : html, size };
   }
   const cf = path.join(dir, 'content.html');
   if (!fs.existsSync(cf)) fail(`본문 파일이 없습니다: requests/${slug}/${version}/content.html`);
@@ -144,7 +144,15 @@ function renderDoc(slug, version) {
   assertSelfContained(html, `${slug} ${version}`);
   const size = Buffer.byteLength(html);
   if (size > MAX_BYTES) console.warn(`⚠ 파일 용량이 ${kb(size)}입니다. 이미지를 webp로 압축하세요. (권장 상한 ${kb(MAX_BYTES)})`);
-  return { html, size };
+  return { html: opts.linkCss ? linkCss(html) : html, size };
+}
+
+// docs/ 기획서: 내장 CSS 대신 레포의 src/doc.css를 링크 → CSS를 고치면 다시 빌드하지 않아도 모든 기획서에 반영된다.
+// (docs/<slug>/<파일>.html 기준 ../../src/doc.css. 공유용 단일 파일은 인덱스 [기획 추출]이 CSS를 다시 내장해 내려받는다)
+function linkCss(html) {
+  const block = `<style>\n${read(P('src', 'doc.css'))}\n</style>`;
+  if (!html.includes(block)) fail('문서 틀에서 CSS 블록을 찾지 못했습니다 (src/*-frame.html의 <style>{{CSS}}</style> 형식 확인)');
+  return html.replace(block, '<link rel="stylesheet" href="../../src/doc.css">');
 }
 
 function write(out, html) {
@@ -161,10 +169,14 @@ function verify(out) {
 }
 
 function cmdDoc(slug, version) {
-  const { html, size } = renderDoc(slug, version);
+  // 넘침 검사는 CSS 내장본(draft/, git 제외)으로 실측하고, 통과하면 CSS 링크본을 docs/에 쓴다.
+  const { html: full } = renderDoc(slug, version);
+  const check = P('draft', slug, `${slug}_${version}.html`);
+  write(check, full);
+  verify(check);
+  const { html, size } = renderDoc(slug, version, { linkCss: true });
   const out = P('docs', slug, `${slug}_${version}.html`);
   write(out, html);
-  verify(out);
   console.log(`✔ 기획서 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
   console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
 }
@@ -238,7 +250,7 @@ function cmdIndex() {
       const hasHtml = !!f;
       const cls = `btn${i === 0 && !hasSample ? ' primary' : ''}`;
       const tip = esc([v.date, v.summary].filter(Boolean).join(' · '));
-      if (hasHtml) return `<a class="${cls}" href="${esc(f)}" title="${tip}">${esc(v.version)}</a>`;
+      if (hasHtml) return `<a class="${cls}" href="${esc(f)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
       if (v.url) return `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
       return `<span class="btn disabled" title="${tip}">${esc(v.version)}</span>`;
     };
@@ -252,7 +264,7 @@ function cmdIndex() {
       return { label: v.version, href: '', dl: false };
     });
     const def = cands.find((c) => c.dl);
-    const dlAttr = (c) => `href="${esc(c.href)}" download="${esc(path.basename(c.href))}"`;
+    const dlAttr = (c) => `href="${esc(c.href)}" download="${esc(path.basename(c.href))}"${c.href.startsWith('docs/') ? ' data-extract' : ''}`;
     const extractBtn = def
       ? `<a class="btn" ${dlAttr(def)} title="${esc(def.label)} 기획서를 HTML 파일로 내려받습니다 (스타일·이미지 내장)">기획 추출</a>`
       : '<span class="btn disabled" title="내려받을 HTML 기획서가 없습니다">기획 추출</span>';

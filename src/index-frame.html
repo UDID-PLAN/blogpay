@@ -62,6 +62,20 @@
   });
   apply();
 })();
+
+// [기획 추출] docs/ 기획서는 CSS를 링크로 쓰므로, 내려받을 때 src/doc.css를 다시 내장해 단일 파일(공유본)로 만든다.
+document.addEventListener('click', async (e) => {
+  const a = e.target.closest('a[data-extract]');
+  if (!a) return;
+  e.preventDefault();
+  try {
+    const [html, css] = await Promise.all([fetch(a.getAttribute('href')).then((r) => r.text()), fetch('src/doc.css').then((r) => r.text())]);
+    const out = html.replace(new RegExp('<' + 'link rel="stylesheet" href="[^"]*doc\\.css">'), () => '<style>\n' + css + '\n</style>');
+    const url = URL.createObjectURL(new Blob([out], { type: 'text/html' }));
+    const d = document.createElement('a'); d.href = url; d.download = a.getAttribute('download'); document.body.appendChild(d); d.click(); d.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (err) { alert('기획 추출에 실패했습니다. 잠시 후 다시 시도해 주세요.'); }
+});
 </script>
 </body>
 </html>
