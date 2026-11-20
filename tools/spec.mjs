@@ -58,7 +58,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
   };
 
   const view = (sid, dev, st, first) => {
-    const marks = (st.marks || []).map((m) => `<div class="mark" data-n="${m.n}" style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
+    const marks = (st.marks || []).map((m) => `<div class="mark" data-n="${m.n}"${m.opens ? ` data-opens="${esc(m.opens)}"` : ''} style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
     return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}</div></div>`;
   };
 
@@ -71,12 +71,23 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const KIND = { new: { label: '신설', tone: 'blue' }, extend: { label: '확장', tone: 'violet' } };
     if (sh.kind && !KIND[sh.kind]) fail(`sheet.kind는 new(신설) 또는 extend(확장)만 가능합니다: ${sh.kind}`);
     const kindTag = sh.kind ? badge(KIND[sh.kind]) : '';
+    const stateChips = (states) => {
+      const seen = new Set();
+      return states.map((s, i) => {
+        const chip = (cls, attr) => `<button type="button" class="fchip${cls}${i === 0 ? ' active' : ''}" ${attr}>${esc(s.label)}</button>`;
+        if (!s.group) return chip('', `data-state-btn="${esc(s.id)}"`);
+        const case_ = `<button type="button" class="fchip case${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}" data-in-group="${esc(s.group)}" hidden>${esc(s.label)}</button>`;
+        if (seen.has(s.group)) return case_;
+        seen.add(s.group);
+        return `<button type="button" class="fchip" data-group-btn="${esc(s.group)}">${esc(s.group)}</button>${case_}`;
+      }).join('');
+    };
     const tools = `<div class="stage-tools">
-<div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div>
+<div class="seg" role="group" aria-label="화면 상태">${stateChips(devs[d0]?.states || [])}</div>
 <div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div></div>`;
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
-    const annoLi = (a) => `<li data-n="${a.n}"><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`;
+    const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`;
     const firstState = devs[d0]?.states?.[0]?.id;
     const ownLists = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states).filter((s, i, a) => s.annotations && a.findIndex((x) => x.id === s.id) === i);
     const annos = `<ol class="annos${ownLists.some((s) => s.id === firstState) ? '' : ' on'}" data-for="*">${(sh.annotations || []).map(annoLi).join('')}</ol>`
@@ -90,7 +101,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const flowBody = rows.length ? rows.map((r) => `<ol class="flow">${r.map((x) => {
       if (x.sheet && !sheetIds.has(x.sheet)) fail(`사용자 흐름의 이동 대상 시트가 없습니다: ${x.sheet}`);
       const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
-      return `<li><button type="button" class="fchip${x.sheet === sh.id ? ' here' : ''}"${go}>${esc(x.label)}</button></li>`;
+      return `<li><button type="button" class="fchip"${go} data-flow-key="${esc(x.label)}">${esc(x.label)}</button></li>`;
     }).join('')}</ol>`).join('') : '';
     const qBody = b.questions && b.questions.length ? list(b.questions) : '';
     const panels = [['policy', '정책', policyBody], ['flow', '사용자 흐름', flowBody], ['questions', '확인 필요', qBody]];
@@ -123,10 +134,11 @@ $('.spec-chapter').forEach(function(ch){
   $('.spec-sheet',ch).forEach(function(sh){
     var act=function(sel,attr,def){var e=$(sel+'.active',sh)[0];return e?e.getAttribute(attr):def;};
     var dev=act('[data-dev-btn]','data-dev-btn','pc'),st=act('[data-state-btn]','data-state-btn',''),sel=null;
-    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});}
+    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});var cur=$('[data-state-btn="'+st+'"]',sh)[0],grp=cur?cur.getAttribute('data-in-group'):null;$('[data-in-group]',sh).forEach(function(c){c.hidden=c.getAttribute('data-in-group')!==grp;});$('[data-group-btn]',sh).forEach(function(g){g.classList.toggle('active',g.getAttribute('data-group-btn')===grp);});var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});}
     show();
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
+    $('[data-group-btn]',sh).forEach(function(g){g.addEventListener('click',function(){var f=$('[data-in-group="'+g.getAttribute('data-group-btn')+'"]',sh)[0];if(f)f.click();});});
     var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.setProperty('--zoom',z/100);});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
     $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
     setZoom(0);
@@ -137,14 +149,15 @@ $('.spec-chapter').forEach(function(ch){
       var li=items(n).filter(function(e){return e.tagName==='LI';})[0];if(li&&scrollList)li.scrollIntoView({block:'nearest',behavior:'smooth'});}
     $('.mark,.annos > li',sh).forEach(function(e){var n=e.getAttribute('data-n');
       e.addEventListener('mouseenter',function(){hot(n,true);});e.addEventListener('mouseleave',function(){hot(n,false);});
-      e.addEventListener('click',function(){focus(n,e.classList.contains('mark'));});});
+      e.addEventListener('click',function(){var o=e.getAttribute('data-opens');if(o){var ob=$('[data-state-btn="'+o+'"]',sh)[0];if(ob){ob.click();return;}}focus(n,e.classList.contains('mark'));});});
     $('[data-panel-btn]',sh).forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-panel-btn'),was=b.classList.contains('active');
       $('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});
       if(!was){b.classList.add('active');$('.spec-drawer[data-panel="'+k+'"]',sh).forEach(function(d){d.classList.add('on');});}});});
     GO[sh.getAttribute('data-sheet')]=function(state,n){if(state){var sb=$('[data-state-btn="'+state+'"]',sh)[0];if(sb)sb.click();}if(n)focus(String(n),true);var fb=$('[data-panel-btn="flow"]',sh)[0];if(fb&&!fb.disabled&&!fb.classList.contains('active'))fb.click();};
   });
 });
-$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'));});});
+$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
+$('[data-state-btn],[data-sheet-btn],[data-chapter-btn],[data-group-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
 })();`;
   return { nav, body, script };
 }
