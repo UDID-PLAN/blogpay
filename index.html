@@ -285,8 +285,9 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .mark.hot, .mark.sel { background: var(--mark-fill); border-color: var(--ink); }
 .mark .n { position: absolute; top: 0; left: 0; transform: translate(-50%, -50%); display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--error); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-bold); border: var(--bw-focus) solid var(--surface); }
 .mark.hot .n, .mark.sel .n { background: var(--ink); }
-.side { min-height: 0; overflow: auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
-.side-head { padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); background: var(--hairline-soft); color: var(--ink); font-weight: var(--fw-bold); }
+.side { min-height: 0; display: flex; flex-direction: column; overflow: hidden; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.side-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); background: var(--hairline-soft); color: var(--ink); font-weight: var(--fw-bold); }
+.side-scroll { flex: 1; min-height: 0; overflow: auto; }
 .side-note { padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); color: var(--body); }
 .annos { list-style: none; margin: 0; padding: 0; }
 .annos li { display: grid; grid-template-columns: var(--w-pin) 1fr; gap: var(--sp-3); margin: 0; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); cursor: pointer; }

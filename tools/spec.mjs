@@ -71,8 +71,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const kindTag = sh.kind ? badge(KIND[sh.kind]) : '';
     const tools = `<div class="stage-tools">
 <div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div>
-<div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div>
-<div class="seg" role="group" aria-label="확대"><button type="button" class="fchip" data-zoom-step="-1" aria-label="축소">-</button><span class="zoom-val" data-zoom-val>100%</span><button type="button" class="fchip" data-zoom-step="1" aria-label="확대">+</button></div></div>`;
+<div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div></div>`;
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
     const annos = (sh.annotations || []).map((a) => `<li data-n="${a.n}"><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`).join('');
@@ -84,7 +83,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
 <div class="spec-body"><div class="stage">
 <div class="stage-head"><h2>${esc(sh.title)}</h2>${kindTag}<span class="stage-info">${info}</span></div>
 ${tools}<div class="viewport">${views}</div></div>
-<aside class="side" aria-label="화면 설명"><div class="side-head">화면 설명</div>${intro}<ol class="annos">${annos}</ol></aside></div>
+<aside class="side" aria-label="화면 설명"><div class="side-head"><span>화면 설명</span><div class="seg" role="group" aria-label="확대"><button type="button" class="fchip" data-zoom-step="-1" aria-label="축소">-</button><span class="zoom-val" data-zoom-val>100%</span><button type="button" class="fchip" data-zoom-step="1" aria-label="확대">+</button></div></div><div class="side-scroll">${intro}<ol class="annos">${annos}</ol></div></aside></div>
 ${drawers}${bar}</section>`;
   };
 
@@ -109,8 +108,9 @@ $('.spec-chapter').forEach(function(ch){
     function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});}
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
-    var zoom=100;function setZoom(z){zoom=Math.max(50,Math.min(300,z));$('.canvas',sh).forEach(function(c){c.style.width=zoom+'%';});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=zoom+'%';});if(sel)focus(sel,false);}
-    $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zoom+25*Number(b.getAttribute('data-zoom-step')));});});
+    var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.width=z+'%';});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
+    $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
+    setZoom(0);
     function items(n){return $('.mark,.annos li',sh).filter(function(e){return e.getAttribute('data-n')===n;});}
     function hot(n,on){items(n).forEach(function(e){e.classList.toggle('hot',on);});}
     function focus(n,scrollList){$('.mark,.annos li',sh).forEach(function(e){e.classList.remove('sel');});sel=n;items(n).forEach(function(e){e.classList.add('sel');});
