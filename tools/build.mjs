@@ -235,7 +235,6 @@ function cmdIndex() {
     const btns = sampleBtn + vs.map(chip).join('');
     if (btns) parts.push(`<div class="vbtns">${btns}</div>`);
     if (!btns) parts.push('<span class="mute">작성 전</span>');
-    parts.push(`<div class="vbtns vbtns-extract">${extractBtn}${more}</div>`);
     const planCell = parts.join('');
 
     const extra = [];
@@ -254,12 +253,13 @@ function cmdIndex() {
   <td class="col-content">${contentCell(r.content)}</td>
   <td class="nowrap">${r.flow ? aLink({ label: '플로우', url: r.flow }) : '<span class="mute">-</span>'}</td>
   <td>${planCell}</td>
-  <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
+  <td>${noteCell || '<span class="mute">-</span>'}</td>
+  <td><div class="vbtns vbtns-extract">${extractBtn}${more}</div></td></tr>`;
   });
   const table = `<div class="table-wrap"><table class="index-table">
-<colgroup><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
-<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
-<tbody>${rows.join('\n') || '<tr><td colspan="9" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"><col class="w-md"></colgroup>
+<thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th><th>기획 추출</th></tr></thead>
+<tbody>${rows.join('\n') || '<tr><td colspan="10" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="10" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
 
   // 필터: 진행상태·프로젝트(선택형) + 키워드 검색(제목·내용·이슈 번호·요청일)
   const chips = (group, names) => `<button type="button" class="fchip active" data-group="${group}" data-value="" aria-pressed="true">전체</button>`

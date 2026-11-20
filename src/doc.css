@@ -135,6 +135,7 @@ pre { background: var(--surface); border: var(--bw) solid var(--hairline); borde
 /* 레이아웃 */
 .shell { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-9); display: grid; grid-template-columns: 1fr; gap: var(--sp-6); }
 .shell.wide { max-width: var(--w-wide); }
+.shell.full { max-width: none; }
 @media (min-width: 1024px) { .shell.has-toc { grid-template-columns: var(--w-toc) minmax(0, 1fr); } }
 .toc { display: none; }
 @media (min-width: 1024px) {
@@ -217,7 +218,7 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
      fluid  : 내용 (최소 240)
    현재 열 구성: sm 요청일 · xs 이슈 번호 · md 프로젝트 · xs 진행상태 · md 제목 · fluid 내용 · xs 플로우 · md 기획서 · lg 비고
    표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
-.index-table { table-layout: fixed; min-width: calc(var(--col-sm) + var(--col-xs) * 3 + var(--col-md) * 3 + var(--col-lg) + var(--col-fluid-min)); }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) + var(--col-xs) * 3 + var(--col-md) * 4 + var(--col-lg) + var(--col-fluid-min)); }
 .index-table col.w-xs { width: var(--col-xs); }
 .index-table col.w-sm { width: var(--col-sm); }
 .index-table col.w-md { width: var(--col-md); }
