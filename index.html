@@ -279,6 +279,23 @@ tr[hidden] { display: none; }
   h2 { margin-top: var(--sp-7); }
 }
 
+/* 문서형 STEP 카드 (이용매뉴얼 등): 번호·제목·기간 배지 + 설정 위치, 할 일 / 입력값 / 주의사항 3칸 */
+.doc-plain { display: flex; flex-direction: column; gap: var(--sp-4); }
+.steps { display: flex; flex-direction: column; gap: var(--sp-4); margin: 0; padding: 0; list-style: none; }
+.step { border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.step-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); }
+.step-no { display: inline-flex; align-items: center; justify-content: center; height: var(--h-tag); padding: 0 var(--sp-2); border-radius: var(--radius-full); background: var(--ink); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
+.step-title { color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-md); font-weight: var(--fw-bold); }
+.step-where { margin-left: auto; color: var(--body); font-size: var(--fs-sm); line-height: var(--lh-sm); }
+.step-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.step-cell { min-width: 0; padding: var(--sp-3) var(--sp-4); color: var(--body); }
+.step-cell + .step-cell { border-left: var(--bw) solid var(--hairline); }
+.step-cell h4 { margin: 0 0 var(--sp-2); color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: var(--fw-bold); }
+.step-cell ul, .step-cell ol { margin: 0; padding-left: var(--sp-5); }
+.step-cell .grp { display: block; margin-top: var(--sp-2); color: var(--ink); font-weight: var(--fw-medium); }
+.step-cell .grp:first-child { margin-top: 0; }
+@media (max-width: 1023px) { .step-grid { grid-template-columns: minmax(0, 1fr); } .step-cell + .step-cell { border-left: 0; border-top: var(--bw) solid var(--hairline); } }
+
 @media print {
   body { background: var(--surface); }
   .topbar, .toc { display: none; }
@@ -316,6 +333,8 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .spec-view[data-dev="mobile"] .canvas { width: calc(var(--w-mobile) * var(--zoom, 1)); margin: 0 auto; }
 .canvas img { display: block; width: 100%; height: auto; }
 .mark { position: absolute; border: var(--bw-focus) solid var(--error); border-radius: var(--radius-sm); cursor: pointer; }
+.canvas.case-on .mark { display: none; }
+.cases { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
 .mark.hot, .mark.sel { background: var(--mark-fill); border-color: var(--ink); }
 .mark .n { position: absolute; top: 0; left: 0; transform: translate(-50%, -50%); display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--error); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-bold); border: var(--bw-focus) solid var(--surface); }
 .mark.hot .n, .mark.sel .n { background: var(--ink); }

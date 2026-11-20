@@ -7,7 +7,7 @@
 //   sheets[] type=document           : { id, type, title, tab?, kind: "revisions" | "html", htmlFile? }
 //   sheets[] (화면)                  : { id, tab, title, menuPath, kind: "new"|"extend", intro: string[],
 //                                        devices: { pc: {states:[state]}, mobile: null|{…} },
-//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[], opens? },
+//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[], opens?, cases?: [{label, image?}] },   // cases: 첫 항목=현재 화면, 이후 image로 화면 전체를 바꿔 보여줌
 //                                        blocks: { policy[], policyHtml, flow, questions[] } }   // 비어 있으면 해당 탭은 비활성
 //   state                            : { id, label, image, group?, marks[{n,x,y,w,h,opens?}], annotations?[], overlays?[{id,label,image,box:{x,y,w}}] }
 //                                      group = 같은 값끼리 상태 칩 하나(드롭다운)로 묶임 / annotations = 이 상태에서만 보이는 설명
@@ -58,7 +58,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
   const docSheet = (sh, first) => {
     uniq(sh.id);
     const secs = sh.sections || [{ title: sh.title, kind: sh.kind, htmlFile: sh.htmlFile, open: true }];
-    const body = secs.map((s) => `<details class="acc"${s.open === false ? '' : ' open'}><summary>${esc(s.title)}</summary><div class="acc-body">${sectionBody(s)}</div></details>`).join('\n');
+    // plain:true 섹션은 아코디언 없이 본문만 펼쳐 둔다 (예: 이용매뉴얼 STEP 카드)
+    const body = secs.map((s) => (s.plain ? `<div class="doc-plain">${sectionBody(s)}</div>` : `<details class="acc"${s.open === false ? '' : ' open'}><summary>${esc(s.title)}</summary><div class="acc-body">${sectionBody(s)}</div></details>`)).join('\n');
     return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}"><div class="spec-doc">${body}</div></section>`;
   };
 
@@ -99,7 +100,9 @@ export function renderSpec(spec, { dir, fail, warn }) {
     allStates.forEach((x) => { const own = new Set((x.annotations || sh.annotations || []).map((a) => a.n)); (x.marks || []).forEach((m) => { if (!own.has(m.n)) fail(`${sh.id}/${x.id}: 마크 ${m.n}번에 대응하는 설명이 없습니다`); }); });
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
-    const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`;
+    // 케이스 전환: 같은 화면에서 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인)을 디스크립션 버튼으로 전환. 첫 번째 케이스는 현재 화면(image 생략)
+    const caseBtns = (a) => (a.cases && a.cases.length ? `<div class="cases">${a.cases.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-case="${c.image ? imgData(c.image, `${sh.id} case ${c.label}`) : ''}">${esc(c.label)}</button>`).join('')}</div>` : '');
+    const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}${caseBtns(a)}</div></li>`;
     const firstState = devs[d0]?.states?.[0]?.id;
     const ownLists = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states).filter((s, i, a) => s.annotations && a.findIndex((x) => x.id === s.id) === i);
     const annos = `<ol class="annos${ownLists.some((s) => s.id === firstState) ? '' : ' on'}" data-for="*">${(sh.annotations || []).map(annoLi).join('')}</ol>`
@@ -159,7 +162,9 @@ $('.spec-chapter').forEach(function(ch){
   $('.spec-sheet',ch).forEach(function(sh){
     var act=function(sel,attr,def){var e=$(sel+'.active',sh)[0];return e?e.getAttribute(attr):def;};
     var dev=act('[data-dev-btn]','data-dev-btn','pc'),st=act('[data-state-btn]','data-state-btn',''),sel=null;
-    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});$('[data-menu]',sh).forEach(function(m){var a=$('[data-state-btn].active',m)[0],mb=$('.menu-btn',m)[0];mb.classList.toggle('active',!!a);mb.textContent=m.getAttribute('data-menu')+(a?' · '+a.getAttribute('data-menu-label'):'')+' ▾';$('.menu-list',m)[0].hidden=true;});$('.ovl',sh).forEach(function(o){o.hidden=true;});$('.mark,.annos > li',sh).forEach(function(e){e.classList.remove('sel','hot');});sel=null;var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});}
+    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});$('[data-menu]',sh).forEach(function(m){var a=$('[data-state-btn].active',m)[0],mb=$('.menu-btn',m)[0];mb.classList.toggle('active',!!a);mb.textContent=m.getAttribute('data-menu')+(a?' · '+a.getAttribute('data-menu-label'):'')+' ▾';$('.menu-list',m)[0].hidden=true;});$('.ovl',sh).forEach(function(o){o.hidden=true;});$('.mark,.annos > li',sh).forEach(function(e){e.classList.remove('sel','hot');});sel=null;var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});resetCase();}
+    function resetCase(){$('.canvas img[data-orig]',sh).forEach(function(i){i.src=i.getAttribute('data-orig');});$('.canvas',sh).forEach(function(c){c.classList.remove('case-on');});$('.cases',sh).forEach(function(g){$('[data-case]',g).forEach(function(b,i){b.classList.toggle('active',i===0);});});}
+    $('[data-case]',sh).forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var v=$('.spec-view.on',sh)[0];if(!v)return;var im=$('.canvas > img',v)[0],cv=$('.canvas',v)[0];if(!im.getAttribute('data-orig'))im.setAttribute('data-orig',im.src);var src=b.getAttribute('data-case');im.src=src||im.getAttribute('data-orig');cv.classList.toggle('case-on',!!src);$('[data-case]',b.parentNode).forEach(function(x){x.classList.toggle('active',x===b);});});});
     show();
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
