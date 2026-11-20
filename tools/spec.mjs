@@ -3,7 +3,7 @@
 // spec.json
 //   title / version / date           : 기획서 자체 제목·버전·작성일 (요청 건 제목이 아님)
 //   revisions[]                      : { version, date, reason, changes: string|string[], author, reviewer } — 최신이 위
-//   chapters[]: { id, title, sheets[], policyHtml?, flow? }   // policyHtml·flow는 챕터 안 모든 화면 시트의 하단 탭 기본값
+//   chapters[]: { id, title, sheets[], policyHtml?, flow? }   // policyHtml·flow는 챕터 안 화면 시트가 자기 blocks에 없을 때만 쓰는 기본값 (하단 탭은 항상 2차 탭=화면 시트 기준)
 //   sheets[] type=document           : { id, type, title, tab?, kind: "revisions" | "html", htmlFile? }
 //   sheets[] (화면)                  : { id, tab, title, menuPath, kind: "new"|"extend", intro: string[],
 //                                        devices: { pc: {states:[state]}, mobile: null|{…} },
@@ -124,7 +124,11 @@ export function renderSpec(spec, { dir, fail, warn }) {
       const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}${x.open ? ` data-go-open="${esc(x.open)}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
       return `<li><button type="button" class="fchip"${go} data-flow-key="${esc(x.label)}">${esc(x.label)}</button></li>`;
     }).join('')}</ol>`).join('') : '';
-    const qBody = b.questions && b.questions.length ? list(b.questions) : '';
+    // 확인 필요: 정책 탭과 같은 2열(항목 | 내용) 형식. 항목은 {k, v} 또는 문자열(항목명 없이 내용만)
+    const qRow = (q, i) => (typeof q === 'string'
+      ? `<div class="plist-row"><span class="plist-k">확인 ${i + 1}</span><div class="plist-v">${inline(q)}</div></div>`
+      : `<div class="plist-row"><span class="plist-k">${esc(q.k)}</span><div class="plist-v">${Array.isArray(q.v) ? list(q.v) : inline(q.v)}</div></div>`);
+    const qBody = b.questions && b.questions.length ? `<div class="plist">${b.questions.map(qRow).join('')}</div>` : '';
     const panels = [['policy', '정책', policyBody], ['flow', '사용자 흐름', flowBody], ['questions', '확인 필요', qBody]];
     const bar = `<div class="tabs bar">${panels.map(([k, l, body]) => `<button type="button" class="tab" data-panel-btn="${k}"${body ? '' : ' disabled'}>${l}</button>`).join('')}</div>`;
     const drawers = panels.filter(([, , body]) => body).map(([k, , body]) => `<div class="spec-drawer" data-panel="${k}">${body}</div>`).join('');
