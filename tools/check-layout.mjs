@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const WIDTHS = [1440, 1100]; // 데스크톱 폭. 표는 최소 폭 이하에서 가로 스크롤이라 이 이하는 같은 레이아웃
+const WIDTHS = [1920, 1440, 1100]; // 데스크톱 폭. 표는 최소 폭 이하에서 가로 스크롤이라 이 이하는 같은 레이아웃
 
 function findChrome() {
   const cands = [process.env.CHROME_BIN, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome',

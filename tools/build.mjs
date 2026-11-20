@@ -229,8 +229,8 @@ function cmdIndex() {
     const others = cands.filter((c) => c !== def);
     const moreItems = others.map((c) => c.dl
       ? `<li><a ${dlAttr(c)}>${esc(c.label)}</a></li>`
-      : c.href ? `<li><a href="${esc(c.href)}" target="_blank" rel="noopener noreferrer">${esc(c.label)} · 외부 문서 열기</a></li>` : `<li><span class="mute">${esc(c.label)} · 파일 없음</span></li>`).join('');
-    const more = others.length ? `<details class="more"><summary class="btn">다른 버전</summary><ul class="more-list">${moreItems}</ul></details>` : '';
+      : c.href ? `<li><a href="${esc(c.href)}" target="_blank" rel="noopener noreferrer">${esc(c.label)}</a></li>` : `<li><span class="mute">${esc(c.label)} · 파일 없음</span></li>`).join('');
+    const more = others.length ? `<details class="more"><summary class="btn">과거 버전</summary><ul class="more-list">${moreItems}</ul></details>` : '';
     const parts = [];
     const btns = sampleBtn + vs.map(chip).join('');
     if (btns) parts.push(`<div class="vbtns">${btns}</div>`);
@@ -262,12 +262,12 @@ function cmdIndex() {
 <tbody>${rows.join('\n') || '<tr><td colspan="10" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="10" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
 
   // 필터: 진행상태·프로젝트(선택형) + 키워드 검색(제목·내용·이슈 번호·요청일)
-  const chips = (group, names) => `<button type="button" class="fchip active" data-group="${group}" data-value="" aria-pressed="true">전체</button>`
-    + names.map((n) => `<button type="button" class="fchip" data-group="${group}" data-value="${esc(n)}" aria-pressed="false">${esc(n)}</button>`).join('');
+  const chips = (group, names) => `<div class="chips"><button type="button" class="fchip active" data-group="${group}" data-value="" aria-pressed="true">전체</button>`
+    + names.map((n) => `<button type="button" class="fchip" data-group="${group}" data-value="${esc(n)}" aria-pressed="false">${esc(n)}</button>`).join('') + '</div>';
   const filters = `<div class="filters">
   <div class="filter-row"><span class="filter-label">진행상태</span>${chips('status', statusNames)}</div>
   <div class="filter-row"><span class="filter-label">프로젝트</span>${chips('project', (site.projectTags || []).map((t) => t.name))}</div>
-  <div class="filter-row"><span class="filter-label">검색</span><input id="q" class="search" type="search" placeholder="제목·내용·이슈 번호 검색" autocomplete="off"><span id="result-count" class="mute"></span></div>
+  <div class="filter-row"><span class="filter-label">검색</span><div class="chips search-wrap"><input id="q" class="search" type="search" placeholder="제목·내용·이슈 번호 검색" autocomplete="off"><span id="result-count" class="mute"></span></div></div>
 </div>`;
 
   const html = fill(read(P('src', 'index-frame.html')), {
