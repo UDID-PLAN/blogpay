@@ -11,5 +11,34 @@
   "references": [],
   "planLinks": [],
   "note": "",
-  "versions": []
+  "versions": [
+    {
+      "version": "v1.0",
+      "date": "2026-11-20",
+      "reason": "-",
+      "changes": "최초 작성",
+      "summary": "최초 작성",
+      "author": "최수빈",
+      "reviewer": "-"
+    }
+  ],
+  "materials": [
+    {
+      "kind": "정책정리",
+      "label": "Figma 카카오싱크 연동 개발 요청 > v1.0 - 독립몰방식 (판매자 설정 단계·화면설계)",
+      "url": "https://www.figma.com/design/WTlvrYddGVCU2TQgkZEpdV",
+      "note": "v1.0 근거"
+    },
+    {
+      "kind": "자료조사",
+      "label": "카카오싱크 개발가이드",
+      "url": "https://developers.kakao.com/docs/latest/ko/kakaosync/common"
+    },
+    {
+      "kind": "관리자UI",
+      "label": "블로그페이 관리자 SNS로그인연동 관리(PRO·BASIC)·쇼핑몰 개인정보처리방침",
+      "path": "requests/kakao-sync/v1.0/screens/",
+      "note": "실제 화면에 상태를 주입해 캡처, 개인정보·키 마스킹"
+    }
+  ]
 }
