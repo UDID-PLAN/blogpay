@@ -94,6 +94,8 @@
   --w-toc: 224px;
   --w-card-min: 256px;
   --w-search: 256px;
+  --w-side: 360px;
+  --w-pin: 24px;
 
   /* 인덱스 표 열 너비 — 이 5개만 쓴다 */
   --col-xs: 96px;
@@ -254,12 +256,50 @@ tr[hidden] { display: none; }
   .card, .table-wrap, figure { break-inside: avoid; }
 }
 
+/* ── 화면정의서(spec) ── 같은 토큰만 사용한다 */
+.spec-head { max-width: var(--w-wide); margin: 0 auto; padding: var(--sp-5) var(--sp-5) 0; }
+.spec-head h1 { margin-bottom: var(--sp-1); }
+.spec-nav { position: sticky; top: var(--topbar-h); z-index: 5; background: var(--canvas); border-bottom: var(--bw) solid var(--hairline); }
+.spec-nav-in { max-width: var(--w-wide); margin: 0 auto; padding: var(--sp-3) var(--sp-5); display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.spec-main { max-width: var(--w-wide); margin: 0 auto; padding: var(--sp-5) var(--sp-5) var(--sp-9); }
+.spec-subtabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: 0 0 var(--sp-4); }
+.spec-sheet { display: none; }
+.spec-sheet.on { display: block; }
+.spec-chapter { display: none; }
+.spec-chapter.on { display: block; }
+.sheet-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin: 0 0 var(--sp-3); }
+.sheet-head h2 { margin: 0; padding: 0; border: 0; }
+.sheet-path { margin: 0 0 var(--sp-3); color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.spec-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); margin: 0 0 var(--sp-3); }
+.seg { display: inline-flex; gap: var(--sp-1); }
+.seg .fchip[disabled] { color: var(--faint); background: var(--hairline-soft); cursor: not-allowed; }
+.spec-grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); align-items: start; }
+@media (min-width: 1024px) { .spec-grid { grid-template-columns: minmax(0, 1fr) var(--w-side); } }
+.spec-view { display: none; }
+.spec-view.on { display: block; }
+.preview { position: relative; border: var(--bw) solid var(--hairline); border-radius: var(--radius-sm); background: var(--surface); }
+.preview img { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); }
+.pin { position: absolute; transform: translate(-50%, -50%); display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--error); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-bold); border: var(--bw-focus) solid var(--surface); cursor: pointer; }
+.pin.hot { background: var(--ink); }
+.annos { list-style: none; margin: 0; padding: 0; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.annos li { display: grid; grid-template-columns: var(--w-pin) 1fr; gap: var(--sp-3); margin: 0; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); cursor: pointer; }
+.annos li:last-child { border-bottom: 0; }
+.annos li.hot { background: var(--hairline-soft); }
+.annos .n { display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--error); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-bold); }
+.annos strong { display: block; }
+.annos p { margin: 0; color: var(--body); }
+.blocks { display: grid; grid-template-columns: 1fr; gap: var(--sp-3); margin-top: var(--sp-4); }
+@media (min-width: 1024px) { .blocks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.block { border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); padding: var(--sp-3) var(--sp-4); }
+.block > summary { margin: 0; color: var(--ink); font-weight: var(--fw-bold); }
+.block ul { margin: var(--sp-2) 0 0; }
+
 </style>
 </head>
 <body>
 <header class="topbar">
   <span class="brand">BlogPay</span>
-  <span class="topbar-meta">updated 2026-11-19</span>
+  <span class="topbar-meta">updated 2026-11-20</span>
 </header>
 <div class="shell wide">
   <main class="content">
@@ -329,7 +369,7 @@ https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
 
 이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요</div></details></td>
   <td class="nowrap"><a href="https://flow.team/l/QLo76" target="_blank" rel="noopener noreferrer">플로우</a></td>
-  <td><div class="vbtns"><a class="btn primary" href="https://drive.google.com/file/d/1idyfI_jUp8LT7Pi0sNi7Jd-pe5vF7RXj/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-19 · 주문관리 제외, 재고·템플릿 삭제, 배송비 매칭 신설">v1.1</a><a class="btn" href="https://drive.google.com/file/d/1u-8wMBgc82k0zaqv7KqmyAv56T0seNFR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-16 · 최초 작성">v1.0</a></div></td>
+  <td><div class="vbtns"><a class="btn primary" href="https://drive.google.com/file/d/1idyfI_jUp8LT7Pi0sNi7Jd-pe5vF7RXj/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-19 · 주문관리 제외, 재고·템플릿 삭제, 배송비 매칭 신설">v1.1</a><a class="btn" href="https://drive.google.com/file/d/1u-8wMBgc82k0zaqv7KqmyAv56T0seNFR/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" title="2026-11-16 · 최초 작성">v1.0</a></div><div class="vbtns"><a class="btn" href="published/smartstore-integration/smartstore-integration_v1.1_sample.html" title="화면정의서 템플릿 샘플 (v1.1 기준)">샘플</a></div></td>
   <td><ul class="reflist"><li><a href="https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&amp;ouid=107355833966066135700&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">자료조사</a></li><li><a href="https://docs.google.com/spreadsheets/d/1o0Dy55emC7KasMEDpt5TespjSIzzQgTyCjCYUeDsPJI/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">상품 API 정리</a></li><li><a href="https://docs.google.com/spreadsheets/d/10w2IR9UbVSn9n004jyQyybupC-c3pDnaTX691Sg6eGw/edit?usp=drivesdk&amp;ouid=111238274888123773065" target="_blank" rel="noopener noreferrer">주문 API 정리</a></li></ul></td></tr><tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>
   </main>
 </div>

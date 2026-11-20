@@ -153,6 +153,14 @@ function cmdPublish(slug, version, force) {
   console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
 }
 
+// 템플릿 샘플: 실제 공유본과 별개 파일(published/<slug>/<slug>_<버전>_sample.html). 샘플은 덮어써도 된다.
+function cmdSample(slug, version) {
+  const { html, size } = renderDoc(slug, version);
+  const out = P('published', slug, `${slug}_${version}_sample.html`);
+  write(out, html);
+  console.log(`✔ 샘플 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
+}
+
 function linkBtn(label, url, primary) {
   if (!url) return `<span class="btn disabled">${esc(label)} (미등록)</span>`;
   return `<a class="btn${primary ? ' primary' : ''}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
@@ -203,6 +211,10 @@ function cmdIndex() {
     };
     const parts = [];
     if (vs.length) parts.push(`<div class="vbtns">${vs.map(chip).join('')}</div>`);
+    if (r.sample) {
+      const sf = `published/${r.slug}/${r.slug}_${r.sample}_sample.html`;
+      if (fs.existsSync(P(sf))) parts.push(`<div class="vbtns"><a class="btn" href="${esc(sf)}" title="화면정의서 템플릿 샘플 (${esc(r.sample)} 기준)">샘플</a></div>`);
+    }
     const planCell = parts.join('') || '<span class="mute">작성 전</span>';
 
     const extra = [];
@@ -258,6 +270,7 @@ const [cmd, a, b, ...rest] = process.argv.slice(2);
 const force = [a, b, ...rest].includes('--force');
 if (cmd === 'doc' && a && b) cmdDoc(a, b);
 else if (cmd === 'publish' && a && b) cmdPublish(a, b, force);
+else if (cmd === 'sample' && a && b) cmdSample(a, b);
 else if (cmd === 'index') cmdIndex();
 else {
   console.log(`사용법:
