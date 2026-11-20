@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "doc": "node tools/build.mjs doc",
-    "publish": "node tools/build.mjs publish",
     "index": "node tools/build.mjs index",
     "lint:css": "node tools/lint-css.mjs",
     "check:layout": "node tools/check-layout.mjs",

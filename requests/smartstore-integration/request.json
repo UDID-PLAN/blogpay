@@ -69,7 +69,15 @@
       "author": "최수빈",
       "reviewer": "-",
       "url": "https://drive.google.com/file/d/1idyfI_jUp8LT7Pi0sNi7Jd-pe5vF7RXj/view?usp=drivesdk"
+    },
+    {
+      "version": "vSample",
+      "date": "2026-11-19",
+      "reason": "-",
+      "changes": "화면정의서 템플릿 샘플 (v1.1 내용 기준)",
+      "summary": "화면정의서 템플릿 샘플",
+      "author": "최수빈",
+      "reviewer": "-"
     }
-  ],
-  "sample": "v1.1"
+  ]
 }

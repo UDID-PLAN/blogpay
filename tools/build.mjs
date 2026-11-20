@@ -2,7 +2,6 @@
 // BlogPay 기획서 빌드 스크립트 (외부 패키지 없음, Node 18+)
 //
 //   node tools/build.mjs doc <slug> <버전>        기획서 생성 → requests/<slug>/<버전>/<slug>_<버전>.html  (수정 시 다시 빌드해 덮어씀, 인덱스 버전 버튼이 이 파일을 연다)
-//   node tools/build.mjs publish <slug> <버전>    공유본 생성 → published/<slug>/<slug>_<버전>.html (이미 있으면 거부, --force로만 덮어쓰기)
 //   node tools/build.mjs index                    인덱스 생성 → index.html
 //
 // 결과 HTML은 CSS·이미지를 모두 내장한 단일 파일이다. 외부 링크가 하나라도 있으면 빌드가 실패한다.
@@ -181,27 +180,6 @@ function cmdDoc(slug, version) {
   console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
 }
 
-function cmdPublish(slug, version, force) {
-  const out = P('published', slug, `${slug}_${version}.html`);
-  if (fs.existsSync(out) && !force) {
-    fail(`이미 공유된 버전입니다: ${path.relative(ROOT, out)}\n  공유한 버전은 수정하지 않습니다. 변경이 있으면 새 버전(예: v1.2)을 만드세요. (정말 덮어써야 하면 --force)`);
-  }
-  const { html, size } = renderDoc(slug, version);
-  write(out, html);
-  verify(out);
-  console.log(`✔ 공유본 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
-  console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
-}
-
-// 템플릿 샘플: 실제 공유본과 별개 파일(published/<slug>/<slug>_<버전>_sample.html). 샘플은 덮어써도 된다.
-function cmdSample(slug, version) {
-  const { html, size } = renderDoc(slug, version);
-  const out = P('published', slug, `${slug}_${version}_sample.html`);
-  write(out, html);
-  verify(out);
-  console.log(`✔ 샘플 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
-}
-
 function linkBtn(label, url, primary) {
   if (!url) return `<span class="btn disabled">${esc(label)} (미등록)</span>`;
   return `<a class="btn${primary ? ' primary' : ''}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
@@ -240,26 +218,21 @@ function cmdIndex() {
 
   const rows = reqs.map((r) => {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
-    // 기획서 열: ① 샘플(있으면 최상위·검정, 새 탭) ② 버전 버튼 ③ [기획 추출] — 변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다
-    const sampleFile = r.sample ? `published/${r.slug}/${r.slug}_${r.sample}_sample.html` : '';
-    const hasSample = !!sampleFile && fs.existsSync(P(sampleFile));
-    // 버전 HTML: requests/<slug>/<버전>/ 기획서 우선, 없으면 published/(과거 공유본)
-    const verFile = (v) => [`requests/${r.slug}/${v.version}/${r.slug}_${v.version}.html`, `published/${r.slug}/${r.slug}_${v.version}.html`].find((f) => fs.existsSync(P(f))) || '';
+    // 기획서 열: 버전 버튼(새 탭) — requests/<slug>/<버전>/ 기획서, 없으면 versions[].url(외부 문서)
+    const verFile = (v) => { const f = `requests/${r.slug}/${v.version}/${r.slug}_${v.version}.html`; return fs.existsSync(P(f)) ? f : ''; };
     const chip = (v, i) => {
       const f = verFile(v);
       const hasHtml = !!f;
-      const cls = `btn${i === 0 && !hasSample ? ' primary' : ''}`;
+      const cls = `btn${i === 0 ? ' primary' : ''}`;
       const tip = esc([v.date, v.summary].filter(Boolean).join(' · '));
       if (hasHtml) return `<a class="${cls}" href="${esc(f)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
       if (v.url) return `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
       return `<span class="btn disabled" title="${tip}">${esc(v.version)}</span>`;
     };
-    const sampleBtn = hasSample ? `<a class="btn primary" href="${esc(sampleFile)}" target="_blank" rel="noopener noreferrer" title="화면정의서 템플릿 샘플 (${esc(r.sample)} 기준)">샘플</a>` : '';
-    // 추출 후보(최신 버전부터): HTML이 있는 버전 → 샘플(같은 버전) → 외부 문서 링크 순으로 판단. 내려받을 수 있는 것은 HTML 파일뿐이다.
+    // 추출 후보(최신 버전부터): 기획서 HTML이 있으면 CSS를 내장해 내려받고, 없으면 외부 문서 링크로만 연다.
     const cands = vs.map((v) => {
       const f = verFile(v);
       if (f) return { label: v.version, href: f, dl: true };
-      if (hasSample && r.sample === v.version) return { label: `${v.version} (샘플)`, href: sampleFile, dl: true };
       if (v.url) return { label: v.version, href: v.url, dl: false };
       return { label: v.version, href: '', dl: false };
     });
@@ -274,7 +247,7 @@ function cmdIndex() {
       : c.href ? `<li><a href="${esc(c.href)}" target="_blank" rel="noopener noreferrer">${esc(c.label)}</a></li>` : `<li><span class="mute">${esc(c.label)} · 파일 없음</span></li>`).join('');
     const more = others.length ? `<details class="more"><summary class="btn">과거 버전</summary><ul class="more-list">${moreItems}</ul></details>` : '';
     const parts = [];
-    const btns = sampleBtn + vs.map(chip).join('');
+    const btns = vs.map(chip).join('');
     if (btns) parts.push(`<div class="vbtns">${btns}</div>`);
     if (!btns) parts.push('<span class="mute">작성 전</span>');
     const planCell = parts.join('');
@@ -332,13 +305,10 @@ if (cssErrors.length) { console.error('✖ CSS 단일 규격 위반 (src/doc.css
 const [cmd, a, b, ...rest] = process.argv.slice(2);
 const force = [a, b, ...rest].includes('--force');
 if (cmd === 'doc' && a && b) cmdDoc(a, b);
-else if (cmd === 'publish' && a && b) cmdPublish(a, b, force);
-else if (cmd === 'sample' && a && b) cmdSample(a, b);
 else if (cmd === 'index') cmdIndex();
 else {
   console.log(`사용법:
   node tools/build.mjs doc <slug> <버전>       기획서 생성 (requests/<slug>/<버전>/, 덮어씀)
-  node tools/build.mjs publish <slug> <버전>   공유본 생성 (published/, 덮어쓰기 거부)
   node tools/build.mjs index                   인덱스(index.html) 갱신`);
   process.exit(cmd ? 1 : 0);
 }

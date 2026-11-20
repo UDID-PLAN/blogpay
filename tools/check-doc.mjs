@@ -1,7 +1,7 @@
 // 기획서(문서) 레이아웃 검사 — 빌드된 HTML을 헤드리스 Chrome으로 열어 폭별로 실측한다.
 //  ① 페이지 가로 스크롤(문서 전체 넘침)  ② 스크롤 영역 밖으로 튀어나온 요소
 //  모든 챕터·시트 탭을 순서대로 열어 검사한다. (spec.json 기반 문서만 탭이 있고, content.html 문서는 1화면)
-//  사용: node tools/check-doc.mjs <html 파일>...   (build.mjs doc/publish/sample 때 자동 실행)
+//  사용: node tools/check-doc.mjs <html 파일>...   (build.mjs doc 때 자동 실행)
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';

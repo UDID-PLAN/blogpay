@@ -21,10 +21,8 @@ blogpay/
 │        ├─ <slug>_v1.0.html   # 기획서 (doc 빌드 결과, 덮어씀). CSS는 src/doc.css 링크 → CSS 수정 바로 반영. 인덱스 버전 버튼이 새 탭으로 염
 │        ├─ content.html       # 본문만 작성 (스타일·목차·개정이력은 빌드가 채움)
 │        └─ assets/            # 이 버전에서 쓰는 이미지 (webp 권장)
-├─ published/<slug>/           # 요청 건당 폴더 1개. publish 때마다 <slug>_<버전>.html 이 새 파일로 추가됨 (덮어쓰기 거부)
-│                              #   샘플은 <slug>_<버전>_sample.html 로 별도 생성 (덮어써도 됨)
 └─ tools/
-   ├─ build.mjs                # 빌드 (doc · publish · sample · index)
+   ├─ build.mjs                # 빌드 (doc · index)
    ├─ spec.mjs                 # spec.json → 화면정의서 렌더러
    ├─ lint-css.mjs             # CSS 단일 규격 검사
    ├─ check-layout.mjs         # 인덱스 넘침 검사
@@ -41,13 +39,11 @@ blogpay/
 3. 기획서 생성: `node tools/build.mjs doc <slug> <버전>` → `requests/<slug>/<버전>/<slug>_<버전>.html` (수정할 때마다 다시 빌드해 덮어씀)
 4. 인덱스 갱신: `node tools/build.mjs index` → 버전 버튼이 해당 기획서로 연결
 5. 커밋·푸시하면 GitHub Pages에 배포됨. 인덱스 [기획 추출]이 CSS를 내장한 단일 HTML(공유본)로 내려받아 주므로 그 파일 1개를 개발팀에 전달
-6. (선택) 고정 사본이 필요하면 `node tools/build.mjs publish <slug> <버전>` → `published/`에 덮어쓰기 불가 사본 생성
 
 ## 규칙
 
 - **버전 = 컨펌 단위입니다.** 작업 중 수정은 같은 버전에 계속 반영(다시 빌드해 덮어씀)하고, 상부 컨펌을 받은 뒤에만 다음 버전(v1.0 → v1.1)을 복사 생성합니다.
 - [기획 추출]은 그 시점(마지막 커밋·배포) 기준 기획서를 단일 HTML로 내려받습니다. 추출본이 공유본입니다.
-- `publish`(덮어쓰기 불가 사본)는 선택 사항입니다.
 - 스타일 수정은 `src/doc.css`에서만 합니다. 기획서에는 바로 반영되고, 이미 내려받은 공유본에는 영향이 없습니다.
 - 외부 링크(CDN·외부 폰트·외부 이미지)를 쓰지 않습니다. 쓰면 빌드가 실패합니다.
 - 폴더명(slug)은 영문 소문자와 하이픈으로 합니다. (예: `smartstore-integration`)
@@ -56,8 +52,8 @@ blogpay/
 
 ## 인덱스의 기획서·기획 추출 열
 
-- **샘플**: 화면정의서 템플릿 샘플이 있으면 맨 앞에 검정 버튼으로 두고 새 탭에서 엽니다. (`request.json`의 `sample`)
-- **버전 버튼**: 최신 버전이 위. `requests/<slug>/<버전>/` 기획서 → `published/` 사본 → `versions[].url`(외부 문서) 순으로 새 탭으로 엽니다.
+- **샘플**: 화면정의서 템플릿 샘플은 `vSample` 버전으로 관리합니다. (예: 스마트스토어 `requests/smartstore-integration/vSample/`)
+- **버전 버튼**: 최신 버전이 위. `requests/<slug>/<버전>/` 기획서가 있으면 그 파일, 없으면 `versions[].url`(외부 문서)을 새 탭으로 엽니다.
 - **기획 추출**(비고 오른쪽 열): 스타일·이미지가 내장된 HTML 파일을 내려받습니다. 기본은 최신 버전이며, 최신 버전의 HTML이 없으면 같은 버전의 샘플을 내려받습니다. `과거 버전`에서 과거 버전을 고를 수 있고, HTML이 없는 버전은 외부 문서 링크로만 열립니다. 내려받을 HTML이 하나도 없으면 비활성입니다.
 
 ## 인덱스 표 열 너비 규칙
@@ -104,7 +100,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 
 - `:root` 밖에서는 px·hex·rgb를 직접 쓰지 않고 토큰만 씁니다. (글자 크기 `--fs-*` 12/14/16/20/32, 굵기 `--fw-*` 400/500/600, 간격 `--sp-*` 4~96, 라운드 `--radius-*` 6/12/full, 높이 컨트롤 32·태그 24)
 - 텍스트 색은 ink·body만 씁니다. 옅은 회색(mute)은 대비 3.2:1이라 텍스트에서 제외했습니다.
-- `npm run lint:css`로 검사하며, 빌드(`doc`·`publish`·`index`) 때도 자동 실행되어 위반 시 빌드가 중단됩니다.
+- `npm run lint:css`로 검사하며, 빌드(`doc`·`index`) 때도 자동 실행되어 위반 시 빌드가 중단됩니다.
 - 새 값이 필요하면 임의 값을 쓰지 말고 `:root`에 토큰을 먼저 추가·합의합니다.
 
 ## 레이아웃 검사
