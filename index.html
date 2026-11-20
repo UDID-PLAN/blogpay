@@ -98,7 +98,7 @@
   --w-mobile: 390px;
   --w-pin: 24px;
   --mark-fill: rgba(238, 0, 0, 0.08);
-  --h-bar: 48px;
+  --scrim: rgba(23, 23, 23, 0.4);
 
   /* 인덱스 표 열 너비 — 이 5개만 쓴다 */
   --col-xs: 96px;
@@ -277,7 +277,7 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .stage-head h2 { margin: 0; padding: 0; border: 0; font-size: var(--fs-md); line-height: var(--lh-md); }
 .stage-info { color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); }
 .stage-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); margin-left: auto; }
-.seg { display: inline-flex; gap: var(--sp-1); }
+.seg { display: inline-flex; align-items: center; gap: var(--sp-1); }
 .seg .fchip[disabled] { color: var(--faint); background: var(--hairline-soft); cursor: not-allowed; }
 .viewport[data-dev="mobile"] { background: var(--hairline-soft); }
 .viewport[data-dev="mobile"] .canvas { background: var(--surface); border-inline: var(--bw) solid var(--hairline); }
@@ -342,9 +342,6 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .acc-body { padding: var(--sp-4); }
 .acc-body .table-wrap:last-child { margin-bottom: 0; }
 
-.mark[data-opens], .annos > li[data-opens] { cursor: pointer; }
-.seg { align-items: center; }
-.seg .fchip[hidden] { display: none; }
 .canvas .ovl { position: absolute; inset: 0; background: var(--scrim); cursor: pointer; }
 .canvas .ovl[hidden] { display: none; }
 .canvas .ovl img { position: absolute; height: auto; }

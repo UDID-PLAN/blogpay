@@ -3,12 +3,17 @@
 // spec.json
 //   title / version / date           : 기획서 자체 제목·버전·작성일 (요청 건 제목이 아님)
 //   revisions[]                      : { version, date, reason, changes: string|string[], author, reviewer } — 최신이 위
-//   chapters[]: { id, title, sheets[] }
+//   chapters[]: { id, title, sheets[], policyHtml?, flow? }   // policyHtml·flow는 챕터 안 모든 화면 시트의 하단 탭 기본값
 //   sheets[] type=document           : { id, type, title, tab?, kind: "revisions" | "html", htmlFile? }
-//   sheets[] type=screen             : { id, no, title, menuPath, url, badges[], intro: string[], notice,
-//                                        devices: { pc: {states:[{id,label,image,marks:[{n,x,y,w,h}]}]}, mobile: null|{…} },
-//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[] },  // 문자열 안 {{…}} = 붉은 정책 강조
-//                                        blocks: { policy[], related[], questions[] } }
+//   sheets[] (화면)                  : { id, tab, title, menuPath, kind: "new"|"extend", intro: string[],
+//                                        devices: { pc: {states:[state]}, mobile: null|{…} },
+//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[], opens? },
+//                                        blocks: { policy[], policyHtml, flow, questions[] } }   // 비어 있으면 해당 탭은 비활성
+//   state                            : { id, label, image, group?, marks[{n,x,y,w,h,opens?}], annotations?[], overlays?[{id,label,image,box:{x,y,w}}] }
+//                                      group = 같은 값끼리 상태 칩 하나(드롭다운)로 묶임 / annotations = 이 상태에서만 보이는 설명
+//                                      overlays = 상태 전환 없이 화면 위에 띄우는 팝업(box는 캔버스 대비 %)
+//   opens                            : 마크·설명을 누르면 열 상태 id 또는 overlay id (없는 id는 무시되므로 반드시 빌드 검증을 통과시킬 것)
+//   flow[]                           : { label, sheet, state?, n?, open? } 또는 행 배열 — 누르면 해당 시트·상태·번호(·팝업)로 이동
 //   marks x,y,w,h: 이미지 가로·세로 대비 % (번호 배지는 박스 좌상단)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -88,6 +93,10 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const tools = `<div class="stage-tools">
 <div class="seg" role="group" aria-label="화면 상태">${stateChips(devs[d0]?.states || [])}</div>
 <div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div></div>`;
+    const allStates = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states);
+    const targets = new Set(allStates.flatMap((x) => [x.id, ...(x.overlays || []).map((o) => o.id)]));
+    [...allStates.flatMap((x) => x.marks || []), ...(sh.annotations || [])].forEach((x) => { if (x.opens && !targets.has(x.opens)) fail(`${sh.id}: opens가 가리키는 상태·팝업이 없습니다: ${x.opens}`); });
+    allStates.forEach((x) => { const own = new Set((x.annotations || sh.annotations || []).map((a) => a.n)); (x.marks || []).forEach((m) => { if (!own.has(m.n)) fail(`${sh.id}/${x.id}: 마크 ${m.n}번에 대응하는 설명이 없습니다`); }); });
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
     const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`;
@@ -103,6 +112,15 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const sheetIds = new Set((ch.sheets || []).map((x) => x.id));
     const flowBody = rows.length ? rows.map((r) => `<ol class="flow">${r.map((x) => {
       if (x.sheet && !sheetIds.has(x.sheet)) fail(`사용자 흐름의 이동 대상 시트가 없습니다: ${x.sheet}`);
+      if (x.sheet && sheetIds.has(x.sheet)) {
+        const tg = (ch.sheets || []).find((y) => y.id === x.sheet);
+        const sts = Object.values(tg.devices || {}).filter(Boolean).flatMap((v) => v.states || []);
+        const ok = new Set(sts.flatMap((y) => [y.id, ...(y.overlays || []).map((o) => o.id)]));
+        if (x.state && !ok.has(x.state)) fail(`사용자 흐름의 상태가 없습니다: ${x.sheet}/${x.state}`);
+        if (x.open && !ok.has(x.open)) fail(`사용자 흐름의 팝업이 없습니다: ${x.sheet}/${x.open}`);
+        const st0 = sts.find((y) => y.id === (x.state || sts[0]?.id));
+        if (x.n && st0 && !(st0.marks || []).some((m) => m.n === x.n)) fail(`사용자 흐름의 번호 ${x.n}에 해당하는 마크가 없습니다: ${x.sheet}/${st0.id}`);
+      }
       const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}${x.open ? ` data-go-open="${esc(x.open)}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
       return `<li><button type="button" class="fchip"${go} data-flow-key="${esc(x.label)}">${esc(x.label)}</button></li>`;
     }).join('')}</ol>`).join('') : '';
@@ -142,10 +160,8 @@ $('.spec-chapter').forEach(function(ch){
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
     $('.menu-btn',sh).forEach(function(g){g.addEventListener('click',function(e){e.stopPropagation();var l=g.parentNode.querySelector('.menu-list');var h=l.hidden;$('.menu-list').forEach(function(x){x.hidden=true;});l.hidden=!h;});});
-    document.addEventListener('click',function(){$('.menu-list',sh).forEach(function(x){x.hidden=true;});});
     function ovl(id,on){$('.spec-view.on .ovl',sh).forEach(function(o){if(o.getAttribute('data-ovl')===id)o.hidden=!on;});}
     $('.ovl',sh).forEach(function(o){o.addEventListener('click',function(){o.hidden=true;});});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl',sh).forEach(function(o){o.hidden=true;});});
     var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.setProperty('--zoom',z/100);});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
     $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
     setZoom(0);
@@ -164,6 +180,8 @@ $('.spec-chapter').forEach(function(ch){
     GO[sh.getAttribute('data-sheet')]=function(state,n,open){if(state){var sb=$('[data-state-btn="'+state+'"]',sh)[0];if(sb)sb.click();}clearSel();if(n)focus(String(n),true);if(open)ovl(open,true);var fb=$('[data-panel-btn="flow"]',sh)[0];if(fb&&!fb.disabled&&!fb.classList.contains('active'))fb.click();};
   });
 });
+document.addEventListener('click',function(){$('.menu-list').forEach(function(x){x.hidden=true;});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl').forEach(function(o){o.hidden=true;});});
 $('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
 $('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
 })();`;

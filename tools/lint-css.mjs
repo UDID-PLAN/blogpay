@@ -25,6 +25,9 @@ export function lintCss(css) {
       for (const v of m[1].trim().split(/\s+/)) if (!/^(0|auto|var\(--sp-\d\))$/.test(v)) errors.push(`${n}: 간격은 --sp-* 토큰만: ${v}`);
     }
   });
+  // 정의되지 않은 토큰 참조 (--zoom은 화면 확대 스크립트가 런타임에 넣는다)
+  const defined = new Set([...stripped.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+  lines.forEach((line, i) => { for (const m of line.matchAll(/var\((--[\w-]+)/g)) if (!defined.has(m[1]) && m[1] !== '--zoom') errors.push(`${i + 1}: 정의되지 않은 토큰 ${m[1]}`); });
   return errors;
 }
 
