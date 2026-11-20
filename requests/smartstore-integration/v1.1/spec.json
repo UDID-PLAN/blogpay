@@ -57,7 +57,7 @@
    "sheets": [
     {
      "id": "linked-list",
-     "title": "연동상품관리 (목록)",
+     "title": "연동상품관리",
      "menuPath": "상품관리 > 연동상품관리",
      "intro": [
       "연동상품관리 LNB (메뉴 신설)",

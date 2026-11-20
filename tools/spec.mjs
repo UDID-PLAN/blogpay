@@ -70,8 +70,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
     if (sh.kind && !KIND[sh.kind]) fail(`sheet.kind는 new(신설) 또는 extend(확장)만 가능합니다: ${sh.kind}`);
     const kindTag = sh.kind ? badge(KIND[sh.kind]) : '';
     const tools = `<div class="stage-tools">
-<div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div>
-<div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div></div>`;
+<div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div>
+<div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div></div>`;
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
     const annos = (sh.annotations || []).map((a) => `<li data-n="${a.n}"><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`).join('');
