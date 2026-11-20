@@ -95,6 +95,7 @@
   --w-card-min: 256px;
   --w-search: 256px;
   --w-side: 400px;
+  --w-mobile: 390px;
   --w-pin: 24px;
   --mark-fill: rgba(238, 0, 0, 0.08);
   --h-bar: 48px;
@@ -281,7 +282,8 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .viewport { flex: 1; min-height: 0; overflow: auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
 .spec-view { display: none; }
 .spec-view.on { display: block; }
-.canvas { position: relative; width: 100%; }
+.canvas { position: relative; width: calc(100% * var(--zoom, 1)); }
+.spec-view[data-dev="mobile"] .canvas { width: calc(var(--w-mobile) * var(--zoom, 1)); margin: 0 auto; }
 .canvas img { display: block; width: 100%; height: auto; }
 .mark { position: absolute; border: var(--bw-focus) solid var(--error); border-radius: var(--radius-sm); cursor: pointer; }
 .mark.hot, .mark.sel { background: var(--mark-fill); border-color: var(--ink); }

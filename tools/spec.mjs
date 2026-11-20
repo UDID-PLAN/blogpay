@@ -7,7 +7,7 @@
 //   sheets[] type=document           : { id, type, title, tab?, kind: "revisions" | "html", htmlFile? }
 //   sheets[] type=screen             : { id, no, title, menuPath, url, badges[], intro: string[], notice,
 //                                        devices: { pc: {states:[{id,label,image,marks:[{n,x,y,w,h}]}]}, mobile: null|{…} },
-//                                        annotations[]: { n, title, lines: (string | {t, ref:true})[] },
+//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[] },  // 문자열 안 {{…}} = 붉은 정책 강조
 //                                        blocks: { policy[], related[], questions[] } }
 //   marks x,y,w,h: 이미지 가로·세로 대비 % (번호 배지는 박스 좌상단)
 import fs from 'node:fs';
@@ -30,8 +30,10 @@ export function renderSpec(spec, { dir, fail, warn }) {
   const ids = new Set();
   const uniq = (id) => { if (ids.has(id)) fail(`spec.json에 중복 id가 있습니다: ${id}`); ids.add(id); return id; };
   const badge = (b) => `<span class="tag ${b.tone ? 'tone-' + esc(b.tone) : ''}">${esc(b.label ?? b)}</span>`;
-  const line = (l) => (typeof l === 'string' ? esc(l) : l.ref ? `<span class="ref">${esc(l.t)}</span>` : esc(l.t));
-  const list = (arr) => (arr && arr.length ? `<ul>${arr.map((x) => `<li>${line(x)}</li>`).join('')}</ul>` : '<p class="mute">해당 없음</p>');
+  const inline = (t) => esc(t).replace(/\{\{(.+?)\}\}/g, '<span class="ref">$1</span>');
+  const line = (l) => (typeof l === 'string' ? inline(l) : l.ref ? `<span class="ref">${esc(l.t)}</span>` : inline(l.t));
+  const li = (x) => `<li>${line(x)}${x && x.sub && x.sub.length ? `<ul>${x.sub.map(li).join('')}</ul>` : ''}</li>`;
+  const list = (arr) => (arr && arr.length ? `<ul>${arr.map(li).join('')}</ul>` : '<p class="mute">해당 없음</p>');
 
   const revisions = () => {
     const rows = (spec.revisions || []).map((r) => {
@@ -108,7 +110,7 @@ $('.spec-chapter').forEach(function(ch){
     function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});}
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
-    var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.width=z+'%';});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
+    var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.setProperty('--zoom',z/100);});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
     $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
     setZoom(0);
     function items(n){return $('.mark,.annos > li',sh).filter(function(e){return e.getAttribute('data-n')===n;});}
