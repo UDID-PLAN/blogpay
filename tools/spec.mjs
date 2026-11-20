@@ -7,7 +7,7 @@
 //   sheets[] type=document           : { id, type, title, tab?, kind: "revisions" | "html", htmlFile? }
 //   sheets[] (화면)                  : { id, tab, title, menuPath, kind: "new"|"extend", intro: string[],
 //                                        devices: { pc: {states:[state]}, mobile: null|{…} },
-//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[], opens?, cases?: [{label, image?, marks?}] },   // cases: 첫 항목=현재 화면, 이후 image로 화면 전체를 바꿔 보여줌. marks가 있으면 그 마커만 표시
+//                                        annotations[]: { n, title, lines: (string | {t, ref?:true, sub?:[…]})[], opens?, cases?: [{label, image?, marks?}] },   // cases: 첫 항목=현재 화면, 이후 image로 화면 전체를 바꿔 보여줌. 해당 번호 마커만 표시(marks로 위치 지정)
 //                                        blocks: { policy[], policyHtml, flow, questions[] } }   // 비어 있으면 해당 탭은 비활성
 //   state                            : { id, label, image, group?, marks[{n,x,y,w,h,opens?}], annotations?[], overlays?[{id,label,image,box:{x,y,w}}] }
 //                                      group = 같은 값끼리 상태 칩 하나(드롭다운)로 묶임 / annotations = 이 상태에서만 보이는 설명
@@ -36,8 +36,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
   const uniq = (id) => { if (ids.has(id)) fail(`spec.json에 중복 id가 있습니다: ${id}`); ids.add(id); return id; };
   const badge = (b) => `<span class="tag ${b.tone ? 'tone-' + esc(b.tone) : ''}">${esc(b.label ?? b)}</span>`;
   const inline = (t) => esc(t).replace(/\{\{(.+?)\}\}/g, '<span class="ref">$1</span>');
-  // {copy:"문구"}: 안내 배너·알림처럼 긴 문구를 그대로 옮겨 쓸 수 있게 [복사] 버튼과 함께 표시({{}} 강조는 복사 시 제거)
-  const copyBox = (l) => `${l.t ? inline(l.t) : ''}<div class="copy-box"><div class="copy-text">${inline(l.copy)}</div><button type="button" class="fchip copy-btn" data-copy="${esc(l.copy.replace(/\{\{(.+?)\}\}/g, '$1'))}">복사</button></div>`;
+  // {t, copy:"문구"}: 안내 배너·알림처럼 긴 문구는 본문 대신 [복사] 버튼만 표시. 누르면 토스트 알림({{}} 강조는 복사 시 제거)
+  const copyBox = (l) => `${l.t ? inline(l.t) : ''}<button type="button" class="fchip copy-btn" data-copy="${esc(l.copy.replace(/\{\{(.+?)\}\}/g, '$1'))}">복사</button>`;
   const line = (l) => (typeof l === 'string' ? inline(l) : l.copy ? copyBox(l) : l.ref ? `<span class="ref">${esc(l.t)}</span>` : inline(l.t));
   const li = (x) => `<li>${line(x)}${x && x.sub && x.sub.length ? `<ul>${x.sub.map(li).join('')}</ul>` : ''}</li>`;
   const list = (arr) => (arr && arr.length ? `<ul>${arr.map(li).join('')}</ul>` : '<p class="mute">해당 없음</p>');
@@ -103,7 +103,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
     // 케이스 전환: 같은 화면에서 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인)을 디스크립션 버튼으로 전환. 첫 번째 케이스는 현재 화면(image 생략)
-    // case.marks: 케이스 이미지에서 위치가 달라지는 마커(생략하면 기본 마커를 그대로 둔다)
+    // 케이스 전환 시 해당 번호 마커만 남긴다. case.marks로 케이스 이미지의 위치를 지정(생략하면 기본 위치)
     const caseBtns = (a) => (a.cases && a.cases.length ? `<div class="cases">${a.cases.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-case="${c.image ? imgData(c.image, `${sh.id} case ${c.label}`) : ''}" data-case-n="${a.n}"${c.marks ? ` data-case-marks="${esc(JSON.stringify(c.marks))}"` : ''}>${esc(c.label)}</button>`).join('')}</div>` : '');
     const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}${caseBtns(a)}</div></li>`;
     const firstState = devs[d0]?.states?.[0]?.id;
@@ -151,7 +151,9 @@ ${drawers}${bar}</section>`;
     uniq(sh.id);
     const f = path.resolve(dir, sh.htmlFile || '');
     if (!sh.htmlFile || !fs.existsSync(f)) fail(`단계 시트 본문 파일이 없습니다: ${sh.htmlFile}`);
-    const img = sh.image ? `<div class="canvas"><img alt="${esc(sh.title)}" src="${imgData(sh.image, `${sh.id} step`)}"></div>` : '<p class="step-empty mute">이미지 준비 중</p>';
+    // images: [{image, caption?, source?}] — 위에서 아래로 쌓아 보여준다(예: 카카오 공식 가이드 예시 화면)
+    const imgs = sh.images || (sh.image ? [{ image: sh.image }] : []);
+    const img = imgs.length ? `<div class="step-imgs">${imgs.map((x, k) => `<figure class="step-fig"><img alt="${esc(x.caption || sh.title)}" src="${imgData(x.image, `${sh.id} step ${k}`)}">${x.caption || x.source ? `<figcaption>${esc(x.caption || '')}${x.source ? `<span class="mute"> · 출처 : ${esc(x.source)}</span>` : ''}</figcaption>` : ''}</figure>`).join('')}</div>` : '<p class="step-empty mute">이미지 준비 중</p>';
     const tag = sh.badge ? badge(sh.badge) : '';
     return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}"><div class="spec-body step-body"><div class="stage"><div class="viewport">${img}</div></div>
 <aside class="side" aria-label="단계 설명"><div class="side-head step-side-head"><span class="step-no">${esc(sh.no || sh.tab)}</span><span class="step-title">${esc(sh.title)}</span>${tag}</div><div class="side-scroll">${sh.where ? `<p class="step-where">설정 위치 : ${esc(sh.where)}</p>` : ''}${fs.readFileSync(f, 'utf8')}</div></aside></div></section>`;
@@ -183,7 +185,7 @@ $('.spec-chapter').forEach(function(ch){
     var caseN=null;
     function resetCase(){caseN=null;$('.canvas img[data-orig]',sh).forEach(function(i){i.src=i.getAttribute('data-orig');});$('.canvas .cm',sh).forEach(function(m){m.remove();});$('.canvas',sh).forEach(function(c){c.classList.remove('case-on');});$('.cases',sh).forEach(function(g){$('[data-case]',g).forEach(function(b,i){b.classList.toggle('active',i===0);});});}
     $('[data-case]',sh).forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var v=$('.spec-view.on',sh)[0];if(!v)return;var n=b.getAttribute('data-case-n');resetCase();var im=$('.canvas > img',v)[0],cv=$('.canvas',v)[0];if(!im.getAttribute('data-orig'))im.setAttribute('data-orig',im.src);var src=b.getAttribute('data-case');
-      if(src){im.src=src;caseN=n;var ms=b.getAttribute('data-case-marks');if(ms){cv.classList.add('case-on');JSON.parse(ms).forEach(function(m){var d=document.createElement('div');d.className='mark cm';d.setAttribute('data-n',String(m.n));d.style.left=m.x+'%';d.style.top=m.y+'%';d.style.width=m.w+'%';d.style.height=m.h+'%';d.innerHTML='<span class="n">'+m.n+'</span>';d.addEventListener('click',function(){pickN(String(m.n),true);});cv.appendChild(d);});}}
+      if(src){im.src=src;caseN=n;var ms=b.getAttribute('data-case-marks'),dm=$('.mark[data-n="'+n+'"]',cv)[0],list=ms?JSON.parse(ms):(dm?[{n:n,x:parseFloat(dm.style.left),y:parseFloat(dm.style.top),w:parseFloat(dm.style.width),h:parseFloat(dm.style.height)}]:[]);cv.classList.add('case-on');{list.forEach(function(m){var d=document.createElement('div');d.className='mark cm';d.setAttribute('data-n',String(m.n));d.style.left=m.x+'%';d.style.top=m.y+'%';d.style.width=m.w+'%';d.style.height=m.h+'%';d.innerHTML='<span class="n">'+m.n+'</span>';d.addEventListener('click',function(){pickN(String(m.n),true);});cv.appendChild(d);});}}
       $('[data-case]',b.parentNode).forEach(function(x){x.classList.toggle('active',x===b);});focus(n,false);});});
     // 케이스 전환 중 다른 번호를 누르면 기본 화면으로 돌아간 뒤 해당 번호로 이동
     function pickN(n,fromMark){if(caseN&&n!==caseN)resetCase();focus(n,fromMark);}
@@ -212,8 +214,10 @@ $('.spec-chapter').forEach(function(ch){
   });
 });
 document.addEventListener('click',function(){$('.menu-list').forEach(function(x){x.hidden=true;});});
-$('[data-copy]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var t=b.getAttribute('data-copy');var done=function(){b.textContent='복사됨';setTimeout(function(){b.textContent='복사';},1200);};
-  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done);}else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();}});});
+var TOAST=document.createElement('div');TOAST.className='toast';TOAST.hidden=true;document.body.appendChild(TOAST);var TT=null;
+function toast(m){TOAST.textContent=m;TOAST.hidden=false;clearTimeout(TT);TT=setTimeout(function(){TOAST.hidden=true;},1500);}
+$('[data-copy]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var t=b.getAttribute('data-copy');var done=function(){toast('복사되었습니다.');};
+  var fb=function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');}catch(x){}a.remove();done();};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,fb);}else{fb();}});});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl').forEach(function(o){o.hidden=true;});});
 $('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
 $('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});

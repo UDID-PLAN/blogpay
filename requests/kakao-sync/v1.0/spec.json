@@ -75,10 +75,11 @@
                     },
                     {
                       "n": 4,
-                      "x": 24.58,
-                      "y": 28.55,
-                      "w": 8.1,
-                      "h": 1.99
+                      "x": 24.48,
+                      "y": 28.46,
+                      "w": 8.53,
+                      "h": 2.18,
+                      "opens": "alert-sync"
                     },
                     {
                       "n": 5,
@@ -92,8 +93,7 @@
                       "x": 52.61,
                       "y": 60,
                       "w": 3.98,
-                      "h": 2.95,
-                      "opens": "alert-sync"
+                      "h": 2.95
                     }
                   ]
                 },
@@ -112,10 +112,10 @@
                     },
                     {
                       "n": 2,
-                      "x": 52.61,
-                      "y": 60,
-                      "w": 3.98,
-                      "h": 2.95
+                      "x": 24.48,
+                      "y": 28.46,
+                      "w": 8.53,
+                      "h": 2.18
                     }
                   ],
                   "annotations": [
@@ -123,8 +123,8 @@
                       "n": 1,
                       "title": "알림 - 카카오싱크로 변경",
                       "lines": [
-                        "카카오싱크를 선택하고 저장하면 노출됩니다.",
-                        "확인을 누르면 저장되고, 취소하면 저장하지 않습니다.",
+                        "카카오로그인에서 카카오싱크로 전환할 때 노출됩니다.",
+                        "확인을 누르면 전환되고, 취소하면 기존 방식을 유지합니다.",
                         {
                           "t": "알림 문구",
                           "copy": "카카오싱크로 변경하시겠습니까?\n카카오 디벨로퍼스 설정을 완료하지 않으면 카카오 로그인이 동작하지 않을 수 있습니다."
@@ -133,7 +133,7 @@
                     },
                     {
                       "n": 2,
-                      "title": "버튼 - 저장",
+                      "title": "버튼 - 카카오로그인 / 카카오싱크",
                       "lines": [
                         "알림이 뜨는 버튼입니다."
                       ]
@@ -155,10 +155,10 @@
                     },
                     {
                       "n": 2,
-                      "x": 52.61,
-                      "y": 60,
-                      "w": 3.98,
-                      "h": 2.95
+                      "x": 24.48,
+                      "y": 28.46,
+                      "w": 8.53,
+                      "h": 2.18
                     }
                   ],
                   "annotations": [
@@ -166,8 +166,8 @@
                       "n": 1,
                       "title": "알림 - 카카오로그인으로 변경",
                       "lines": [
-                        "카카오싱크에서 카카오로그인으로 바꿔 저장하면 노출됩니다.",
-                        "확인을 누르면 저장되고, 취소하면 저장하지 않습니다.",
+                        "카카오싱크에서 카카오로그인으로 전환할 때 노출됩니다.",
+                        "확인을 누르면 전환되고, 취소하면 기존 방식을 유지합니다.",
                         {
                           "t": "알림 문구",
                           "copy": "카카오 로그인으로 변경하시겠습니까?\n카카오 디벨로퍼스에서 간편가입 설정을 해제해 주세요."
@@ -176,7 +176,7 @@
                     },
                     {
                       "n": 2,
-                      "title": "버튼 - 저장",
+                      "title": "버튼 - 카카오로그인 / 카카오싱크",
                       "lines": [
                         "알림이 뜨는 버튼입니다."
                       ]
@@ -238,6 +238,7 @@
               "title": "버튼 - 카카오로그인 / 카카오싱크",
               "lines": [
                 "기본값은 카카오로그인입니다.",
+                "방식을 전환하면 확인 알림이 뜹니다.",
                 "개인 판매회원은 카카오싱크를 선택할 수 없습니다. (페이앱 회원 유형 기준)"
               ],
               "cases": [
@@ -248,7 +249,8 @@
                   "label": "개인 판매회원",
                   "image": "screens/sns-pro-personal-pc.webp"
                 }
-              ]
+              ],
+              "opens": "alert-sync"
             },
             {
               "n": 5,
@@ -261,9 +263,8 @@
               "n": 6,
               "title": "버튼 - 저장",
               "lines": [
-                "연동 방식을 바꿔 저장하면 확인 알림이 뜹니다."
-              ],
-              "opens": "alert-sync"
+                "입력한 설정을 저장합니다."
+              ]
             }
           ],
           "blocks": {
@@ -282,6 +283,12 @@
                 "n": 4
               },
               {
+                "label": "알림 · 카카오싱크로 변경",
+                "sheet": "sns-pro",
+                "state": "alert-sync",
+                "n": 1
+              },
+              {
                 "label": "REST API Key 입력",
                 "sheet": "sns-pro",
                 "state": "default",
@@ -292,12 +299,6 @@
                 "sheet": "sns-pro",
                 "state": "default",
                 "n": 6
-              },
-              {
-                "label": "알림 · 카카오싱크로 변경",
-                "sheet": "sns-pro",
-                "state": "alert-sync",
-                "n": 1
               }
             ],
             "questions": [
@@ -376,6 +377,7 @@
               "title": "연동방식",
               "lines": [
                 "카카오 로그인을 사용으로 두면 보입니다. 기본값은 카카오로그인입니다.",
+                "방식을 전환하면 PRO와 같은 확인 알림이 뜹니다.",
                 "개인 판매회원은 카카오싱크를 선택할 수 없습니다. (페이앱 회원 유형 기준)"
               ],
               "cases": [
@@ -399,7 +401,7 @@
               "n": 4,
               "title": "버튼 - 저장",
               "lines": [
-                "연동 방식을 바꿔 저장하면 PRO와 같은 확인 알림이 뜹니다."
+                "입력한 설정을 저장합니다."
               ]
             }
           ],
@@ -440,7 +442,14 @@
           "no": "STEP 0",
           "title": "사전 확인",
           "where": "-",
-          "htmlFile": "manual/step0.html"
+          "htmlFile": "manual/step0.html",
+          "images": [
+            {
+              "image": "screens/manual/step0-bizinfo.webp",
+              "caption": "비즈니스 정보 (사업자 정보 등록)",
+              "source": "카카오비즈니스 가이드"
+            }
+          ]
         },
         {
           "id": "step1",
@@ -453,7 +462,29 @@
           "badge": {
             "label": "대기 없음",
             "tone": "mute"
-          }
+          },
+          "images": [
+            {
+              "image": "screens/manual/step1-bizapp.webp",
+              "caption": "비즈 앱 전환 : 사업자 정보 등록",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step1-login-on.webp",
+              "caption": "카카오 로그인 사용 설정",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step1-redirect.webp",
+              "caption": "플랫폼 키 > REST API 키 > 리다이렉트 URI",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step1-qualify.webp",
+              "caption": "추가 기능 신청 > 신청 자격 확인",
+              "source": "카카오디벨로퍼스 문서"
+            }
+          ]
         },
         {
           "id": "step2",
@@ -466,7 +497,14 @@
           "badge": {
             "label": "심사 3~5일",
             "tone": "amber"
-          }
+          },
+          "images": [
+            {
+              "image": "screens/manual/step2-channel-review.webp",
+              "caption": "비즈니스 채널 심사 접수",
+              "source": "카카오비즈니스 가이드"
+            }
+          ]
         },
         {
           "id": "step3",
@@ -479,7 +517,19 @@
           "badge": {
             "label": "심사 3~5일",
             "tone": "amber"
-          }
+          },
+          "images": [
+            {
+              "image": "screens/manual/step3-addon.webp",
+              "caption": "추가 기능 신청 > 카카오톡 채널 연결",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step3-channel.webp",
+              "caption": "카카오톡 채널 연결 관리",
+              "source": "카카오디벨로퍼스 문서"
+            }
+          ]
         },
         {
           "id": "step4",
@@ -492,7 +542,19 @@
           "badge": {
             "label": "심사 3~5일",
             "tone": "amber"
-          }
+          },
+          "images": [
+            {
+              "image": "screens/manual/step4-bizinfo.webp",
+              "caption": "비즈니스 정보 신청",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step4-consent.webp",
+              "caption": "개인정보 동의항목 신청 정보",
+              "source": "카카오디벨로퍼스 문서"
+            }
+          ]
         },
         {
           "id": "step5",
@@ -505,7 +567,19 @@
           "badge": {
             "label": "대기 없음",
             "tone": "mute"
-          }
+          },
+          "images": [
+            {
+              "image": "screens/manual/step5-simple-signup.webp",
+              "caption": "간편가입 사용 설정",
+              "source": "카카오디벨로퍼스 문서"
+            },
+            {
+              "image": "screens/manual/step5-terms.webp",
+              "caption": "서비스 약관 추가",
+              "source": "카카오디벨로퍼스 문서"
+            }
+          ]
         },
         {
           "id": "step6",
@@ -514,7 +588,13 @@
           "no": "STEP 6",
           "title": "블로그페이 연동",
           "where": "블로그페이 관리자",
-          "htmlFile": "manual/step6.html"
+          "htmlFile": "manual/step6.html",
+          "images": [
+            {
+              "image": "screens/sns-pro-pc.webp",
+              "caption": "블로그페이 관리자 > SNS로그인연동 관리"
+            }
+          ]
         }
       ],
       "noteHtml": "manual/order.html"
