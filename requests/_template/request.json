@@ -8,6 +8,14 @@
   "flow": "",
   "qa": "",
   "references": [],
+  "materials": [
+    {
+      "kind": "자료조사",
+      "label": "자료 이름",
+      "url": "https://…",
+      "note": "어디에 쓰였는지 한 줄 (선택)"
+    }
+  ],
   "planLinks": [],
   "note": "",
   "versions": [

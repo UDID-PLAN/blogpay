@@ -20,9 +20,16 @@ blogpay/
 │     └─ v1.0/
 │        ├─ content.html       # 본문만 작성 (스타일·목차·개정이력은 빌드가 채움)
 │        └─ assets/            # 이 버전에서 쓰는 이미지 (webp 권장)
-├─ published/<slug>/<slug>_v1.0.html   # 공유한 버전 (고정, 덮어쓰기 거부)
+├─ published/<slug>/           # 요청 건당 폴더 1개. publish 때마다 <slug>_<버전>.html 이 새 파일로 추가됨 (덮어쓰기 거부)
+│                              #   샘플은 <slug>_<버전>_sample.html 로 별도 생성 (덮어써도 됨)
 ├─ draft/                      # 작업 중 미리보기 (git 제외)
-└─ tools/build.mjs             # 빌드 스크립트
+└─ tools/
+   ├─ build.mjs                # 빌드 (doc · publish · sample · index)
+   ├─ spec.mjs                 # spec.json → 화면정의서 렌더러
+   ├─ lint-css.mjs             # CSS 단일 규격 검사
+   ├─ check-layout.mjs         # 인덱스 넘침 검사
+   ├─ check-doc.mjs            # 문서 넘침 검사 (폭 1440/1024/768/500, 모든 챕터·시트 탭)
+   └─ capture/                 # 화면 캡처·마커 좌표 실측 (shot.mjs · measure.mjs · examples/)
 ```
 
 ## 작업 순서
@@ -106,3 +113,54 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 - `site.json`에 등록된 프로젝트·진행상태 태그 전체를 검사하므로, 아직 목록에 없는 새 태그도 미리 잡습니다.
 - Chrome을 찾지 못하면 경고만 하고 건너뜁니다. (`CHROME_BIN`으로 경로 지정)
 
+## 화면정의서 작성 규칙 (spec.json 방식)
+
+화면정의서는 `requests/<slug>/<버전>/spec.json` 하나로 작성합니다. `spec.json`이 있으면 빌드가 `tools/spec.mjs`로 렌더링하고, 없으면 `content.html` 방식으로 빌드합니다. 템플릿·CSS·뷰어 동작은 렌더러가 담당하므로 작성자는 내용만 채웁니다.
+
+### 작업 흐름 (참고 Figma 없이 자료로 바로 작성)
+
+1. **자료 수령·등록** — 자료조사·자료정리·정책정리·관리자 UI HTML을 받으면 `request.json`의 `materials`에 종류(`자료조사`/`자료정리`/`정책정리`/`관리자UI`/`기타`)·이름·링크(또는 경로)를 기록합니다. 로컬 HTML은 `requests/<slug>/materials/`에 보관합니다.
+2. **화면 캡처 준비** — 관리자·쇼핑몰 저장 HTML을 상태별로 가공(개인정보 마스킹, 알림창·모달 상태 주입)한 뒤 `tools/capture/shot.mjs`로 캡처합니다. 가공 예시는 `tools/capture/examples/`.
+3. **마커 좌표 실측** — `tools/capture/measure.mjs`에 `{"마커번호":["선택자"]}`를 주면 `marks`용 좌표(%)가 나옵니다. 눈대중으로 좌표를 적지 않습니다.
+4. **spec.json 작성** — 정책정리 내용을 근거로 디스크립션·정책·사용자 흐름을 작성합니다. 근거 자료가 없는 문장은 쓰지 않고 `questions`(확인 필요)로 분리합니다. 참고 Figma가 없으므로 문구는 작성자(AI 포함)가 직접 쓰며, 검토 전에는 확정 문구로 취급하지 않습니다.
+5. **빌드·검사** — `node tools/build.mjs doc <slug> <버전>` → 검증(opens·마커↔디스크립션·flow·이미지·외부 링크), CSS 규격, 폭별 넘침 검사가 자동 실행됩니다.
+6. **공유** — `publish` → `index`. 공유한 버전은 수정하지 않고 새 버전을 만듭니다.
+
+### spec.json 구조
+
+- 최상위: `title` · `version` · `date` · `revisions[]` · `chapters[]`
+- 챕터: `{ id, title, sheets[], policyHtml?, flow? }` — 챕터 `flow`는 사용자 흐름 칩 목록
+- 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
+- 화면 시트: `{ id, tab, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
+  - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.
+- 상태(`states[]`): `{ id, label, image, group?, marks[{ n, x, y, w, h, opens? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
+  - `group`을 주면 칩 대신 드롭다운(예: 알림)으로 묶입니다. 상태가 많아져도 칩 줄이 깨지지 않습니다.
+  - 모달·팝업은 화면 전체 이미지가 아니라 **오버레이**(잘라낸 팝업 이미지 + 스크림)로 올립니다. 페이지가 바뀐 것처럼 보이지 않게 합니다.
+  - 알림창은 상태(`alert-*`)로 두고 자체 디스크립션을 가집니다. 트리거 버튼은 기본 상태 마커의 `opens`로 연결합니다.
+- 디스크립션(`annotations[]`): `{ n, title, lines[], opens? }` — `lines` 항목은 문자열(`{{red}}…{{/red}}` 강조 가능) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목)
+- 사용자 흐름(`flow` 행): `{ label, sheet, state?, n?, open? }` — 칩 클릭 시 해당 시트·상태·번호·오버레이로 이동하며 하이라이트는 1개만 유지합니다.
+
+### 작성 원칙
+
+- 디스크립션은 **사용자 조작 → 시스템 동작** 중심의 단문으로 씁니다. 배경 설명은 정책 탭으로 보냅니다.
+- 화면의 모든 마커(`marks`)는 같은 번호의 디스크립션이 있어야 하고, 디스크립션의 번호는 화면 마커 또는 알림 상태와 연결되어야 합니다. (빌드가 검사)
+- 라벨은 실제 화면 문구와 같게 씁니다. (예: 버튼 라벨이 "상품선택"이면 디스크립션 제목도 "버튼 - 상품선택")
+- 샘플 데이터(상품명·회원명 등)는 가공 시 작성자가 만든 값이므로 자료의 실제 값과 구분하고, 개인정보는 `홍길동(sample)`처럼 마스킹합니다.
+- Happy Path만 쓰지 않습니다. 빈 상태·알림·오류·권한·한도 등 해당되는 상태는 상태 칩이나 `questions`로 남깁니다.
+- 새 스타일이 필요하면 `src/doc.css`의 토큰(`:root`)을 먼저 추가합니다. 인라인 스타일·임의 px·hex는 쓰지 않습니다.
+
+### 검사 (빌드 때 자동 실행)
+
+| 검사 | 내용 | 생략 |
+| --- | --- | --- |
+| spec 검증 | `opens`·마커↔디스크립션·flow 대상·이미지·외부 링크 | 불가 |
+| CSS 규격 | 토큰만 사용, 미정의 토큰 차단 | 불가 |
+| 인덱스 넘침 | 표 머리글·셀·태그 (`check-layout.mjs`) | Chrome 없으면 경고 후 건너뜀 |
+| 문서 넘침 | 폭 1440/1024/768/500에서 모든 챕터·시트의 페이지 가로 스크롤·영역 밖 요소 (`check-doc.mjs`) | `--no-check` |
+
+### 지원 범위와 알려진 제한
+
+- **화면 표시**: 데스크톱·태블릿·모바일(≤640px)에서 넘침 없음을 검사합니다. 모바일에서는 화면 이미지·디스크립션이 세로로 쌓이고 표는 가로 스크롤됩니다.
+- **인쇄·PDF**: 화면정의서는 화면용 뷰어(뷰포트 고정 레이아웃)라 인쇄하면 첫 화면만 나옵니다. 전달 형식은 HTML 1개 파일이며, PDF가 필요하면 별도 인쇄 스타일을 먼저 합의합니다.
+- **헤드리스 Chrome 최소 창 폭은 약 500px**이라 그보다 좁은 폭은 실측하지 못합니다.
+- 연동상품관리 챕터는 화면 시트가 아직 없습니다. (흐름 칩 "화면 시트 추가 예정")

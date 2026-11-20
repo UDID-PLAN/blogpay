@@ -7,6 +7,9 @@
     "publish": "node tools/build.mjs publish",
     "index": "node tools/build.mjs index",
     "lint:css": "node tools/lint-css.mjs",
-    "check:layout": "node tools/check-layout.mjs"
+    "check:layout": "node tools/check-layout.mjs",
+    "check:doc": "node tools/check-doc.mjs",
+    "measure": "node tools/capture/measure.mjs",
+    "shot": "node tools/capture/shot.mjs"
   }
 }

@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lintCss } from './lint-css.mjs';
 import { checkLayout } from './check-layout.mjs';
+import { checkDoc } from './check-doc.mjs';
 import { renderSpec } from './spec.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -30,7 +31,22 @@ const kb = (n) => (n / 1024).toFixed(0) + 'KB';
 function loadRequest(slug) {
   const f = P('requests', slug, 'request.json');
   if (!fs.existsSync(f)) fail(`요청 건을 찾을 수 없습니다: requests/${slug}/request.json`);
-  return readJson(f);
+  const req = readJson(f);
+  validateMaterials(slug, req);
+  return req;
+}
+
+// 입력 자료 목록(materials) 검사 — 기획서를 무엇을 근거로 썼는지 요청 건마다 남긴다. (선택 항목이지만 있으면 형식을 지킨다)
+const MATERIAL_KINDS = ['자료조사', '자료정리', '정책정리', '관리자UI', '기타'];
+function validateMaterials(slug, req) {
+  if (req.materials === undefined) return;
+  if (!Array.isArray(req.materials)) fail(`requests/${slug}/request.json: materials는 배열이어야 합니다`);
+  req.materials.forEach((m, i) => {
+    const at = `requests/${slug}/request.json materials[${i}]`;
+    if (!MATERIAL_KINDS.includes(m.kind)) fail(`${at}: kind는 ${MATERIAL_KINDS.join(' / ')} 중 하나여야 합니다 (현재: ${m.kind})`);
+    if (!m.label) fail(`${at}: label이 없습니다`);
+    if (!m.url && !m.path) fail(`${at}: url(공유 링크) 또는 path(로컬 경로) 중 하나는 필요합니다`);
+  });
 }
 
 // 외부 리소스 참조 검사 — 단일 파일로 전달했을 때 깨지는 원인을 빌드 단계에서 차단
@@ -136,10 +152,19 @@ function write(out, html) {
   fs.writeFileSync(out, html);
 }
 
+// 생성된 문서를 폭별로 실측해 넘침이 있으면 빌드 실패로 처리한다. (--no-check로 생략 가능)
+function verify(out) {
+  if (process.argv.includes('--no-check')) return;
+  const r = checkDoc([out]);
+  if (r.errors.length) { console.error('✖ 문서 레이아웃 넘침 발견\n' + r.errors.map((e) => '  ' + e).join('\n')); process.exit(1); }
+  if (!r.skipped) console.log('✔ 문서 레이아웃 검사 통과');
+}
+
 function cmdDoc(slug, version) {
   const { html, size } = renderDoc(slug, version);
   const out = P('draft', slug, `${slug}_${version}.html`);
   write(out, html);
+  verify(out);
   console.log(`✔ 초안 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
 }
 
@@ -150,6 +175,7 @@ function cmdPublish(slug, version, force) {
   }
   const { html, size } = renderDoc(slug, version);
   write(out, html);
+  verify(out);
   console.log(`✔ 공유본 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
   console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
 }
@@ -159,6 +185,7 @@ function cmdSample(slug, version) {
   const { html, size } = renderDoc(slug, version);
   const out = P('published', slug, `${slug}_${version}_sample.html`);
   write(out, html);
+  verify(out);
   console.log(`✔ 샘플 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
 }
 

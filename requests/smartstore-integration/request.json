@@ -22,6 +22,31 @@
       "url": "https://docs.google.com/spreadsheets/d/10w2IR9UbVSn9n004jyQyybupC-c3pDnaTX691Sg6eGw/edit?usp=drivesdk&ouid=111238274888123773065"
     }
   ],
+  "materials": [
+    {
+      "kind": "자료조사",
+      "label": "네이버 스마트스토어 연동 자료조사",
+      "url": "https://docs.google.com/presentation/d/1y0gYoWjSCApLbNffp-bFZvm2qP3aNC5o/edit?usp=drive_link&ouid=107355833966066135700&rtpof=true&sd=true",
+      "note": "v1.0 근거"
+    },
+    {
+      "kind": "자료정리",
+      "label": "상품 API 정리",
+      "url": "https://docs.google.com/spreadsheets/d/1o0Dy55emC7KasMEDpt5TespjSIzzQgTyCjCYUeDsPJI/edit?usp=drivesdk&ouid=111238274888123773065"
+    },
+    {
+      "kind": "자료정리",
+      "label": "주문 API 정리",
+      "url": "https://docs.google.com/spreadsheets/d/10w2IR9UbVSn9n004jyQyybupC-c3pDnaTX691Sg6eGw/edit?usp=drivesdk&ouid=111238274888123773065",
+      "note": "v1.1에서 주문관리 1차 범위 제외"
+    },
+    {
+      "kind": "관리자UI",
+      "label": "블로그페이 관리자·쇼핑몰 저장 HTML (구매후기 목록·상세·일괄등록)",
+      "path": "capture-lab/rv/",
+      "note": "v1.1 샘플 화면 캡처 원본. 레포 밖 작업 폴더라 다음 요청부터는 requests/<slug>/materials/에 보관"
+    }
+  ],
   "planLinks": [],
   "note": "",
   "versions": [
