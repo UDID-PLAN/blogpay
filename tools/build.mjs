@@ -102,8 +102,9 @@ function renderDoc(slug, version) {
   const dir = P('requests', slug, version);
   const sf = path.join(dir, 'spec.json');
   if (fs.existsSync(sf)) {
-    const { nav, body, script } = renderSpec(readJson(sf), { dir, revisions: revisionsTable(req.versions, idx), fail, warn: (m) => console.warn('⚠ ' + m) });
-    const html = fill(read(P('src', 'spec-frame.html')), { CSS: read(P('src', 'doc.css')), TITLE: esc(req.title), VERSION: esc(version), DATE: esc(ver.date), NAV: nav, CONTENT: body, SCRIPT: script });
+    const spec = readJson(sf);
+    const { nav, body, script } = renderSpec(spec, { dir, fail, warn: (m) => console.warn('⚠ ' + m) });
+    const html = fill(read(P('src', 'spec-frame.html')), { CSS: read(P('src', 'doc.css')), TITLE: esc(spec.title || req.title), VERSION: esc(spec.version || version), DATE: esc(spec.date || ver.date), NAV: nav, CONTENT: body, SCRIPT: script });
     assertSelfContained(html, `${slug} ${version}`);
     const size = Buffer.byteLength(html);
     if (size > MAX_BYTES) console.warn(`⚠ 파일 용량이 ${kb(size)}입니다. 이미지를 webp로 압축하세요. (권장 상한 ${kb(MAX_BYTES)})`);
