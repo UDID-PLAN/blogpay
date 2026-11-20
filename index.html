@@ -354,6 +354,15 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .menu-list[hidden] { display: none; }
 .menu-list .fchip { white-space: nowrap; }
 
+.plist { display: flex; flex-direction: column; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.plist-row { display: grid; grid-template-columns: var(--col-md) 1fr; gap: var(--sp-4); align-items: start; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); }
+.plist-row:last-child { border-bottom: 0; }
+.plist-k { color: var(--ink); font-weight: var(--fw-medium); }
+.plist-v { color: var(--body); }
+.plist-steps { display: flex; flex-direction: column; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; counter-reset: st; color: var(--body); }
+.plist-steps li { display: flex; align-items: center; gap: var(--sp-2); counter-increment: st; }
+.plist-steps li::before { content: counter(st); flex: none; display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--ink); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
+
 </style>
 </head>
 <body>

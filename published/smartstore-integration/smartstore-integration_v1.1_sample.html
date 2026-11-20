@@ -360,8 +360,8 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .plist-k { color: var(--ink); font-weight: var(--fw-medium); }
 .plist-v { color: var(--body); }
 .plist-steps { display: flex; flex-direction: column; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; counter-reset: st; color: var(--body); }
-.plist-steps li { display: flex; align-items: flex-start; gap: var(--sp-2); counter-increment: st; }
-.plist-steps li::before { content: counter(st); flex: none; display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-pill); background: var(--ink); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
+.plist-steps li { display: flex; align-items: center; gap: var(--sp-2); counter-increment: st; }
+.plist-steps li::before { content: counter(st); flex: none; display: inline-flex; align-items: center; justify-content: center; width: var(--w-pin); height: var(--w-pin); border-radius: var(--radius-full); background: var(--ink); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
 
 </style>
 </head>
