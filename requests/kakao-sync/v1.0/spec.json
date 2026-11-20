@@ -591,7 +591,7 @@
           "htmlFile": "manual/step6.html",
           "images": [
             {
-              "image": "screens/sns-pro-pc.webp",
+              "image": "screens/manual/step6-blogpay.webp",
               "caption": "블로그페이 관리자 > SNS로그인연동 관리"
             }
           ]
