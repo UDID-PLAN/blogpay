@@ -10,6 +10,7 @@ blogpay/
 ├─ index.html                  # 인덱스 (빌드로 생성) — 서비스 공통 링크 + 요청 건 리스트
 ├─ site.json                   # 서비스 공통 링크 (IA, 정책서, 약관 등)
 ├─ src/
+│  ├─ icons/                   # 파비콘·홈 화면 바로가기 아이콘 (app-icon-512 원본 → 180/192/32 PNG). 빌드가 data URI로 내장
 │  ├─ doc.css                  # ★ 공통 스타일은 이 파일 하나만 관리
 │  ├─ doc-frame.html           # 문서 틀(상단바·목차·본문 영역)
 │  └─ index-frame.html         # 인덱스 틀

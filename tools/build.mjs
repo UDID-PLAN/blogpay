@@ -23,7 +23,14 @@ const read = (p) => fs.readFileSync(p, 'utf8');
 const readJson = (p) => JSON.parse(read(p));
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const stripTags = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-const fill = (tpl, map) => tpl.replace(/\{\{([A-Z_]+)\}\}/g, (m, k) => (k in map ? map[k] : m));
+// 아이콘(파비콘·홈 화면 바로가기)은 src/icons/의 PNG를 data URI로 내장한다. 외부 링크 없이 단일 파일을 유지하기 위함.
+const iconUri = (f) => 'data:image/png;base64,' + fs.readFileSync(P('src', 'icons', f)).toString('base64');
+const iconLinks = () => [
+  `<link rel="icon" type="image/png" sizes="32x32" href="${iconUri('icon-32.png')}">`,
+  `<link rel="icon" type="image/png" sizes="192x192" href="${iconUri('icon-192.png')}">`,
+  `<link rel="apple-touch-icon" sizes="180x180" href="${iconUri('apple-touch-180.png')}">`,
+].join('\n');
+const fill = (tpl, map) => tpl.replace(/\{\{([A-Z_]+)\}\}/g, (m, k) => (k === 'ICONS' ? iconLinks() : k in map ? map[k] : m));
 const fail = (msg) => { console.error('✖ ' + msg); process.exit(1); };
 const kb = (n) => (n / 1024).toFixed(0) + 'KB';
 
@@ -52,7 +59,7 @@ function validateMaterials(slug, req) {
 function assertSelfContained(html, label) {
   const bad = [];
   const rules = [
-    [/<link\b[^>]*\bhref=/gi, '<link href>'],
+    [/<link\b[^>]*\bhref="(?!data:image\/png;base64,)/gi, '<link href> (data URI 아님)'],
     [/<script\b[^>]*\bsrc=/gi, '<script src>'],
     [/<(?:img|source|iframe|video|audio)\b[^>]*\bsrc="(?!data:)[^"]*"/gi, '<img/iframe src> (data URI 아님)'],
     [/@import\b/gi, '@import'],
