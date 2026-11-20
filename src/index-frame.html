@@ -63,7 +63,7 @@
   apply();
 })();
 
-// [기획 추출] docs/ 기획서는 CSS를 링크로 쓰므로, 내려받을 때 src/doc.css를 다시 내장해 단일 파일(공유본)로 만든다.
+// [기획 추출] 기획서(requests/…)는 CSS를 링크로 쓰므로, 내려받을 때 src/doc.css를 다시 내장해 단일 파일(공유본)로 만든다.
 document.addEventListener('click', async (e) => {
   const a = e.target.closest('a[data-extract]');
   if (!a) return;

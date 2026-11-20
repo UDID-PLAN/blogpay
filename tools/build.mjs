@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // BlogPay 기획서 빌드 스크립트 (외부 패키지 없음, Node 18+)
 //
-//   node tools/build.mjs doc <slug> <버전>        기획서 생성 → docs/<slug>/<slug>_<버전>.html  (수정 시 다시 빌드해 덮어씀, 인덱스 버전 버튼이 이 파일을 연다)
+//   node tools/build.mjs doc <slug> <버전>        기획서 생성 → requests/<slug>/<버전>/<slug>_<버전>.html  (수정 시 다시 빌드해 덮어씀, 인덱스 버전 버튼이 이 파일을 연다)
 //   node tools/build.mjs publish <slug> <버전>    공유본 생성 → published/<slug>/<slug>_<버전>.html (이미 있으면 거부, --force로만 덮어쓰기)
 //   node tools/build.mjs index                    인덱스 생성 → index.html
 //
@@ -147,12 +147,12 @@ function renderDoc(slug, version, opts = {}) {
   return { html: opts.linkCss ? linkCss(html) : html, size };
 }
 
-// docs/ 기획서: 내장 CSS 대신 레포의 src/doc.css를 링크 → CSS를 고치면 다시 빌드하지 않아도 모든 기획서에 반영된다.
-// (docs/<slug>/<파일>.html 기준 ../../src/doc.css. 공유용 단일 파일은 인덱스 [기획 추출]이 CSS를 다시 내장해 내려받는다)
+// 기획서(requests/<slug>/<버전>/<slug>_<버전>.html): 내장 CSS 대신 레포의 src/doc.css를 링크 → CSS를 고치면 다시 빌드하지 않아도 모든 기획서에 반영된다.
+// 공유용 단일 파일은 인덱스 [기획 추출]이 CSS를 다시 내장해 내려받는다.
 function linkCss(html) {
   const block = `<style>\n${read(P('src', 'doc.css'))}\n</style>`;
   if (!html.includes(block)) fail('문서 틀에서 CSS 블록을 찾지 못했습니다 (src/*-frame.html의 <style>{{CSS}}</style> 형식 확인)');
-  return html.replace(block, '<link rel="stylesheet" href="../../src/doc.css">');
+  return html.replace(block, '<link rel="stylesheet" href="../../../src/doc.css">');
 }
 
 function write(out, html) {
@@ -169,13 +169,13 @@ function verify(out) {
 }
 
 function cmdDoc(slug, version) {
-  // 넘침 검사는 CSS 내장본(draft/, git 제외)으로 실측하고, 통과하면 CSS 링크본을 docs/에 쓴다.
+  // 넘침 검사는 CSS 내장본(draft/, git 제외)으로 실측하고, 통과하면 CSS 링크본을 requests/<slug>/<버전>/에 쓴다.
   const { html: full } = renderDoc(slug, version);
   const check = P('draft', slug, `${slug}_${version}.html`);
   write(check, full);
   verify(check);
   const { html, size } = renderDoc(slug, version, { linkCss: true });
-  const out = P('docs', slug, `${slug}_${version}.html`);
+  const out = P('requests', slug, version, `${slug}_${version}.html`);
   write(out, html);
   console.log(`✔ 기획서 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
   console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
@@ -243,8 +243,8 @@ function cmdIndex() {
     // 기획서 열: ① 샘플(있으면 최상위·검정, 새 탭) ② 버전 버튼 ③ [기획 추출] — 변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다
     const sampleFile = r.sample ? `published/${r.slug}/${r.slug}_${r.sample}_sample.html` : '';
     const hasSample = !!sampleFile && fs.existsSync(P(sampleFile));
-    // 버전 HTML: docs/(수정 가능한 기획서) 우선, 없으면 published/(과거 공유본)
-    const verFile = (v) => [`docs/${r.slug}/${r.slug}_${v.version}.html`, `published/${r.slug}/${r.slug}_${v.version}.html`].find((f) => fs.existsSync(P(f))) || '';
+    // 버전 HTML: requests/<slug>/<버전>/ 기획서 우선, 없으면 published/(과거 공유본)
+    const verFile = (v) => [`requests/${r.slug}/${v.version}/${r.slug}_${v.version}.html`, `published/${r.slug}/${r.slug}_${v.version}.html`].find((f) => fs.existsSync(P(f))) || '';
     const chip = (v, i) => {
       const f = verFile(v);
       const hasHtml = !!f;
@@ -264,7 +264,7 @@ function cmdIndex() {
       return { label: v.version, href: '', dl: false };
     });
     const def = cands.find((c) => c.dl);
-    const dlAttr = (c) => `href="${esc(c.href)}" download="${esc(path.basename(c.href))}"${c.href.startsWith('docs/') ? ' data-extract' : ''}`;
+    const dlAttr = (c) => `href="${esc(c.href)}" download="${esc(path.basename(c.href))}"${c.href.startsWith('requests/') ? ' data-extract' : ''}`;
     const extractBtn = def
       ? `<a class="btn" ${dlAttr(def)} title="${esc(def.label)} 기획서를 HTML 파일로 내려받습니다 (스타일·이미지 내장)">기획 추출</a>`
       : '<span class="btn disabled" title="내려받을 HTML 기획서가 없습니다">기획 추출</span>';
@@ -337,7 +337,7 @@ else if (cmd === 'sample' && a && b) cmdSample(a, b);
 else if (cmd === 'index') cmdIndex();
 else {
   console.log(`사용법:
-  node tools/build.mjs doc <slug> <버전>       기획서 생성 (docs/, 덮어씀)
+  node tools/build.mjs doc <slug> <버전>       기획서 생성 (requests/<slug>/<버전>/, 덮어씀)
   node tools/build.mjs publish <slug> <버전>   공유본 생성 (published/, 덮어쓰기 거부)
   node tools/build.mjs index                   인덱스(index.html) 갱신`);
   process.exit(cmd ? 1 : 0);

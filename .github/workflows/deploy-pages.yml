@@ -1,6 +1,6 @@
 name: Deploy to GitHub Pages
 
-# main에 푸시하면 인덱스·기획서(docs)·공통 CSS(src/doc.css)·공유본(published)을 배포한다. (작업 원본 requests/, tools/ 는 배포하지 않음)
+# main에 푸시하면 인덱스·기획서(requests/<slug>/<버전>/<slug>_<버전>.html)·공통 CSS(src/doc.css)·공유본(published)을 배포한다. (spec.json·이미지 등 작업 원본과 tools/ 는 배포하지 않음)
 on:
   push:
     branches: [main]
@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir _site
           cp index.html _site/
-          [ -d docs ] && cp -r docs _site/ || true
+          find requests -mindepth 3 -maxdepth 3 -name '*_v*.html' ! -path 'requests/_template/*' -exec cp --parents {} _site/ \;
           mkdir -p _site/src && cp src/doc.css _site/src/
           [ -d published ] && cp -r published _site/ || true
           touch _site/.nojekyll
