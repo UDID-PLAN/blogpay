@@ -79,11 +79,11 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const panels = [['policy', '정책', b.policy], ['related', '연관 화면 · 흐름', b.related], ['questions', '확인 필요', b.questions]];
     const bar = `<div class="tabs bar">${panels.map(([k, l]) => `<button type="button" class="tab" data-panel-btn="${k}">${l}</button>`).join('')}</div>`;
     const drawers = panels.map(([k, l, arr]) => `<div class="spec-drawer" data-panel="${k}"><h4>${l}</h4>${list(arr)}</div>`).join('');
+    const zoom = `<div class="seg" role="group" aria-label="확대"><button type="button" class="fchip" data-zoom-step="-1" aria-label="축소">-</button><span class="zoom-val" data-zoom-val>100%</span><button type="button" class="fchip" data-zoom-step="1" aria-label="확대">+</button></div>`;
     return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}">
-<div class="spec-body"><div class="stage">
-<div class="stage-head"><h2>${esc(sh.title)}</h2>${kindTag}<span class="stage-info">${info}</span></div>
-${tools}<div class="viewport">${views}</div></div>
-<aside class="side" aria-label="화면 설명"><div class="side-head"><span>화면 설명</span><div class="seg" role="group" aria-label="확대"><button type="button" class="fchip" data-zoom-step="-1" aria-label="축소">-</button><span class="zoom-val" data-zoom-val>100%</span><button type="button" class="fchip" data-zoom-step="1" aria-label="확대">+</button></div></div><div class="side-scroll">${intro}<ol class="annos">${annos}</ol></div></aside></div>
+<div class="stage-row"><div class="stage-head"><h2>${esc(sh.title)}</h2>${kindTag}<span class="stage-info">${info}</span>${tools}</div><div class="stage-zoom">${zoom}</div></div>
+<div class="spec-body"><div class="stage"><div class="viewport">${views}</div></div>
+<aside class="side" aria-label="화면 설명"><div class="side-head"><span>화면 설명</span></div><div class="side-scroll">${intro}<ol class="annos">${annos}</ol></div></aside></div>
 ${drawers}${bar}</section>`;
   };
 
@@ -111,12 +111,12 @@ $('.spec-chapter').forEach(function(ch){
     var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.width=z+'%';});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
     $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
     setZoom(0);
-    function items(n){return $('.mark,.annos li',sh).filter(function(e){return e.getAttribute('data-n')===n;});}
+    function items(n){return $('.mark,.annos > li',sh).filter(function(e){return e.getAttribute('data-n')===n;});}
     function hot(n,on){items(n).forEach(function(e){e.classList.toggle('hot',on);});}
-    function focus(n,scrollList){$('.mark,.annos li',sh).forEach(function(e){e.classList.remove('sel');});sel=n;items(n).forEach(function(e){e.classList.add('sel');});
+    function focus(n,scrollList){$('.mark,.annos > li',sh).forEach(function(e){e.classList.remove('sel');});sel=n;items(n).forEach(function(e){e.classList.add('sel');});
       var m=items(n).filter(function(e){return e.classList.contains('mark')&&e.offsetParent;})[0];if(m)m.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});
       var li=items(n).filter(function(e){return e.tagName==='LI';})[0];if(li&&scrollList)li.scrollIntoView({block:'nearest',behavior:'smooth'});}
-    $('.mark,.annos li',sh).forEach(function(e){var n=e.getAttribute('data-n');
+    $('.mark,.annos > li',sh).forEach(function(e){var n=e.getAttribute('data-n');
       e.addEventListener('mouseenter',function(){hot(n,true);});e.addEventListener('mouseleave',function(){hot(n,false);});
       e.addEventListener('click',function(){focus(n,e.classList.contains('mark'));});});
     $('[data-panel-btn]',sh).forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-panel-btn'),was=b.classList.contains('active');
