@@ -395,8 +395,13 @@
                   "overlays": [
                     {
                       "id": "modal",
-                      "label": "상품 리스트 모달",
-                      "image": "screens/review-bulk-modal-pc.png"
+                      "label": "상품 리스트 팝업",
+                      "image": "screens/review-bulk-modal-popup-pc.png",
+                      "box": {
+                        "x": 30.47,
+                        "y": 9.6,
+                        "w": 39.06
+                      }
                     }
                   ]
                 },
@@ -527,8 +532,9 @@
             },
             {
               "n": 5,
-              "title": "모달 - 상품 리스트",
+              "title": "버튼 - 상품선택",
               "lines": [
+                "클릭 시 상품 리스트 팝업 표시",
                 "기존 [구매후기 > 글쓰기 > 상품선택 팝업] 동일 호출"
               ],
               "opens": "modal"
