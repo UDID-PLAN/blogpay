@@ -28,27 +28,26 @@
  ],
  "chapters": [
   {
-   "id": "rev",
-   "title": "개정이력",
-   "sheets": [
-    {
-     "id": "revisions",
-     "type": "document",
-     "kind": "revisions",
-     "title": "화면 설계서 개정이력"
-    }
-   ]
-  },
-  {
    "id": "overview",
    "title": "개요",
    "sheets": [
     {
      "id": "overview-doc",
      "type": "document",
-     "kind": "html",
-     "htmlFile": "overview.html",
-     "title": "개요 : 연동정책"
+     "title": "개요",
+     "sections": [
+      {
+       "title": "개정이력",
+       "kind": "revisions",
+       "open": true
+      },
+      {
+       "title": "연동정책",
+       "kind": "html",
+       "htmlFile": "overview.html",
+       "open": true
+      }
+     ]
     }
    ]
   },
@@ -59,9 +58,7 @@
     {
      "id": "linked-list",
      "title": "연동상품관리 (목록)",
-     "menuPath": "상품관리 > 연동상품관리(신설)",
-     "url": "/controller/goods/(연동상품관리)",
-     "badges": [],
+     "menuPath": "상품관리 > 연동상품관리",
      "intro": [
       "연동상품관리 LNB (메뉴 신설)",
       "연결된 스마트스토어의 상품 연동 현황 관리 / 기존 상품 중 가져오기, 내보내기를 통해 연동상품으로 등록된 상품 목록"
@@ -228,7 +225,8 @@
        "8번 관리 컬럼 설명 문구는 Figma 원문 기준으로 옮겼으며 '삭제 버튼 삭제' 의미인지 확인 필요",
        "연동실패 [!] 모달 등 화면 상태 시트는 추가 예정"
       ]
-     }
+     },
+     "kind": "new"
     }
    ]
   }

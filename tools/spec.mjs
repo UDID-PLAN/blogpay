@@ -16,7 +16,6 @@ import path from 'node:path';
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const MIME = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' };
 const IMG_WARN = 800 * 1024;
-const ZOOMS = [100, 150, 200];
 
 export function renderSpec(spec, { dir, fail, warn }) {
   const imgData = (rel, label) => {
@@ -43,16 +42,17 @@ export function renderSpec(spec, { dir, fail, warn }) {
 <thead><tr><th>버전</th><th>변경일자</th><th>변경 사유</th><th>변경 내용</th><th>작성자</th><th>검토자</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   };
 
+  const sectionBody = (s) => {
+    if (s.kind === 'revisions') return revisions();
+    const f = path.resolve(dir, s.htmlFile || '');
+    if (!s.htmlFile || !fs.existsSync(f)) fail(`문서 시트 본문 파일이 없습니다: ${s.htmlFile}`);
+    return fs.readFileSync(f, 'utf8');
+  };
   const docSheet = (sh, first) => {
     uniq(sh.id);
-    let body = '';
-    if (sh.kind === 'revisions') body = revisions();
-    else {
-      const f = path.resolve(dir, sh.htmlFile || '');
-      if (!sh.htmlFile || !fs.existsSync(f)) fail(`문서 시트 본문 파일이 없습니다: ${sh.htmlFile}`);
-      body = fs.readFileSync(f, 'utf8');
-    }
-    return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}"><div class="spec-doc"><h2>${esc(sh.title)}</h2>${body}</div></section>`;
+    const secs = sh.sections || [{ title: sh.title, kind: sh.kind, htmlFile: sh.htmlFile, open: true }];
+    const body = secs.map((s) => `<details class="acc"${s.open === false ? '' : ' open'}><summary>${esc(s.title)}</summary><div class="acc-body">${sectionBody(s)}</div></details>`).join('\n');
+    return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}"><div class="spec-doc">${body}</div></section>`;
   };
 
   const view = (sid, dev, st, first) => {
@@ -65,11 +65,14 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const devs = sh.devices || {};
     const keys = ['pc', 'mobile'];
     const d0 = keys.find((k) => devs[k]);
-    const info = [sh.menuPath, sh.url].filter(Boolean).map(esc).join(' · ');
+    const info = esc(sh.menuPath || '');
+    const KIND = { new: { label: '신설', tone: 'blue' }, extend: { label: '확장', tone: 'violet' } };
+    if (sh.kind && !KIND[sh.kind]) fail(`sheet.kind는 new(신설) 또는 extend(확장)만 가능합니다: ${sh.kind}`);
+    const kindTag = sh.kind ? badge(KIND[sh.kind]) : '';
     const tools = `<div class="stage-tools">
 <div class="seg" role="group" aria-label="디바이스">${keys.map((k) => `<button type="button" class="fchip${k === d0 ? ' active' : ''}" data-dev-btn="${k}"${devs[k] ? '' : ' disabled title="모바일 화면 없음"'}>${k === 'pc' ? 'PC' : '모바일'}</button>`).join('')}</div>
 <div class="seg" role="group" aria-label="화면 상태">${(devs[d0]?.states || []).map((s, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}">${esc(s.label)}</button>`).join('')}</div>
-<div class="seg" role="group" aria-label="확대">${ZOOMS.map((z, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-zoom-btn="${z}">${z}%</button>`).join('')}</div></div>`;
+<div class="seg" role="group" aria-label="확대"><button type="button" class="fchip" data-zoom-step="-1" aria-label="축소">-</button><span class="zoom-val" data-zoom-val>100%</span><button type="button" class="fchip" data-zoom-step="1" aria-label="확대">+</button></div></div>`;
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map(esc).join('<br>')}</div>` : '';
     const annos = (sh.annotations || []).map((a) => `<li data-n="${a.n}"><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`).join('');
@@ -79,7 +82,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const drawers = panels.map(([k, l, arr]) => `<div class="spec-drawer" data-panel="${k}"><h4>${l}</h4>${list(arr)}</div>`).join('');
     return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}">
 <div class="spec-body"><div class="stage">
-<div class="stage-head"><h2>${esc(sh.title)}</h2>${(sh.badges || []).map(badge).join('')}<span class="stage-info">${info}</span></div>
+<div class="stage-head"><h2>${esc(sh.title)}</h2>${kindTag}<span class="stage-info">${info}</span></div>
 ${tools}<div class="viewport">${views}</div></div>
 <aside class="side" aria-label="화면 설명"><div class="side-head">화면 설명</div>${intro}<ol class="annos">${annos}</ol></aside></div>
 ${drawers}${bar}</section>`;
@@ -106,7 +109,8 @@ $('.spec-chapter').forEach(function(ch){
     function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});}
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
-    $('[data-zoom-btn]',sh).forEach(function(b){b.addEventListener('click',function(){pick($('[data-zoom-btn]',sh),b);$('.canvas',sh).forEach(function(c){c.style.width=b.getAttribute('data-zoom-btn')+'%';});if(sel)focus(sel,false);});});
+    var zoom=100;function setZoom(z){zoom=Math.max(50,Math.min(300,z));$('.canvas',sh).forEach(function(c){c.style.width=zoom+'%';});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=zoom+'%';});if(sel)focus(sel,false);}
+    $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zoom+25*Number(b.getAttribute('data-zoom-step')));});});
     function items(n){return $('.mark,.annos li',sh).filter(function(e){return e.getAttribute('data-n')===n;});}
     function hot(n,on){items(n).forEach(function(e){e.classList.toggle('hot',on);});}
     function focus(n,scrollList){$('.mark,.annos li',sh).forEach(function(e){e.classList.remove('sel');});sel=n;items(n).forEach(function(e){e.classList.add('sel');});

@@ -252,7 +252,7 @@ tr[hidden] { display: none; }
 
 /* ── 화면정의서(spec) ── 같은 토큰만 사용한다. 인덱스와 같은 상단바·여백·선·라운드 규칙을 따른다 */
 body.spec .topbar { gap: var(--sp-5); }
-.spec-doc-title { flex: 1; min-width: 0; color: var(--ink); font-weight: var(--fw-bold); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.spec-doc-title { flex: 1; min-width: 0; margin-left: var(--sp-4); color: var(--ink); font-size: var(--fs-lg); line-height: var(--lh-lg); font-weight: var(--fw-bold); letter-spacing: var(--ls-lg); text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .spec-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .spec-chapter { display: none; flex: 1; min-height: 0; flex-direction: column; }
@@ -260,7 +260,6 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .spec-sheet { display: none; flex: 1; min-height: 0; flex-direction: column; }
 .spec-sheet.on { display: flex; }
 .spec-doc { flex: 1; min-height: 0; overflow: auto; padding: var(--sp-5); }
-.spec-doc h2 { margin-top: 0; padding-top: 0; border-top: 0; }
 .spec-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) var(--w-side); gap: var(--sp-4); padding: var(--sp-4) var(--sp-5); }
 .stage { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
 .stage-head { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); }
@@ -313,3 +312,9 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .tabs.bar { border-bottom: 0; border-top: var(--bw) solid var(--hairline); }
 .tabs.bar .tab { border-bottom: 0; border-top: var(--bw-focus) solid transparent; }
 .tabs.bar .tab.active { border-top-color: var(--ink); }
+.zoom-val { display: inline-flex; align-items: center; justify-content: center; min-width: var(--col-xs); color: var(--ink); font-weight: var(--fw-medium); }
+.acc { margin: 0 0 var(--sp-4); border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.acc > summary { margin: 0; padding: var(--sp-3) var(--sp-4); color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-md); font-weight: var(--fw-bold); cursor: pointer; }
+.acc[open] > summary { border-bottom: var(--bw) solid var(--hairline); }
+.acc-body { padding: var(--sp-4); }
+.acc-body .table-wrap:last-child { margin-bottom: 0; }
