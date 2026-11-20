@@ -391,13 +391,14 @@
                       "h": 2.56,
                       "opens": "alert-save"
                     }
+                  ],
+                  "overlays": [
+                    {
+                      "id": "modal",
+                      "label": "상품 리스트 모달",
+                      "image": "screens/review-bulk-modal-pc.png"
+                    }
                   ]
-                },
-                {
-                  "id": "modal",
-                  "label": "모달",
-                  "image": "screens/review-bulk-modal-pc.png",
-                  "marks": []
                 },
                 {
                   "id": "alert-upload",
@@ -731,7 +732,8 @@
         {
           "label": "모달 · 상품 리스트",
           "sheet": "review-bulk",
-          "state": "modal"
+          "state": "default",
+          "open": "modal"
         },
         {
           "label": "등록 · 저장",

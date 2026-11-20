@@ -59,7 +59,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
 
   const view = (sid, dev, st, first) => {
     const marks = (st.marks || []).map((m) => `<div class="mark" data-n="${m.n}"${m.opens ? ` data-opens="${esc(m.opens)}"` : ''} style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
-    return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}</div></div>`;
+    const ovls = (st.overlays || []).map((o) => `<img class="ovl" alt="${esc(o.label || o.id)}" data-ovl="${esc(o.id)}" hidden src="${imgData(o.image, `${sid} ${dev} ${o.id}`)}">`).join('');
+    return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}${ovls}</div></div>`;
   };
 
   const screenSheet = (sh, first, ch = {}) => {
@@ -72,15 +73,17 @@ export function renderSpec(spec, { dir, fail, warn }) {
     if (sh.kind && !KIND[sh.kind]) fail(`sheet.kind는 new(신설) 또는 extend(확장)만 가능합니다: ${sh.kind}`);
     const kindTag = sh.kind ? badge(KIND[sh.kind]) : '';
     const stateChips = (states) => {
-      const seen = new Set();
-      return states.map((s, i) => {
-        const chip = (cls, attr) => `<button type="button" class="fchip${cls}${i === 0 ? ' active' : ''}" ${attr}>${esc(s.label)}</button>`;
-        if (!s.group) return chip('', `data-state-btn="${esc(s.id)}"`);
-        const case_ = `<button type="button" class="fchip case${i === 0 ? ' active' : ''}" data-state-btn="${esc(s.id)}" data-in-group="${esc(s.group)}" hidden>${esc(s.label)}</button>`;
-        if (seen.has(s.group)) return case_;
-        seen.add(s.group);
-        return `<button type="button" class="fchip" data-group-btn="${esc(s.group)}">${esc(s.group)}</button>${case_}`;
-      }).join('');
+      const chip = (x, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-state-btn="${esc(x.id)}">${esc(x.label)}</button>`;
+      const out = [];
+      for (let i = 0; i < states.length; i++) {
+        const g = states[i].group;
+        if (!g) { out.push(chip(states[i], i)); continue; }
+        const members = [];
+        while (i < states.length && states[i].group === g) { members.push(chip(states[i], i)); i++; }
+        i--;
+        out.push(`<span class="seg-group" role="group" aria-label="${esc(g)}"><span class="seg-label">${esc(g)}</span>${members.join('')}</span>`);
+      }
+      return out.join('');
     };
     const tools = `<div class="stage-tools">
 <div class="seg" role="group" aria-label="화면 상태">${stateChips(devs[d0]?.states || [])}</div>
@@ -100,7 +103,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const sheetIds = new Set((ch.sheets || []).map((x) => x.id));
     const flowBody = rows.length ? rows.map((r) => `<ol class="flow">${r.map((x) => {
       if (x.sheet && !sheetIds.has(x.sheet)) fail(`사용자 흐름의 이동 대상 시트가 없습니다: ${x.sheet}`);
-      const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
+      const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}${x.open ? ` data-go-open="${esc(x.open)}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
       return `<li><button type="button" class="fchip"${go} data-flow-key="${esc(x.label)}">${esc(x.label)}</button></li>`;
     }).join('')}</ol>`).join('') : '';
     const qBody = b.questions && b.questions.length ? list(b.questions) : '';
@@ -134,11 +137,13 @@ $('.spec-chapter').forEach(function(ch){
   $('.spec-sheet',ch).forEach(function(sh){
     var act=function(sel,attr,def){var e=$(sel+'.active',sh)[0];return e?e.getAttribute(attr):def;};
     var dev=act('[data-dev-btn]','data-dev-btn','pc'),st=act('[data-state-btn]','data-state-btn',''),sel=null;
-    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});var cur=$('[data-state-btn="'+st+'"]',sh)[0],grp=cur?cur.getAttribute('data-in-group'):null;$('[data-in-group]',sh).forEach(function(c){c.hidden=c.getAttribute('data-in-group')!==grp;});$('[data-group-btn]',sh).forEach(function(g){g.classList.toggle('active',g.getAttribute('data-group-btn')===grp);});var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});}
+    function show(){$('.spec-view',sh).forEach(function(v){v.classList.toggle('on',v.getAttribute('data-dev')===dev&&v.getAttribute('data-state')===st);});$('.viewport',sh).forEach(function(v){v.setAttribute('data-dev',dev);});$('.ovl',sh).forEach(function(o){o.hidden=true;});var own=$('.annos[data-for="'+st+'"]',sh)[0];$('.annos',sh).forEach(function(o){o.classList.toggle('on',own?o===own:o.getAttribute('data-for')==='*');});}
     show();
     $('[data-dev-btn]',sh).forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;dev=b.getAttribute('data-dev-btn');pick($('[data-dev-btn]',sh),b);show();});});
     $('[data-state-btn]',sh).forEach(function(b){b.addEventListener('click',function(){st=b.getAttribute('data-state-btn');pick($('[data-state-btn]',sh),b);show();});});
-    $('[data-group-btn]',sh).forEach(function(g){g.addEventListener('click',function(){var f=$('[data-in-group="'+g.getAttribute('data-group-btn')+'"]',sh)[0];if(f)f.click();});});
+    function ovl(id,on){$('.spec-view.on .ovl',sh).forEach(function(o){if(o.getAttribute('data-ovl')===id)o.hidden=!on;});}
+    $('.ovl',sh).forEach(function(o){o.addEventListener('click',function(){o.hidden=true;});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl',sh).forEach(function(o){o.hidden=true;});});
     var ZS=[100,150,200],zi=0;function setZoom(i){zi=Math.max(0,Math.min(ZS.length-1,i));var z=ZS[zi];$('.canvas',sh).forEach(function(c){c.style.setProperty('--zoom',z/100);});$('[data-zoom-val]',sh).forEach(function(v){v.textContent=z+'%';});$('[data-zoom-step]',sh).forEach(function(b){b.disabled=(Number(b.getAttribute('data-zoom-step'))<0&&zi===0)||(Number(b.getAttribute('data-zoom-step'))>0&&zi===ZS.length-1);});if(sel)focus(sel,false);}
     $('[data-zoom-step]',sh).forEach(function(b){b.addEventListener('click',function(){setZoom(zi+Number(b.getAttribute('data-zoom-step')));});});
     setZoom(0);
@@ -149,15 +154,15 @@ $('.spec-chapter').forEach(function(ch){
       var li=items(n).filter(function(e){return e.tagName==='LI';})[0];if(li&&scrollList)li.scrollIntoView({block:'nearest',behavior:'smooth'});}
     $('.mark,.annos > li',sh).forEach(function(e){var n=e.getAttribute('data-n');
       e.addEventListener('mouseenter',function(){hot(n,true);});e.addEventListener('mouseleave',function(){hot(n,false);});
-      e.addEventListener('click',function(){var o=e.getAttribute('data-opens');if(o){var ob=$('[data-state-btn="'+o+'"]',sh)[0];if(ob){ob.click();return;}}focus(n,e.classList.contains('mark'));});});
+      e.addEventListener('click',function(){var o=e.getAttribute('data-opens');if(o){var ov=$('.spec-view.on .ovl[data-ovl="'+o+'"]',sh)[0];if(ov){ovl(o,true);return;}var ob=$('[data-state-btn="'+o+'"]',sh)[0];if(ob){ob.click();return;}}focus(n,e.classList.contains('mark'));});});
     $('[data-panel-btn]',sh).forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-panel-btn'),was=b.classList.contains('active');
       $('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});
       if(!was){b.classList.add('active');$('.spec-drawer[data-panel="'+k+'"]',sh).forEach(function(d){d.classList.add('on');});}});});
-    GO[sh.getAttribute('data-sheet')]=function(state,n){if(state){var sb=$('[data-state-btn="'+state+'"]',sh)[0];if(sb)sb.click();}if(n)focus(String(n),true);var fb=$('[data-panel-btn="flow"]',sh)[0];if(fb&&!fb.disabled&&!fb.classList.contains('active'))fb.click();};
+    GO[sh.getAttribute('data-sheet')]=function(state,n,open){if(state){var sb=$('[data-state-btn="'+state+'"]',sh)[0];if(sb)sb.click();}if(n)focus(String(n),true);if(open)ovl(open,true);var fb=$('[data-panel-btn="flow"]',sh)[0];if(fb&&!fb.disabled&&!fb.classList.contains('active'))fb.click();};
   });
 });
-$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
-$('[data-state-btn],[data-sheet-btn],[data-chapter-btn],[data-group-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
+$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
+$('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
 })();`;
   return { nav, body, script };
 }
