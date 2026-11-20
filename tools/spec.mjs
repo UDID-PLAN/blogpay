@@ -151,7 +151,7 @@ ${drawers}${bar}</section>`;
 
   const script = `(function(){
 var $=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
-var GO={};
+var GO={},PANEL=null;
 function pick(btns,on){btns.forEach(function(b){b.classList.toggle('active',b===on);});}
 $('[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){pick($('[data-chapter-btn]'),b);$('.spec-chapter').forEach(function(c){c.classList.toggle('on',c.getAttribute('data-chapter')===b.getAttribute('data-chapter-btn'));});});});
 $('.spec-chapter').forEach(function(ch){
@@ -180,7 +180,7 @@ $('.spec-chapter').forEach(function(ch){
       e.addEventListener('click',function(){var o=e.getAttribute('data-opens');if(o){var ov=$('.spec-view.on .ovl[data-ovl="'+o+'"]',sh)[0];if(ov){ovl(o,true);return;}var ob=$('[data-state-btn="'+o+'"]',sh)[0];if(ob){ob.click();return;}}focus(n,e.classList.contains('mark'));});});
     $('[data-panel-btn]',sh).forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-panel-btn'),was=b.classList.contains('active');
       $('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});
-      if(!was){b.classList.add('active');$('.spec-drawer[data-panel="'+k+'"]',sh).forEach(function(d){d.classList.add('on');});}});});
+      if(!was){b.classList.add('active');$('.spec-drawer[data-panel="'+k+'"]',sh).forEach(function(d){d.classList.add('on');});}PANEL=was?null:k;});});
     GO[sh.getAttribute('data-sheet')]=function(state,n,open){if(state){var sb=$('[data-state-btn="'+state+'"]',sh)[0];if(sb)sb.click();}clearSel();if(n)focus(String(n),true);if(open)ovl(open,true);var fb=$('[data-panel-btn="flow"]',sh)[0];if(fb&&!fb.disabled&&!fb.classList.contains('active'))fb.click();};
   });
 });
@@ -188,6 +188,9 @@ document.addEventListener('click',function(){$('.menu-list').forEach(function(x)
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl').forEach(function(o){o.hidden=true;});});
 $('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
 $('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
+// 하단 탭(정책·사용자 흐름·확인 필요)은 사용자가 직접 닫기 전까지 1차·2차 탭을 옮겨도 같은 탭을 펼친 상태로 유지한다.
+function syncPanel(){$('.spec-chapter.on .spec-sheet.on').forEach(function(sh){$('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});if(!PANEL)return;var b=$('[data-panel-btn="'+PANEL+'"]',sh)[0];if(b&&!b.disabled){b.classList.add('active');$('.spec-drawer[data-panel="'+PANEL+'"]',sh).forEach(function(d){d.classList.add('on');});}});}
+$('[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',syncPanel);});
 })();`;
   return { nav, body, script };
 }
