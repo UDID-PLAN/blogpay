@@ -334,10 +334,10 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .kv th { width: var(--col-md); }
 .cols2 { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); align-items: start; }
 @media (min-width: 1024px) { .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.rev-table { table-layout: fixed; }
+.rev-table { table-layout: fixed; min-width: calc(var(--col-xs) * 3 + var(--col-sm) + var(--col-md) * 3); }
 .rev-table .c-ver, .rev-table .c-who { width: var(--col-xs); }
 .rev-table .c-date { width: var(--col-sm); }
-.rev-table .c-why { width: 30%; }
+.rev-table .c-why { width: 25%; }
 .rev-table td, .rev-table th { overflow-wrap: break-word; }
 .rev-table td:first-child, .rev-table td:nth-child(2), .rev-table td:nth-child(5), .rev-table td:nth-child(6) { white-space: nowrap; }
 @media (max-width: 1023px) { body.spec { height: auto; overflow: auto; } .spec-body, .stage-row { grid-template-columns: 1fr; } }

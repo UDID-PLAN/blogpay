@@ -106,6 +106,11 @@
   --col-md: 160px;
   --col-lg: 192px;
   --col-fluid-min: 240px;
+  /* 넓은 화면(1600px 이상)용 인덱스 열 너비 — 표가 넓어진 만큼 열도 넓게 */
+  --col-xs-wide: 112px;
+  --col-sm-wide: 136px;
+  --col-md-wide: 192px;
+  --col-lg-wide: 240px;
 }
 
 * { box-sizing: border-box; }
@@ -143,6 +148,7 @@ pre { background: var(--surface); border: var(--bw) solid var(--hairline); borde
 /* 레이아웃 */
 .shell { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-9); display: grid; grid-template-columns: 1fr; gap: var(--sp-6); }
 .shell.wide { max-width: var(--w-wide); }
+.shell.full { max-width: none; }
 @media (min-width: 1024px) { .shell.has-toc { grid-template-columns: var(--w-toc) minmax(0, 1fr); } }
 .toc { display: none; }
 @media (min-width: 1024px) {
@@ -225,7 +231,7 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
      fluid  : 내용 (최소 240)
    현재 열 구성: sm 요청일 · xs 이슈 번호 · md 프로젝트 · xs 진행상태 · md 제목 · fluid 내용 · xs 플로우 · md 기획서 · lg 비고
    표 최소 폭 = 토큰 합계. 화면이 이보다 좁으면(태블릿·모바일) 줄바꿈 대신 가로 스크롤이 생긴다. */
-.index-table { table-layout: fixed; min-width: calc(var(--col-sm) + var(--col-xs) * 3 + var(--col-md) * 3 + var(--col-lg) + var(--col-fluid-min)); }
+.index-table { table-layout: fixed; min-width: calc(var(--col-sm) + var(--col-xs) * 3 + var(--col-md) * 4 + var(--col-lg) + var(--col-fluid-min)); }
 .index-table col.w-xs { width: var(--col-xs); }
 .index-table col.w-sm { width: var(--col-sm); }
 .index-table col.w-md { width: var(--col-md); }
@@ -235,17 +241,35 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
 .cell-content summary { margin: 0; }
 .cell-content div { margin-top: var(--sp-2); white-space: pre-line; word-break: break-all; }
 .vbtns { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.vbtns + .vbtns { margin-top: var(--sp-2); }
+.more > summary { list-style: none; cursor: pointer; }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary::after { content: "▾"; margin-left: var(--sp-1); }
+.more[open] > summary::after { content: "▴"; }
+.more-list { display: flex; flex-direction: column; gap: var(--sp-1); margin: var(--sp-2) 0 0; padding: 0; list-style: none; }
+.more-list li { margin: 0; }
 .reflist { list-style: none; margin: 0; padding: 0; }
 .reflist li { margin: 0 0 var(--sp-1); }
 .reflist li:last-child { margin-bottom: 0; }
 
 /* 필터 */
 .filters { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-4); }
-.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); }
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); min-width: 0; }
+@media (min-width: 1600px) {
+  .index-table col.w-xs { width: var(--col-xs-wide); }
+  .index-table col.w-sm { width: var(--col-sm-wide); }
+  .index-table col.w-md { width: var(--col-md-wide); }
+  .index-table col.w-lg { width: var(--col-lg-wide); }
+}
 .filter-label { min-width: var(--sp-8); color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
 tr[hidden] { display: none; }
 
 @media (max-width: 640px) {
+  .filter-row { flex-direction: column; align-items: stretch; }
+  .filter-label { min-width: 0; }
+  .search-wrap { flex-direction: column; align-items: stretch; }
+  .search-wrap .search { width: 100%; }
   .topbar { padding: 0 var(--sp-4); }
   .shell { padding: var(--sp-5) var(--sp-4) var(--sp-8); }
   h2 { margin-top: var(--sp-7); }
@@ -318,10 +342,10 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .kv th { width: var(--col-md); }
 .cols2 { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); align-items: start; }
 @media (min-width: 1024px) { .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.rev-table { table-layout: fixed; }
+.rev-table { table-layout: fixed; min-width: calc(var(--col-xs) * 3 + var(--col-sm) + var(--col-md) * 3); }
 .rev-table .c-ver, .rev-table .c-who { width: var(--col-xs); }
 .rev-table .c-date { width: var(--col-sm); }
-.rev-table .c-why { width: 30%; }
+.rev-table .c-why { width: 25%; }
 .rev-table td, .rev-table th { overflow-wrap: break-word; }
 .rev-table td:first-child, .rev-table td:nth-child(2), .rev-table td:nth-child(5), .rev-table td:nth-child(6) { white-space: nowrap; }
 @media (max-width: 1023px) { body.spec { height: auto; overflow: auto; } .spec-body, .stage-row { grid-template-columns: 1fr; } }
