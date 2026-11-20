@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // BlogPay 기획서 빌드 스크립트 (외부 패키지 없음, Node 18+)
 //
-//   node tools/build.mjs doc <slug> <버전>        초안 생성  → draft/<slug>/<slug>_<버전>.html  (git 제외)
+//   node tools/build.mjs doc <slug> <버전>        기획서 생성 → docs/<slug>/<slug>_<버전>.html  (수정 시 다시 빌드해 덮어씀, 인덱스 버전 버튼이 이 파일을 연다)
 //   node tools/build.mjs publish <slug> <버전>    공유본 생성 → published/<slug>/<slug>_<버전>.html (이미 있으면 거부, --force로만 덮어쓰기)
 //   node tools/build.mjs index                    인덱스 생성 → index.html
 //
@@ -162,10 +162,11 @@ function verify(out) {
 
 function cmdDoc(slug, version) {
   const { html, size } = renderDoc(slug, version);
-  const out = P('draft', slug, `${slug}_${version}.html`);
+  const out = P('docs', slug, `${slug}_${version}.html`);
   write(out, html);
   verify(out);
-  console.log(`✔ 초안 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
+  console.log(`✔ 기획서 생성: ${path.relative(ROOT, out)} (${kb(size)})`);
+  console.log('  → node tools/build.mjs index 로 인덱스를 갱신하세요.');
 }
 
 function cmdPublish(slug, version, force) {
@@ -230,9 +231,11 @@ function cmdIndex() {
     // 기획서 열: ① 샘플(있으면 최상위·검정, 새 탭) ② 버전 버튼 ③ [기획 추출] — 변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다
     const sampleFile = r.sample ? `published/${r.slug}/${r.slug}_${r.sample}_sample.html` : '';
     const hasSample = !!sampleFile && fs.existsSync(P(sampleFile));
+    // 버전 HTML: docs/(수정 가능한 기획서) 우선, 없으면 published/(과거 공유본)
+    const verFile = (v) => [`docs/${r.slug}/${r.slug}_${v.version}.html`, `published/${r.slug}/${r.slug}_${v.version}.html`].find((f) => fs.existsSync(P(f))) || '';
     const chip = (v, i) => {
-      const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
-      const hasHtml = fs.existsSync(P(f));
+      const f = verFile(v);
+      const hasHtml = !!f;
       const cls = `btn${i === 0 && !hasSample ? ' primary' : ''}`;
       const tip = esc([v.date, v.summary].filter(Boolean).join(' · '));
       if (hasHtml) return `<a class="${cls}" href="${esc(f)}" title="${tip}">${esc(v.version)}</a>`;
@@ -242,8 +245,8 @@ function cmdIndex() {
     const sampleBtn = hasSample ? `<a class="btn primary" href="${esc(sampleFile)}" target="_blank" rel="noopener noreferrer" title="화면정의서 템플릿 샘플 (${esc(r.sample)} 기준)">샘플</a>` : '';
     // 추출 후보(최신 버전부터): HTML이 있는 버전 → 샘플(같은 버전) → 외부 문서 링크 순으로 판단. 내려받을 수 있는 것은 HTML 파일뿐이다.
     const cands = vs.map((v) => {
-      const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
-      if (fs.existsSync(P(f))) return { label: v.version, href: f, dl: true };
+      const f = verFile(v);
+      if (f) return { label: v.version, href: f, dl: true };
       if (hasSample && r.sample === v.version) return { label: `${v.version} (샘플)`, href: sampleFile, dl: true };
       if (v.url) return { label: v.version, href: v.url, dl: false };
       return { label: v.version, href: '', dl: false };
@@ -322,7 +325,7 @@ else if (cmd === 'sample' && a && b) cmdSample(a, b);
 else if (cmd === 'index') cmdIndex();
 else {
   console.log(`사용법:
-  node tools/build.mjs doc <slug> <버전>       초안 생성 (draft/, git 제외)
+  node tools/build.mjs doc <slug> <버전>       기획서 생성 (docs/, 덮어씀)
   node tools/build.mjs publish <slug> <버전>   공유본 생성 (published/, 덮어쓰기 거부)
   node tools/build.mjs index                   인덱스(index.html) 갱신`);
   process.exit(cmd ? 1 : 0);

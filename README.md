@@ -20,9 +20,9 @@ blogpay/
 │     └─ v1.0/
 │        ├─ content.html       # 본문만 작성 (스타일·목차·개정이력은 빌드가 채움)
 │        └─ assets/            # 이 버전에서 쓰는 이미지 (webp 권장)
+├─ docs/<slug>/                # 기획서 본문. doc 빌드 때마다 <slug>_<버전>.html 을 덮어씀 (인덱스 버전 버튼·기획 추출이 이 파일 사용)
 ├─ published/<slug>/           # 요청 건당 폴더 1개. publish 때마다 <slug>_<버전>.html 이 새 파일로 추가됨 (덮어쓰기 거부)
 │                              #   샘플은 <slug>_<버전>_sample.html 로 별도 생성 (덮어써도 됨)
-├─ draft/                      # 작업 중 미리보기 (git 제외)
 └─ tools/
    ├─ build.mjs                # 빌드 (doc · publish · sample · index)
    ├─ spec.mjs                 # spec.json → 화면정의서 렌더러
@@ -38,10 +38,10 @@ blogpay/
 
 1. 새 요청 건: `requests/_template`을 `requests/<slug>`로 복사하고 `request.json`에 요청 시트(개선기획 요청서)의 행을 옮겨 적습니다. 인덱스 표의 컬럼은 이 시트를 따릅니다.
 2. 새 버전: `request.json`의 `versions`에 항목 추가 → `requests/<slug>/<버전>/content.html` 작성
-3. 미리보기: `node tools/build.mjs doc <slug> <버전>` → `draft/<slug>/<slug>_<버전>.html`을 브라우저로 열어 확인
-4. 공유 확정: `node tools/build.mjs publish <slug> <버전>` → `published/`에 생성
-5. 인덱스 갱신: `node tools/build.mjs index`
-6. 커밋 후 `published/…html` 파일 1개를 개발팀에 전달
+3. 기획서 생성: `node tools/build.mjs doc <slug> <버전>` → `docs/<slug>/<slug>_<버전>.html` (수정할 때마다 다시 빌드해 덮어씀)
+4. 인덱스 갱신: `node tools/build.mjs index` → 버전 버튼이 `docs/` 기획서로 연결
+5. 커밋 후 인덱스의 [기획 추출]로 내려받은 HTML 1개를 개발팀에 전달
+6. (선택) 고정 사본이 필요하면 `node tools/build.mjs publish <slug> <버전>` → `published/`에 덮어쓰기 불가 사본 생성
 
 ## 규칙
 
@@ -55,7 +55,7 @@ blogpay/
 ## 인덱스의 기획서·기획 추출 열
 
 - **샘플**: 화면정의서 템플릿 샘플이 있으면 맨 앞에 검정 버튼으로 두고 새 탭에서 엽니다. (`request.json`의 `sample`)
-- **버전 버튼**: 최신 버전이 위. `published/`에 HTML이 있으면 그 파일, 없으면 `versions[].url`(외부 문서)로 연결합니다.
+- **버전 버튼**: 최신 버전이 위. `docs/` 기획서 → `published/` 사본 → `versions[].url`(외부 문서) 순으로 연결합니다.
 - **기획 추출**(비고 오른쪽 열): 스타일·이미지가 내장된 HTML 파일을 내려받습니다. 기본은 최신 버전이며, 최신 버전의 HTML이 없으면 같은 버전의 샘플을 내려받습니다. `과거 버전`에서 과거 버전을 고를 수 있고, HTML이 없는 버전은 외부 문서 링크로만 열립니다. 내려받을 HTML이 하나도 없으면 비활성입니다.
 
 ## 인덱스 표 열 너비 규칙
