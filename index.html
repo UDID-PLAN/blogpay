@@ -67,6 +67,7 @@
   --fw-bold: 600;
 
   /* 간격 */
+  --w-step-img: 1020px;
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -294,7 +295,7 @@ tr[hidden] { display: none; }
 .step-cell ul, .step-cell ol { margin: 0; padding-left: var(--sp-5); }
 .step-cell .grp { display: block; margin-top: var(--sp-2); color: var(--ink); font-weight: var(--fw-medium); }
 .step-cell .grp:first-child { margin-top: 0; }
-.chapter-note { flex: none; padding: var(--sp-3) var(--sp-5) 0; }
+.chapter-note { flex: none; padding: var(--sp-3) var(--sp-5); }
 .note-bar { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-2) var(--sp-4); border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); color: var(--body); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .note-k { flex: none; color: var(--ink); font-weight: var(--fw-bold); }
 .note-items { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4); margin: 0; padding: 0; list-style: none; }
@@ -304,7 +305,7 @@ tr[hidden] { display: none; }
 .step-body .side .step-cell + .step-cell { border-left: 0; border-top: var(--bw) solid var(--hairline); }
 .step-imgs { display: flex; flex-direction: column; gap: var(--sp-5); padding: var(--sp-4); }
 .step-fig { margin: 0; }
-.step-fig img { display: block; max-width: 100%; height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-sm); }
+.step-fig img { display: block; width: 100%; max-width: var(--w-step-img); height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-sm); }
 .step-fig figcaption { margin-top: var(--sp-2); text-align: center; color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .step-empty { display: flex; align-items: center; justify-content: center; height: 100%; margin: 0; }
 @media (max-width: 1023px) { .step-grid { grid-template-columns: minmax(0, 1fr); } .step-cell + .step-cell { border-left: 0; border-top: var(--bw) solid var(--hairline); } }
