@@ -259,21 +259,16 @@ tr[hidden] { display: none; }
 }
 
 /* ── 화면정의서(spec) ── 같은 토큰만 사용한다. 인덱스와 같은 상단바·여백·선·라운드 규칙을 따른다 */
+body.spec .topbar { gap: var(--sp-5); }
+.spec-doc-title { flex: 1; min-width: 0; color: var(--ink); font-weight: var(--fw-bold); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-.spec-top { flex: none; border-bottom: var(--bw) solid var(--hairline); background: var(--canvas); }
-.spec-top-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3) var(--sp-5); padding: var(--sp-4) var(--sp-5); }
-.spec-title { margin: 0; color: var(--ink); font-size: var(--fs-lg); line-height: var(--lh-lg); font-weight: var(--fw-bold); letter-spacing: var(--ls-lg); }
-.spec-meta { color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); }
-.spec-tabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); padding: 0 var(--sp-5) var(--sp-3); }
 .spec-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .spec-chapter { display: none; flex: 1; min-height: 0; flex-direction: column; }
 .spec-chapter.on { display: flex; }
 .spec-sheet { display: none; flex: 1; min-height: 0; flex-direction: column; }
 .spec-sheet.on { display: flex; }
-.spec-sheetnav { flex: none; display: flex; flex-wrap: wrap; gap: var(--sp-2); padding: var(--sp-3) var(--sp-5) 0; }
 .spec-doc { flex: 1; min-height: 0; overflow: auto; padding: var(--sp-5); }
 .spec-doc h2 { margin-top: 0; padding-top: 0; border-top: 0; }
-.spec-doc .table-wrap { max-width: var(--w-wide); }
 .spec-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) var(--w-side); gap: var(--sp-4); padding: var(--sp-4) var(--sp-5); }
 .stage { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
 .stage-head { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); }
@@ -307,9 +302,6 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .spec-drawer { flex: none; display: none; max-height: 40vh; overflow: auto; padding: var(--sp-4) var(--sp-5); border-top: var(--bw) solid var(--hairline); background: var(--surface); }
 .spec-drawer.on { display: block; }
 .spec-drawer ul { margin: 0; }
-.spec-bar { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); min-height: var(--h-bar); padding: var(--sp-2) var(--sp-5); border-top: var(--bw) solid var(--hairline); background: var(--canvas); }
-.spec-bar .grow { flex: 1; }
-.spec-bar .fchip.active { background: var(--ink); color: var(--on-primary); }
 .kv th { width: var(--col-md); }
 .cols2 { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); align-items: start; }
 @media (min-width: 1024px) { .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -320,6 +312,15 @@ body.spec { height: 100vh; display: flex; flex-direction: column; overflow: hidd
 .rev-table td, .rev-table th { overflow-wrap: break-word; }
 .rev-table td:first-child, .rev-table td:nth-child(2), .rev-table td:nth-child(5), .rev-table td:nth-child(6) { white-space: nowrap; }
 @media (max-width: 1023px) { body.spec { height: auto; overflow: auto; } .spec-body { grid-template-columns: 1fr; } }
+.tabs { flex: none; display: flex; border-bottom: var(--bw) solid var(--hairline); background: var(--canvas); }
+.tab { flex: 1; appearance: none; cursor: pointer; padding: var(--sp-3) var(--sp-4); border: 0; border-bottom: var(--bw-focus) solid transparent; background: none; color: var(--body); font-family: inherit; font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: var(--fw-medium); }
+.tab:hover { color: var(--ink); background: var(--hairline-soft); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: var(--fw-bold); }
+.tab:focus-visible { outline: var(--bw-focus) solid var(--link); outline-offset: calc(var(--bw-focus) * -1); }
+.tabs.sub { background: var(--surface); }
+.tabs.bar { border-bottom: 0; border-top: var(--bw) solid var(--hairline); }
+.tabs.bar .tab { border-bottom: 0; border-top: var(--bw-focus) solid transparent; }
+.tabs.bar .tab.active { border-top-color: var(--ink); }
 
 </style>
 </head>

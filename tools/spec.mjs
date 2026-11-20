@@ -75,22 +75,22 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const annos = (sh.annotations || []).map((a) => `<li data-n="${a.n}"><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}</div></li>`).join('');
     const b = sh.blocks || {};
     const panels = [['policy', '정책', b.policy], ['related', '연관 화면 · 흐름', b.related], ['questions', '확인 필요', b.questions]];
-    const bar = `<div class="spec-bar">${panels.map(([k, l]) => `<button type="button" class="fchip" data-panel-btn="${k}">${l}</button>`).join('')}<span class="grow"></span>${sh.notice ? `<span class="tag tone-amber">${esc(sh.notice)}</span>` : ''}</div>`;
+    const bar = `<div class="tabs bar">${panels.map(([k, l]) => `<button type="button" class="tab" data-panel-btn="${k}">${l}</button>`).join('')}</div>`;
     const drawers = panels.map(([k, l, arr]) => `<div class="spec-drawer" data-panel="${k}"><h4>${l}</h4>${list(arr)}</div>`).join('');
     return `<section class="spec-sheet${first ? ' on' : ''}" data-sheet="${esc(sh.id)}">
 <div class="spec-body"><div class="stage">
-<div class="stage-head"><h2>${esc(sh.no ? sh.no + 'p ' : '')}${esc(sh.title)}</h2>${(sh.badges || []).map(badge).join('')}<span class="stage-info">${info}</span></div>
+<div class="stage-head"><h2>${esc(sh.title)}</h2>${(sh.badges || []).map(badge).join('')}<span class="stage-info">${info}</span></div>
 ${tools}<div class="viewport">${views}</div></div>
 <aside class="side" aria-label="화면 설명"><div class="side-head">화면 설명</div>${intro}<ol class="annos">${annos}</ol></aside></div>
 ${drawers}${bar}</section>`;
   };
 
   const chapters = spec.chapters || [];
-  const nav = chapters.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-chapter-btn="${esc(c.id)}">${esc(c.title)}</button>`).join('');
+  const nav = chapters.map((c, i) => `<button type="button" class="tab${i === 0 ? ' active' : ''}" data-chapter-btn="${esc(c.id)}">${esc(c.title)}</button>`).join('');
   const body = chapters.map((c, i) => {
     uniq(c.id);
     const sheets = c.sheets || [];
-    const subtabs = sheets.length > 1 ? `<div class="spec-sheetnav">${sheets.map((s, j) => `<button type="button" class="fchip${j === 0 ? ' active' : ''}" data-sheet-btn="${esc(s.id)}">${esc(s.tab || s.title)}</button>`).join('')}</div>` : '';
+    const subtabs = sheets.length > 1 ? `<div class="tabs sub">${sheets.map((s, j) => `<button type="button" class="tab${j === 0 ? ' active' : ''}" data-sheet-btn="${esc(s.id)}">${esc(s.tab || s.title)}</button>`).join('')}</div>` : '';
     return `<div class="spec-chapter${i === 0 ? ' on' : ''}" data-chapter="${esc(c.id)}">${subtabs}${sheets.map((s, j) => (s.type === 'document' ? docSheet(s, j === 0) : screenSheet(s, j === 0))).join('\n')}</div>`;
   }).join('\n');
 
