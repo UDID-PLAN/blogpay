@@ -227,6 +227,13 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
 .cell-content summary { margin: 0; }
 .cell-content div { margin-top: var(--sp-2); white-space: pre-line; word-break: break-all; }
 .vbtns { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.vbtns + .vbtns { margin-top: var(--sp-2); }
+.more > summary { list-style: none; cursor: pointer; }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary::after { content: "▾"; margin-left: var(--sp-1); }
+.more[open] > summary::after { content: "▴"; }
+.more-list { display: flex; flex-direction: column; gap: var(--sp-1); margin: var(--sp-2) 0 0; padding: 0; list-style: none; }
+.more-list li { margin: 0; }
 .reflist { list-style: none; margin: 0; padding: 0; }
 .reflist li { margin: 0 0 var(--sp-1); }
 .reflist li:last-child { margin-bottom: 0; }

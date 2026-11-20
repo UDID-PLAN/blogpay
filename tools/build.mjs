@@ -200,26 +200,43 @@ function cmdIndex() {
 
   const rows = reqs.map((r) => {
     const vs = [...(r.versions || [])].reverse(); // 최신이 위
-    // 기획서 열: 버전 버튼만 표시 (변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다)
+    // 기획서 열: ① 샘플(있으면 최상위·검정, 새 탭) ② 버전 버튼 ③ [기획 추출] — 변경 내용은 각 기획서의 개정이력에 있으므로 목록에는 넣지 않는다
+    const sampleFile = r.sample ? `published/${r.slug}/${r.slug}_${r.sample}_sample.html` : '';
+    const hasSample = !!sampleFile && fs.existsSync(P(sampleFile));
     const chip = (v, i) => {
       const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
       const hasHtml = fs.existsSync(P(f));
-      const cls = `btn${i === 0 ? ' primary' : ''}`;
+      const cls = `btn${i === 0 && !hasSample ? ' primary' : ''}`;
       const tip = esc([v.date, v.summary].filter(Boolean).join(' · '));
       if (hasHtml) return `<a class="${cls}" href="${esc(f)}" title="${tip}">${esc(v.version)}</a>`;
       if (v.url) return `<a class="${cls}" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer" title="${tip}">${esc(v.version)}</a>`;
       return `<span class="btn disabled" title="${tip}">${esc(v.version)}</span>`;
     };
+    const sampleBtn = hasSample ? `<a class="btn primary" href="${esc(sampleFile)}" target="_blank" rel="noopener noreferrer" title="화면정의서 템플릿 샘플 (${esc(r.sample)} 기준)">샘플</a>` : '';
+    // 추출 후보(최신 버전부터): HTML이 있는 버전 → 샘플(같은 버전) → 외부 문서 링크 순으로 판단. 내려받을 수 있는 것은 HTML 파일뿐이다.
+    const cands = vs.map((v) => {
+      const f = `published/${r.slug}/${r.slug}_${v.version}.html`;
+      if (fs.existsSync(P(f))) return { label: v.version, href: f, dl: true };
+      if (hasSample && r.sample === v.version) return { label: `${v.version} (샘플)`, href: sampleFile, dl: true };
+      if (v.url) return { label: v.version, href: v.url, dl: false };
+      return { label: v.version, href: '', dl: false };
+    });
+    const def = cands.find((c) => c.dl);
+    const dlAttr = (c) => `href="${esc(c.href)}" download="${esc(path.basename(c.href))}"`;
+    const extractBtn = def
+      ? `<a class="btn" ${dlAttr(def)} title="${esc(def.label)} 기획서를 HTML 파일로 내려받습니다 (스타일·이미지 내장)">기획 추출</a>`
+      : '<span class="btn disabled" title="내려받을 HTML 기획서가 없습니다">기획 추출</span>';
+    const others = cands.filter((c) => c !== def);
+    const moreItems = others.map((c) => c.dl
+      ? `<li><a ${dlAttr(c)}>${esc(c.label)}</a></li>`
+      : c.href ? `<li><a href="${esc(c.href)}" target="_blank" rel="noopener noreferrer">${esc(c.label)} · 외부 문서 열기</a></li>` : `<li><span class="mute">${esc(c.label)} · 파일 없음</span></li>`).join('');
+    const more = others.length ? `<details class="more"><summary class="btn">다른 버전</summary><ul class="more-list">${moreItems}</ul></details>` : '';
     const parts = [];
-    
-    let sampleBtn = '';
-    if (r.sample) {
-      const sf = `published/${r.slug}/${r.slug}_${r.sample}_sample.html`;
-      if (fs.existsSync(P(sf))) sampleBtn = `<a class="btn" href="${esc(sf)}" title="화면정의서 템플릿 샘플 (${esc(r.sample)} 기준)">샘플</a>`;
-    }
-    const btns = vs.map(chip).join('') + sampleBtn;
+    const btns = sampleBtn + vs.map(chip).join('');
     if (btns) parts.push(`<div class="vbtns">${btns}</div>`);
-    const planCell = parts.join('') || '<span class="mute">작성 전</span>';
+    if (!btns) parts.push('<span class="mute">작성 전</span>');
+    parts.push(`<div class="vbtns vbtns-extract">${extractBtn}${more}</div>`);
+    const planCell = parts.join('');
 
     const extra = [];
     if (r.qa) extra.push(aLink({ label: 'QA', url: r.qa }));
@@ -240,7 +257,7 @@ function cmdIndex() {
   <td>${noteCell || '<span class="mute">-</span>'}</td></tr>`;
   });
   const table = `<div class="table-wrap"><table class="index-table">
-<colgroup><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-md"><col class="w-lg"></colgroup>
+<colgroup><col class="w-sm"><col class="w-xs"><col class="w-md"><col class="w-xs"><col class="w-md"><col class="w-fluid"><col class="w-xs"><col class="w-lg"><col class="w-lg"></colgroup>
 <thead><tr><th>요청일</th><th>이슈 번호</th><th>프로젝트</th><th>진행상태</th><th>제목</th><th>내용</th><th>플로우</th><th>기획서</th><th>비고</th></tr></thead>
 <tbody>${rows.join('\n') || '<tr><td colspan="9" class="mute">등록된 요청 건이 없습니다.</td></tr>'}<tr id="empty-row" hidden><td colspan="9" class="mute">조건에 맞는 요청이 없습니다.</td></tr></tbody></table></div>`;
 
