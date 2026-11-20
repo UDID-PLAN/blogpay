@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lintCss } from './lint-css.mjs';
 import { checkLayout } from './check-layout.mjs';
+import { renderSpec } from './spec.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -99,6 +100,15 @@ function renderDoc(slug, version) {
   if (idx < 0) fail(`request.json의 versions에 ${version}이(가) 없습니다.`);
   const ver = req.versions[idx];
   const dir = P('requests', slug, version);
+  const sf = path.join(dir, 'spec.json');
+  if (fs.existsSync(sf)) {
+    const { nav, body, script } = renderSpec(readJson(sf), { dir, revisions: revisionsTable(req.versions, idx), fail, warn: (m) => console.warn('⚠ ' + m) });
+    const html = fill(read(P('src', 'spec-frame.html')), { CSS: read(P('src', 'doc.css')), TITLE: esc(req.title), VERSION: esc(version), DATE: esc(ver.date), NAV: nav, CONTENT: body, SCRIPT: script });
+    assertSelfContained(html, `${slug} ${version}`);
+    const size = Buffer.byteLength(html);
+    if (size > MAX_BYTES) console.warn(`⚠ 파일 용량이 ${kb(size)}입니다. 이미지를 webp로 압축하세요. (권장 상한 ${kb(MAX_BYTES)})`);
+    return { html, size };
+  }
   const cf = path.join(dir, 'content.html');
   if (!fs.existsSync(cf)) fail(`본문 파일이 없습니다: requests/${slug}/${version}/content.html`);
 
