@@ -109,8 +109,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
     allStates.forEach((x) => { const own = new Set((x.annotations || sh.annotations || []).map((a) => a.n)); (x.marks || []).forEach((m) => { if (!own.has(m.n)) fail(`${sh.id}/${x.id}: 마크 ${m.n}번에 대응하는 설명이 없습니다`); }); });
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     // intro 항목: 문자열 또는 {t, tryHtml} — tryHtml은 직접 입력해 볼 수 있는 예시 HTML(같은 폴더 파일)을 새 탭으로 연다
-    const tryHtml = (x) => { const f = path.resolve(dir, x.tryHtml); if (!fs.existsSync(f)) fail(`예시 HTML 파일이 없습니다: ${x.tryHtml}`); return ` <button type="button" class="try-link" data-try-html="${Buffer.from(fs.readFileSync(f)).toString('base64')}">${esc(x.t)} ↗</button>`; };
-    const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.map((x) => (typeof x === 'string' ? inline(x) : x.tryHtml ? tryHtml(x) : inline(x.t))).join(' ')}</div>` : '';
+    const tryHtml = (x) => { const f = path.resolve(dir, x.tryHtml); if (!fs.existsSync(f)) fail(`예시 HTML 파일이 없습니다: ${x.tryHtml}`); return `<button type="button" class="fchip try-link" data-try-html="${Buffer.from(fs.readFileSync(f)).toString('base64')}">${icon('external')}${esc(String(x.t).replace(/\s*↗\s*$/, ''))}</button>`; };
+    const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.filter((x) => !(x && x.tryHtml)).map((x) => inline(typeof x === 'string' ? x : x.t)).join('<br>')}${sh.intro.filter((x) => x && x.tryHtml).map(tryHtml).join('')}</div>` : '';
     // 케이스 전환: 같은 화면에서 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인)을 디스크립션 버튼으로 전환. 첫 번째 케이스는 현재 화면(image 생략)
     // 케이스 전환 시 해당 번호 마커만 남긴다. case.marks로 케이스 이미지의 위치를 지정(생략하면 기본 위치)
     const caseBtns = (a) => (a.cases && a.cases.length ? `<div class="cases">${a.cases.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-case="${c.image ? imgData(c.image, `${sh.id} case ${c.label}`) : ''}" data-case-n="${a.n}"${c.marks ? ` data-case-marks="${esc(JSON.stringify(c.marks))}"` : ''}>${esc(c.label)}</button>`).join('')}</div>` : '');
@@ -125,7 +125,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const rowsIn = b.flow ?? ch.flow ?? [];
     const rows = rowsIn.length && !Array.isArray(rowsIn[0]) ? [rowsIn] : rowsIn;
     const sheetIds = new Set((ch.sheets || []).map((x) => x.id));
-    const flowBody = rows.length ? rows.map((r) => `<ol class="flow">${r.map((x) => {
+    // 사용자 흐름: 정책·확인 필요와 같은 2열 표(N단계 | 동작). 행을 누르면 해당 화면·상태·번호로 이동
+    const flowBody = rows.length ? `<div class="plist flow-list">${rows.map((r, gi) => r.map((x, xi) => {
       if (x.sheet && !sheetIds.has(x.sheet)) fail(`사용자 흐름의 이동 대상 시트가 없습니다: ${x.sheet}`);
       if (x.sheet && sheetIds.has(x.sheet)) {
         const tg = (ch.sheets || []).find((y) => y.id === x.sheet);
@@ -137,8 +138,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
         if (x.n && st0 && !(st0.marks || []).some((m) => m.n === x.n)) fail(`사용자 흐름의 번호 ${x.n}에 해당하는 마크가 없습니다: ${x.sheet}/${st0.id}`);
       }
       const go = x.sheet ? ` data-go-sheet="${esc(x.sheet)}"${x.state ? ` data-go-state="${esc(x.state)}"` : ''}${x.n ? ` data-go-n="${x.n}"` : ''}${x.open ? ` data-go-open="${esc(x.open)}"` : ''}` : ' disabled title="화면 시트 추가 예정"';
-      return `<li><button type="button" class="fchip"${go} data-flow-key="${esc(x.label)}"><span class="flow-action">${esc(x.label)}</span></button></li>`;
-    }).join('')}</ol>`).join('') : '';
+      return `<button type="button" class="plist-row flow-row"${go} data-flow-key="${esc(x.label)}"><span class="plist-k">${rows.length > 1 ? `흐름 ${gi + 1} · ` : ''}${xi + 1}단계</span><span class="plist-v">${esc(x.label)}</span></button>`;
+    }).join('')).join('')}</div>` : '';
     // 확인 필요: 정책 탭과 같은 2열(항목 | 내용) 형식. 항목은 {k, v} 또는 문자열(항목명 없이 내용만)
     const qRow = (q, i) => (typeof q === 'string'
       ? `<div class="plist-row"><span class="plist-k">확인 ${i + 1}</span><div class="plist-v">${inline(q)}</div></div>`
@@ -146,7 +147,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const qBody = b.questions && b.questions.length ? `<div class="plist">${b.questions.map(qRow).join('')}</div>` : '';
     // 하단 독: 정책·사용자 흐름·확인 필요 — 아이콘·개수(정책·확인 필요 = 행 수, 흐름 = 단계 수)를 함께 보여준다
     const count = (html, re) => (html.match(re) || []).length;
-    const panels = [['policy', '정책', policyBody, 'policy', count(policyBody, /class="plist-row"/g) || count(policyBody, /<li>/g), '개'], ['flow', '사용자 흐름', flowBody, 'flow', count(flowBody, /<li>/g), '단계'], ['questions', '확인 필요', qBody, 'help', count(qBody, /class="plist-row"/g), '개']];
+    const panels = [['policy', '정책', policyBody, 'policy', count(policyBody, /class="plist-row"/g) || count(policyBody, /<li>/g), '개'], ['flow', '사용자 흐름', flowBody, 'flow', count(flowBody, /class="plist-row/g), '단계'], ['questions', '확인 필요', qBody, 'help', count(qBody, /class="plist-row"/g), '개']];
     const bar = `<div class="tabs bar">${panels.map(([k, l, body, ic, n, u]) => `<button type="button" class="tab" data-panel-btn="${k}" aria-expanded="false"${body ? '' : ' disabled'}>${icon(ic)}<span class="dock-label">${l}</span>${body ? `<span class="dock-count">${n}<span class="dock-unit">${u}</span></span>` : ''}</button>`).join('')}</div>`;
     const drawers = panels.filter(([, , body]) => body).map(([k, , body]) => `<div class="spec-drawer" data-panel="${k}">${body}</div>`).join('');
     const zoom = zoomTools(true);
@@ -227,8 +228,8 @@ function toast(m){TOAST.textContent=m;TOAST.hidden=false;clearTimeout(TT);TT=set
 $('[data-copy]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var t=b.getAttribute('data-copy');var done=function(){toast('복사되었습니다.');};
   var fb=function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');}catch(x){}a.remove();done();};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,fb);}else{fb();}});});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl').forEach(function(o){o.hidden=true;});});
-$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('.flow .fchip').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
-$('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('.flow .fchip.here').forEach(function(f){f.classList.remove('here');});});});
+$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('[data-flow-key]').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
+$('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('[data-flow-key].here').forEach(function(f){f.classList.remove('here');});});});
 // 하단 탭(정책·사용자 흐름·확인 필요)은 사용자가 직접 닫기 전까지 1차·2차 탭을 옮겨도 같은 탭을 펼친 상태로 유지한다.
 function syncPanel(){$('.spec-chapter.on .spec-sheet.on').forEach(function(sh){$('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');x.setAttribute('aria-expanded','false');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});if(!PANEL)return;var b=$('[data-panel-btn="'+PANEL+'"]',sh)[0];if(b&&!b.disabled){b.classList.add('active');b.setAttribute('aria-expanded','true');$('.spec-drawer[data-panel="'+PANEL+'"]',sh).forEach(function(d){d.classList.add('on');});}});}
 $('[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',syncPanel);});
