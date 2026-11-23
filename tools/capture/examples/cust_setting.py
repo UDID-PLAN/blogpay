@@ -65,7 +65,7 @@ def pro():
     if not connected:
         body += '<div style="margin-top:18px"><a class="btn btn-primary btn-sm" id="connBtn">연결하기</a></div>'
     else:
-        body += '<div id="actBtns" style="margin-top:18px;margin-bottom:26px"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div>'
+        body += '<div id="actBtns" style="padding:22px 0 0"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div><div style="height:60px"></div>'
         body += '<div class="alert alert-warning" style="line-height:1.9;margin:0" id="commonGuide">%s</div><div style="height:22px"></div>' % GUIDE2
         body += ('<table class="table table-bordered" id="commonTb"><colgroup><col style="width:15%%"><col></colgroup><tbody>'
                  '<tr><th class="text-center">오늘출발 설정</th><td><table class="table table-bordered" style="margin:0"><colgroup><col style="width:140px"><col></colgroup><tbody>'
@@ -135,6 +135,9 @@ def basic():
     if connected:
         sub.append(H('<div class="bot-btn-area"><a class="btn btn-blue btn-xl" id="saveBtn">저장</a></div>'))
 
+ARROW = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' fill='none' stroke='%23333' stroke-width='1.4'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E\")"
+if plat == 'basic':
+    soup.head.append(H('<style>select{background-color:#fff !important;background-image:%s !important;background-repeat:no-repeat !important;background-position:right 17px center !important;background-size:10px auto !important;-webkit-appearance:none !important;appearance:none !important}</style>' % ARROW))
 (pro if plat == 'pro' else basic)()
 if state in ALERTS:
     alert_overlay(*ALERTS[state])
