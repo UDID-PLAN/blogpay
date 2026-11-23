@@ -24,7 +24,7 @@ function scrollParent(e){for(var p=e.parentElement;p&&p!==document.body;p=p.pare
 function scan(tag){
   if(document.documentElement.scrollWidth>vw+1)out.push(tag+'페이지 가로 스크롤 '+document.documentElement.scrollWidth+'px > '+vw+'px');
   var seen=0;document.querySelectorAll('body *').forEach(function(e){
-    if(seen>=3)return;var r=e.getBoundingClientRect();if(!r.width||!r.height||r.right<=vw+1)return;
+    if(seen>=3||e.ownerSVGElement)return;var r=e.getBoundingClientRect();if(!r.width||!r.height||r.right<=vw+1)return;
     var cs=getComputedStyle(e);if(cs.position==='fixed'||e.closest('[hidden],.menu-list,.ovl')&&e.closest('[hidden]'))return;
     var sp=scrollParent(e);if(sp&&sp.getBoundingClientRect().right<=vw+1)return;
     out.push(tag+'<'+e.tagName.toLowerCase()+(e.className&&e.className.baseVal===undefined?'.'+String(e.className).split(' ')[0]:'')+'> 우측 '+Math.round(r.right)+'px > '+vw+'px');seen++;});

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="dev-plan-capture" content="width=1280, height=800, scale=1.5"><title>추가 회원정보 입력 · 온유상점</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#303438;background:white;font:15px/1.55 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+header{padding:22px;text-align:center;border-top:5px solid #374d55;border-bottom:1px solid #e9ebed;font-size:24px;font-weight:700;color:#383e42}
+main{max-width:840px;margin:54px auto 52px;padding:0 20px}h1{text-align:center;font-size:23px;margin:0 0 33px}h2{font-size:16px;font-weight:600;border-bottom:1px solid #aaa;padding-bottom:12px;margin:0 0 14px}
+.line{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:start;margin:13px 0}.label{padding-top:11px}.required::after{content:"";display:inline-block;vertical-align:super;width:4px;height:4px;border-radius:50%;background:#bb4640;margin-left:4px}
+input,button{font:inherit;color:inherit}input:not([type=checkbox]),button{border:1px solid #d2d5d8;border-radius:5px;background:#fff;padding:9px 12px}
+input:not([type=checkbox]){width:100%;height:45px;min-width:0}input[readonly]{background:#f6f6f6}input::placeholder{color:#72777b}.short{max-width:400px}.pair{display:flex;gap:6px}.pair button,button{white-space:nowrap;cursor:pointer}
+small,.hint{color:#575e65;font-size:12px}.hint,.message{margin:4px 0}.hint{font-size:14px;text-align:center;margin:-18px 0 28px}.message:empty{display:none}.message{font-size:13px;color:#324f77}.checks{display:flex;align-items:center;gap:6px;margin-top:4px}input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:#42484b}.address input{margin-bottom:5px}
+.agree{margin-top:32px}.agree h2{margin-bottom:5px}.term{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 6px 15px}.term button{font-size:12px;padding:3px 9px}.submit{display:block;margin:33px auto 0;background:#303234;color:#fff;width:min(280px,100%);border:0;min-height:46px;font-weight:600}
+dialog{border:1px solid #c9cdd1;border-radius:8px;padding:20px;width:min(92vw,360px)}dialog::backdrop{background:#17202a55}footer{text-align:center;color:#777;font-size:12px;padding:20px;border-top:1px solid #eee}#complete{text-align:center;padding:65px 15px}#try-note{font-size:13px;text-align:center;margin:0;padding:8px;background:#f0f3f6}
+@media(max-width:600px){header{padding:14px;font-size:19px}main{margin:26px auto;padding-inline:16px}h1{font-size:20px;margin-bottom:26px}.hint{font-size:13px;margin:-14px 0 22px}.line{grid-template-columns:1fr;gap:4px;margin:12px 0}.label{padding:0}.short{max-width:none}.agree{margin-top:22px}.term{padding-left:0}.submit{width:100%;margin-top:22px}}
+</style></head><body>
+<p id="try-note" hidden>입력 예시입니다. 실제 회원정보를 저장하지 않습니다.</p>
+<header>온유상점</header><main><form id="profile" autocomplete="off">
+<h1>추가 회원정보 입력</h1><p class="hint">카카오에서 받은 정보를 확인하고 빈 필수 항목을 입력해 주세요.</p>
+<h2>회원가입 정보</h2>
+<div class="line" id="id-row"><label class="label required" for="login-id">아이디</label><div class="short"><div class="pair"><input id="login-id" placeholder="영문/숫자 3~15자" pattern="[A-Za-z0-9]{3,15}" maxlength="15" required><button type="button" id="id-check">중복확인</button></div><p id="id-message" class="message" aria-live="polite"></p></div></div>
+<div id="contact"><div class="line"><label class="label required" for="full-name">이름</label><input class="short" id="full-name" pattern=".*\S.*" title="이름을 입력해 주세요." required></div>
+<div class="line"><label class="label required" for="phone">휴대폰번호</label><div class="short"><input id="phone" type="tel" placeholder="휴대폰번호" pattern="(?:0|\+82[ \-]?)[0-9]{1,2}[ \-]?[0-9]{3,4}[ \-]?[0-9]{4}" title="010-1234-5678 또는 +82 10-1234-5678 형식으로 입력해 주세요." required><label class="checks"><input type="checkbox">수신거부 <small>(주문/배송 관련 문자 수신 불가)</small></label></div></div>
+<div class="line"><label class="label required" for="email">이메일</label><div class="short"><input id="email" type="email" required><label class="checks"><input type="checkbox">수신거부 <small>(주문/배송 관련 이메일 수신 불가)</small></label></div></div></div>
+<div class="line" id="address-row"><label class="label" for="postcode">배송주소</label><div class="address"><div class="pair short"><input id="postcode" readonly placeholder="우편번호"><button type="button" id="lookup">주소검색</button></div><input id="street" readonly aria-label="기본주소" placeholder="기본주소"><input id="detail" aria-label="나머지 주소" placeholder="나머지 주소"></div></div>
+<section class="agree" id="terms"><h2><label class="checks"><input id="all" type="checkbox">전체 동의</label></h2>
+<div class="term"><label class="checks required"><input type="checkbox" id="service" required>이용약관 동의</label><button type="button" data-term="이용약관">보기</button></div>
+<div class="term"><label class="checks required"><input type="checkbox" id="privacy" required>개인정보처리방침 동의</label><button type="button" data-term="개인정보처리방침">보기</button></div></section>
+<button class="submit" id="join" type="submit">가입하기</button></form><section id="complete" hidden><h2>가입이 완료되었습니다</h2><p>온유상점 회원가입과 로그인을 마쳤습니다.</p><button type="button" onclick="location.reload()">다시 입력해 보기</button></section></main>
+<footer>온유상점</footer><dialog id="info"><h2 id="info-title"></h2><p id="info-text"></p><button type="button" id="info-action">닫기</button></dialog>
+<script>
+const byId = id => document.getElementById(id);
+function fillProfile(data, accepted) {
+  for (const [field, value] of Object.entries(data)) if (value) byId(field).value = value;
+  for (const id of accepted) byId(id).checked = true;
+  syncTerms();
+}
+const terms = [byId('service'), byId('privacy')];
+function syncTerms() {
+  byId('all').checked = terms.every(t => t.checked);
+  byId('all').indeterminate = !byId('all').checked && terms.some(t => t.checked);
+}
+fillProfile({'full-name':'이서윤', email:'seoyun@example.com'}, ['service']);
+byId('all').onchange = e => terms.forEach(t => t.checked = e.target.checked);
+terms.forEach(t => t.onchange = syncTerms);
+const idField = byId('login-id');
+let checkedId = '';
+idField.oninput = () => { checkedId=''; idField.setCustomValidity(''); byId('id-message').textContent=''; };
+byId('id-check').onclick = () => {
+  idField.setCustomValidity('');
+  if (!idField.reportValidity()) return;
+  const used = idField.value.toLowerCase() === 'test123';
+  checkedId = used ? '' : idField.value;
+  byId('id-message').textContent = used ? '이미 사용 중인 아이디입니다.' : '사용할 수 있는 아이디입니다.';
+};
+const info = byId('info');
+function openInfo(title, text, action, run) {
+  byId('info-title').textContent=title; byId('info-text').textContent=text; byId('info-action').textContent=action;
+  byId('info-action').onclick=()=>{if(run)run();info.close()}; info.showModal();
+}
+byId('lookup').onclick=()=>openInfo('주소검색 예시','가상 주소 · 온유로 12','이 주소 선택',()=>{byId('postcode').value='00000';byId('street').value='온유로 12';});
+document.querySelectorAll('[data-term]').forEach(b=>b.onclick=()=>openInfo(b.dataset.term,'실제 쇼핑몰에서는 해당 약관 전문이 열립니다.','닫기'));
+byId('profile').onsubmit=e=>{
+  e.preventDefault();
+  if(checkedId !== idField.value){idField.setCustomValidity('아이디 중복확인을 완료해 주세요.');idField.reportValidity();return;}
+  e.target.hidden=true;byId('complete').hidden=false;window.scrollTo(0,0);
+};
+if (location.protocol === 'blob:' || location.hash === '#try') byId('try-note').hidden=false;
+</script></body></html>

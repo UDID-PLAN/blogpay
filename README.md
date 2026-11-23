@@ -86,6 +86,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 | 분류 | violet, cyan | 구분용 태그 |
 
 - 유채색은 태그·상태 같은 작은 요소에만 쓰고 큰 면에는 채우지 않습니다.
+- 화면정의서의 강조색은 **blue(link) 계열 하나**입니다: 번호 핀, 현재 1차·2차 탭, 펼친 하단 칸, 흐름의 현재 단계. 넓은 면은 `link-tint`까지만 씁니다. 상태·기기 칩 선택은 검정, 빨강(`{{강조}}`)은 주의 문구에만 씁니다.
 - 태그는 soft 배경 + 진한 글자색이며, red만 흰 배경 + error 테두리입니다.
 - 그라데이션, pink·magenta는 사용하지 않습니다.
 
@@ -130,21 +131,28 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 
 ### spec.json 구조
 
+화면 구성(v1.1부터): 왼쪽 1차 탭(챕터 레일, 모바일은 상단 가로 스크롤) · 2차 탭(아이콘·밑줄) · 화면 머리줄(제목·경로 / 상태·알림·PC/모바일 / 원본 보기·배율 50~200%) · 미리보기와 번호 핀 · 오른쪽 화면 설명 · 하단 독(정책·사용자 흐름·확인 필요, 개수 자동 표시).
+
+
 - 최상위: `title` · `version` · `date` · `revisions[]` · `chapters[]`
-- 챕터: `{ id, title, sheets[], policyHtml?, flow?, badge?, noteHtml? }` — 챕터 `flow`는 사용자 흐름 칩 목록, `badge`는 1차 탭 옆 태그(`{ label, tone }`, 예: 이용매뉴얼 `기획참고용`)
+- 챕터: `{ id, title, icon?, sheets[], policyHtml?, flow?, badge?, noteHtml? }` — 챕터 `flow`는 사용자 흐름 칩 목록, `badge`는 1차 탭 옆 태그(`{ label, tone }`, 예: 이용매뉴얼 `기획참고용`)
+- 아이콘(`icon`): 챕터·시트·상태에 이름으로 지정합니다. 사용 가능: `grid` `link` `bag` `book` `shield` `layout` `layout-split` `login` `user-plus` `doc-check` (전체 목록 `tools/icons.mjs`, 없는 이름이면 빌드 실패)
 - 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
-- 화면 시트: `{ id, tab, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
+- 화면 시트: `{ id, tab, icon?, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
+  - `intro` 항목은 문자열 또는 `{ t, tryHtml }` — `tryHtml`은 같은 버전 폴더의 예시 HTML을 내장해 "직접 입력해 보기" 링크로 새 탭에서 엽니다. (예: 추가 회원정보 입력)
+  - 한 기기만 있는 화면(예: 카카오 동의 화면은 모바일만)은 없는 기기 버튼이 비활성됩니다.
   - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.
-- 상태(`states[]`): `{ id, label, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
+- 상태(`states[]`): `{ id, label, icon?, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
   - `pin: "right"` — 번호 배지를 박스 우상단에 둡니다. 화면 왼쪽 끝에 붙은 요소(LNB 등)라 배지가 잘리거나 글자를 가릴 때 사용합니다. 이미지에 여백을 덧붙이지 않습니다.
   - `group`을 주면 칩 대신 드롭다운(예: 알림)으로 묶입니다. 상태가 많아져도 칩 줄이 깨지지 않습니다.
   - 모달·팝업은 화면 전체 이미지가 아니라 **오버레이**(잘라낸 팝업 이미지 + 스크림)로 올립니다. 페이지가 바뀐 것처럼 보이지 않게 합니다.
   - 알림창은 상태(`alert-*`)로 두고 자체 디스크립션을 가집니다. 트리거는 **실제로 알림을 띄우는 조작**의 마커에 `opens`로 연결합니다. (예: 저장이 아니라 연동 방식 토글 전환)
   - 상태 칩은 모달·알림에만 씁니다. 같은 화면의 조건별 모습은 상태 칩이 아니라 디스크립션 `cases`로 전환합니다.
-- 디스크립션(`annotations[]`): `{ n, title, lines[], opens?, cases? }` — `lines` 항목은 문자열(`{{강조 문구}}`로 빨간 강조) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목), `{t, copy}`(긴 안내·알림 문구 → [복사] 버튼만 표시, 누르면 토스트)
+- 디스크립션(`annotations[]`): `{ n, title, lines[], opens?, cases? }` — `lines` 항목은 문자열(`{{강조 문구}}`로 빨간 강조, `**굵게**`) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목), `{t, copy}`(긴 안내·알림 문구 → [복사] 버튼만 표시, 누르면 토스트)
   - `cases: [{ label, image?, marks? }]` — 같은 화면이 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인 판매회원)을 디스크립션 버튼으로 전환합니다. 첫 항목은 현재 화면(image 생략). 전환하면 **해당 번호 마커만** 남고, 위치가 달라지면 `marks`로 지정합니다. 다른 번호를 누르면 기본 화면으로 돌아갑니다.
 - 문서 섹션 `plain: true` — 아코디언 없이 본문만 펼칩니다.
-- 단계 시트(`type: "step"`): `{ id, tab, no, title, badge?, where, htmlFile, images[{ image, caption?, source? }] }` — 왼쪽 이미지(폭 통일, 캡션·출처), 오른쪽 STEP 패널(할 일 / 입력값 / 주의사항 `.step-cell`). 예: 이용매뉴얼
+- 단계 시트(`type: "step"`): `{ id, tab, tabSub?, no, title, badge?, where, htmlFile, images[{ image, caption?, source? }] }` — 2차 탭은 `tab`(STEP 0)과 `tabSub`(짧은 이름) 두 줄. 왼쪽 이미지(폭 통일, 캡션·출처·원본 보기, 배율), 오른쪽 STEP 패널(할 일 / 입력값 / 주의사항 `.step-cell`). 예: 이용매뉴얼
+- 확인 필요(`questions`)의 `v`와 정책 HTML 값에는 핵심어를 굵게(`**…**` / `<strong>`) 표시합니다.
 - 챕터 `noteHtml` — 2차 탭 위에 한 줄 요약 바(`.note-bar`)를 둡니다. 예: 설정 순서
 - 개요 챕터에는 개정이력과, 화면 하나에 귀속시킬 수 없는 공통정책만 둡니다. 화면별 정책은 해당 화면 시트의 정책 탭에 씁니다. (기존 문서를 옮겨 적는 중에는 연동정책을 개요에 두고, 화면 탭을 만들 때마다 관련 정책을 해당 탭으로 옮깁니다.)
 - 사용자 흐름(`flow` 행): `{ label, sheet, state?, n?, open? }` — 칩 클릭 시 해당 시트·상태·번호·오버레이로 이동하며 하이라이트는 1개만 유지합니다.
@@ -172,7 +180,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 
 ### 지원 범위와 알려진 제한
 
-- **화면 표시**: 데스크톱·태블릿·모바일(≤640px)에서 넘침 없음을 검사합니다. 모바일에서는 화면 이미지·디스크립션이 세로로 쌓이고 표는 가로 스크롤됩니다.
+- **화면 표시**: 데스크톱·태블릿·모바일(≤640px)에서 넘침 없음을 검사합니다. 모바일에서는 화면 이미지·디스크립션이 세로로 쌓이고, 하단 독은 화면 아래에 고정되며, 표는 가로 스크롤됩니다.
 - **인쇄·PDF**: 화면정의서는 화면용 뷰어(뷰포트 고정 레이아웃)라 인쇄하면 첫 화면만 나옵니다. 전달 형식은 HTML 1개 파일이며, PDF가 필요하면 별도 인쇄 스타일을 먼저 합의합니다.
 - **헤드리스 Chrome 최소 창 폭은 약 500px**이라 그보다 좁은 폭은 실측하지 못합니다.
 - 스마트스토어 vSample은 v1.1을 화면 시트로 옮기는 중입니다. 완성된 시트는 연동설정(외부판매채널 연동 PRO·BASIC), 연동상품관리(목록), 구매후기(목록·등록·상세)이고, 나머지는 흐름 칩에 "화면 시트 추가 예정"으로 표시됩니다.
