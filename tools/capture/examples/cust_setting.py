@@ -65,7 +65,7 @@ def pro():
     if not connected:
         body += '<div style="margin-top:18px"><a class="btn btn-primary btn-sm" id="connBtn">연결하기</a></div>'
     else:
-        body += '<div id="actBtns" style="padding:22px 0 0"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div><div style="height:60px"></div>'
+        body += '<div id="actBtns" style="padding:22px 0 0"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div><div style="height:22px"></div>'
         body += '<div class="alert alert-warning" style="line-height:1.9;margin:0" id="commonGuide">%s</div><div style="height:22px"></div>' % GUIDE2
         body += ('<table class="table table-bordered" id="commonTb"><colgroup><col style="width:15%%"><col></colgroup><tbody>'
                  '<tr><th class="text-center">오늘출발 설정</th><td><table class="table table-bordered" style="margin:0"><colgroup><col style="width:140px"><col></colgroup><tbody>'

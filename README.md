@@ -135,7 +135,8 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 - 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
 - 화면 시트: `{ id, tab, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
   - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.
-- 상태(`states[]`): `{ id, label, image, group?, marks[{ n, x, y, w, h, opens? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
+- 상태(`states[]`): `{ id, label, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
+  - `pin: "right"` — 번호 배지를 박스 우상단에 둡니다. 화면 왼쪽 끝에 붙은 요소(LNB 등)라 배지가 잘리거나 글자를 가릴 때 사용합니다. 이미지에 여백을 덧붙이지 않습니다.
   - `group`을 주면 칩 대신 드롭다운(예: 알림)으로 묶입니다. 상태가 많아져도 칩 줄이 깨지지 않습니다.
   - 모달·팝업은 화면 전체 이미지가 아니라 **오버레이**(잘라낸 팝업 이미지 + 스크림)로 올립니다. 페이지가 바뀐 것처럼 보이지 않게 합니다.
   - 알림창은 상태(`alert-*`)로 두고 자체 디스크립션을 가집니다. 트리거는 **실제로 알림을 띄우는 조작**의 마커에 `opens`로 연결합니다. (예: 저장이 아니라 연동 방식 토글 전환)

@@ -66,7 +66,7 @@ export function renderSpec(spec, { dir, fail, warn }) {
   };
 
   const view = (sid, dev, st, first) => {
-    const marks = (st.marks || []).map((m) => `<div class="mark" data-n="${m.n}"${m.opens ? ` data-opens="${esc(m.opens)}"` : ''} style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
+    const marks = (st.marks || []).map((m) => `<div class="mark${m.pin === 'right' ? ' pin-r' : ''}" data-n="${m.n}"${m.opens ? ` data-opens="${esc(m.opens)}"` : ''} style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
     const ovls = (st.overlays || []).map((o) => `<div class="ovl" data-ovl="${esc(o.id)}" hidden><img alt="${esc(o.label || o.id)}" style="left:${o.box.x}%;top:${o.box.y}%;width:${o.box.w}%" src="${imgData(o.image, `${sid} ${dev} ${o.id}`)}"><span class="ovl-close">닫기 ✕</span></div>`).join('');
     return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}${ovls}</div></div>`;
   };
