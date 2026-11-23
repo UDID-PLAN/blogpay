@@ -318,13 +318,13 @@ body.spec > nav.tabs { flex: none; display: flex; overflow-x: auto; border-botto
 body.spec > nav.tabs > .tab { flex: none; display: flex; align-items: center; gap: var(--sp-2); white-space: nowrap; }
 body.spec > nav.tabs > .tab.active { color: var(--link-deep); border-bottom-color: var(--link); }
 body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
-.tab-label { white-space: nowrap; }
+.tab-label { min-width: 0; word-break: keep-all; overflow-wrap: normal; }
 .spec-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 @media (min-width: 1024px) {
-  body.spec { display: grid; grid-template-columns: minmax(var(--w-rail), max-content) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  body.spec { display: grid; grid-template-columns: var(--w-rail) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
   body.spec .topbar { grid-column: 1 / -1; }
   body.spec > nav.tabs { flex-direction: column; gap: var(--sp-1); padding: var(--sp-4) var(--sp-2); overflow: auto; border-bottom: 0; border-right: var(--bw) solid var(--hairline); }
-  body.spec > nav.tabs > .tab { padding: var(--sp-2) var(--sp-3); border: 0; border-left: var(--bw-focus) solid transparent; border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); text-align: left; white-space: normal; }
+  body.spec > nav.tabs > .tab { flex-wrap: wrap; min-width: 0; padding: var(--sp-2) var(--sp-3); border: 0; border-left: var(--bw-focus) solid transparent; border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); text-align: left; white-space: normal; }
   body.spec > nav.tabs > .tab.active { border-left-color: var(--link); background: var(--link-tint); }
 }
 
