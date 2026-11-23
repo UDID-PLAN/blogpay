@@ -45,6 +45,12 @@
       "label": "블로그페이 관리자·쇼핑몰 저장 HTML (구매후기 목록·상세·일괄등록)",
       "path": "capture-lab/rv/",
       "note": "v1.1 샘플 화면 캡처 원본. 레포 밖 작업 폴더라 다음 요청부터는 requests/<slug>/materials/에 보관"
+    },
+    {
+      "kind": "관리자UI",
+      "label": "블로그페이 관리자 PRO·BASIC 연동설정(외부서비스 연동) 저장 HTML",
+      "url": "https://drive.google.com/drive/u/0/folders/1Ph5xIdDGqmwArWrck9EwBO0SLRWI_a7t",
+      "note": "외부판매채널 연동 화면 가공 베이스. 가공 스크립트: tools/capture/examples/cust_setting.py"
     }
   ],
   "planLinks": [],
