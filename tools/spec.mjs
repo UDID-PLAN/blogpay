@@ -68,9 +68,10 @@ export function renderSpec(spec, { dir, fail, warn }) {
   };
 
   const view = (sid, dev, st, first) => {
+    // 이미지 대체 텍스트: state.alt(없으면 상태 이름)
     const marks = (st.marks || []).map((m) => `<div class="mark${m.pin === 'right' ? ' pin-r' : ''}" data-n="${m.n}"${m.opens ? ` data-opens="${esc(m.opens)}"` : ''} style="left:${m.x}%;top:${m.y}%;width:${m.w}%;height:${m.h}%"><span class="n">${m.n}</span></div>`).join('');
     const ovls = (st.overlays || []).map((o) => `<div class="ovl" data-ovl="${esc(o.id)}" hidden><img alt="${esc(o.label || o.id)}" style="left:${o.box.x}%;top:${o.box.y}%;width:${o.box.w}%" src="${imgData(o.image, `${sid} ${dev} ${o.id}`)}"><span class="ovl-close">닫기 ✕</span></div>`).join('');
-    return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}${ovls}</div></div>`;
+    return `<div class="spec-view${first ? ' on' : ''}" data-dev="${dev}" data-state="${esc(st.id)}"><div class="canvas"><img alt="${esc(st.alt || st.label)}" src="${imgData(st.image, `${sid} ${dev} ${st.id}`)}">${marks}${ovls}</div></div>`;
   };
 
   // 화면 도구: 원본 보기(현재 이미지를 새 탭) + 배율(50~200%, 10% 단위). 배율은 문서 전체에 적용된다
@@ -114,7 +115,12 @@ export function renderSpec(spec, { dir, fail, warn }) {
     // 케이스 전환: 같은 화면에서 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인)을 디스크립션 버튼으로 전환. 첫 번째 케이스는 현재 화면(image 생략)
     // 케이스 전환 시 해당 번호 마커만 남긴다. case.marks로 케이스 이미지의 위치를 지정(생략하면 기본 위치)
     const caseBtns = (a) => (a.cases && a.cases.length ? `<div class="cases">${a.cases.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-case="${c.image ? imgData(c.image, `${sh.id} case ${c.label}`) : ''}" data-case-n="${a.n}"${c.marks ? ` data-case-marks="${esc(JSON.stringify(c.marks))}"` : ''}>${esc(c.label)}</button>`).join('')}</div>` : '');
-    const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}${caseBtns(a)}</div></li>`;
+    // go: 다른 화면으로 이동하는 버튼 {label, sheet, state?, n?} (같은 챕터의 시트). 예: 동의 후 '추가 회원정보 입력' 화면으로
+    const goBtns = (a) => [].concat(a.go || []).map((g) => {
+      if (!(ch.sheets || []).some((y) => y.id === g.sheet)) fail(`${sh.id}: 디스크립션 ${a.n}번 이동 대상 시트가 없습니다: ${g.sheet}`);
+      return `<button type="button" class="fchip go-btn" data-go-sheet="${esc(g.sheet)}"${g.state ? ` data-go-state="${esc(g.state)}"` : ''}${g.n ? ` data-go-n="${g.n}"` : ''} data-flow-key="${esc(g.label)}">${esc(g.label)}</button>`;
+    }).join('');
+    const annoLi = (a) => `<li data-n="${a.n}"${a.opens ? ` data-opens="${esc(a.opens)}"` : ''}><span class="n">${a.n}</span><div><strong>${esc(a.title)}</strong>${list(a.lines)}${caseBtns(a)}${a.go ? `<div class="cases">${goBtns(a)}</div>` : ''}</div></li>`;
     const firstState = devs[d0]?.states?.[0]?.id;
     const ownLists = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states).filter((s, i, a) => s.annotations && a.findIndex((x) => x.id === s.id) === i);
     const annos = `<ol class="annos${ownLists.some((s) => s.id === firstState) ? '' : ' on'}" data-for="*">${(sh.annotations || []).map(annoLi).join('')}</ol>`
@@ -228,7 +234,7 @@ function toast(m){TOAST.textContent=m;TOAST.hidden=false;clearTimeout(TT);TT=set
 $('[data-copy]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var t=b.getAttribute('data-copy');var done=function(){toast('복사되었습니다.');};
   var fb=function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');}catch(x){}a.remove();done();};if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,fb);}else{fb();}});});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('.ovl').forEach(function(o){o.hidden=true;});});
-$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('[data-flow-key]').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
+$('[data-go-sheet]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var id=b.getAttribute('data-go-sheet'),sh=$('.spec-sheet[data-sheet="'+id+'"]')[0];if(!sh)return;var ch=sh.closest('.spec-chapter'),cb=$('[data-chapter-btn="'+ch.getAttribute('data-chapter')+'"]')[0];if(cb)cb.click();var sb=$('[data-sheet-btn="'+id+'"]',ch)[0];if(sb)sb.click();GO[id](b.getAttribute('data-go-state'),b.getAttribute('data-go-n'),b.getAttribute('data-go-open'));$('[data-flow-key]').forEach(function(f){f.classList.toggle('here',f.getAttribute('data-flow-key')===b.getAttribute('data-flow-key'));});});});
 $('[data-state-btn],[data-sheet-btn],[data-chapter-btn]').forEach(function(b){b.addEventListener('click',function(){$('[data-flow-key].here').forEach(function(f){f.classList.remove('here');});});});
 // 하단 탭(정책·사용자 흐름·확인 필요)은 사용자가 직접 닫기 전까지 1차·2차 탭을 옮겨도 같은 탭을 펼친 상태로 유지한다.
 function syncPanel(){$('.spec-chapter.on .spec-sheet.on').forEach(function(sh){$('[data-panel-btn]',sh).forEach(function(x){x.classList.remove('active');x.setAttribute('aria-expanded','false');});$('.spec-drawer',sh).forEach(function(d){d.classList.remove('on');});if(!PANEL)return;var b=$('[data-panel-btn="'+PANEL+'"]',sh)[0];if(b&&!b.disabled){b.classList.add('active');b.setAttribute('aria-expanded','true');$('.spec-drawer[data-panel="'+PANEL+'"]',sh).forEach(function(d){d.classList.add('on');});}});}

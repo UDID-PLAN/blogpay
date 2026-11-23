@@ -142,13 +142,13 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
   - `intro` 항목은 문자열 또는 `{ t, tryHtml }` — `tryHtml`은 같은 버전 폴더의 예시 HTML을 내장해 "직접 입력해 보기" 링크로 새 탭에서 엽니다. (예: 추가 회원정보 입력)
   - 한 기기만 있는 화면(예: 카카오 동의 화면은 모바일만)은 없는 기기 버튼이 비활성됩니다.
   - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.
-- 상태(`states[]`): `{ id, label, icon?, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
+- 상태(`states[]`): `{ id, label, icon?, alt?, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`
   - `pin: "right"` — 번호 배지를 박스 우상단에 둡니다. 화면 왼쪽 끝에 붙은 요소(LNB 등)라 배지가 잘리거나 글자를 가릴 때 사용합니다. 이미지에 여백을 덧붙이지 않습니다.
   - `group`을 주면 칩 대신 드롭다운(예: 알림)으로 묶입니다. 상태가 많아져도 칩 줄이 깨지지 않습니다.
   - 모달·팝업은 화면 전체 이미지가 아니라 **오버레이**(잘라낸 팝업 이미지 + 스크림)로 올립니다. 페이지가 바뀐 것처럼 보이지 않게 합니다.
   - 알림창은 상태(`alert-*`)로 두고 자체 디스크립션을 가집니다. 트리거는 **실제로 알림을 띄우는 조작**의 마커에 `opens`로 연결합니다. (예: 저장이 아니라 연동 방식 토글 전환)
   - 상태 칩은 모달·알림에만 씁니다. 같은 화면의 조건별 모습은 상태 칩이 아니라 디스크립션 `cases`로 전환합니다.
-- 디스크립션(`annotations[]`): `{ n, title, lines[], opens?, cases? }` — `lines` 항목은 문자열(`{{강조 문구}}`로 빨간 강조, `**굵게**`) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목), `{t, copy}`(긴 안내·알림 문구 → [복사] 버튼만 표시, 누르면 토스트)
+- 디스크립션(`annotations[]`): `{ n, title, lines[], opens?, cases?, go? }` — `go: { label, sheet, state?, n? }`는 같은 챕터의 다른 화면으로 이동하는 버튼 — `lines` 항목은 문자열(`{{강조 문구}}`로 빨간 강조, `**굵게**`) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목), `{t, copy}`(긴 안내·알림 문구 → [복사] 버튼만 표시, 누르면 토스트)
   - `cases: [{ label, image?, marks? }]` — 같은 화면이 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인 판매회원)을 디스크립션 버튼으로 전환합니다. 첫 항목은 현재 화면(image 생략). 전환하면 **해당 번호 마커만** 남고, 위치가 달라지면 `marks`로 지정합니다. 다른 번호를 누르면 기본 화면으로 돌아갑니다.
 - 문서 섹션 `plain: true` — 아코디언 없이 본문만 펼칩니다.
 - 단계 시트(`type: "step"`): `{ id, tab, tabSub?, no, title, badge?, where, htmlFile, images[{ image, caption?, source? }] }` — 2차 탭은 `tab`(STEP 0)과 `tabSub`(짧은 이름) 두 줄. 왼쪽 이미지(폭 통일, 캡션·출처·원본 보기, 배율), 오른쪽 STEP 패널(할 일 / 입력값 / 주의사항 `.step-cell`). 예: 이용매뉴얼

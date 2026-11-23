@@ -268,7 +268,6 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
 tr[hidden] { display: none; }
 
 @media (max-width: 640px) {
-  .plist-row { grid-template-columns: minmax(0, 1fr); gap: var(--sp-1); }
   .filter-row { flex-direction: column; align-items: stretch; }
   .filter-label { min-width: 0; }
   .search-wrap { flex-direction: column; align-items: stretch; }
@@ -278,22 +277,8 @@ tr[hidden] { display: none; }
   h2 { margin-top: var(--sp-7); }
 }
 
-/* 문서형 STEP 카드 (이용매뉴얼 등): 번호·제목·기간 배지 + 설정 위치, 할 일 / 입력값 / 주의사항 3칸 */
+/* 문서 본문 섹션(plain): 아코디언 없이 펼침 */
 .doc-plain { display: flex; flex-direction: column; gap: var(--sp-4); }
-.steps { display: flex; flex-direction: column; gap: var(--sp-4); margin: 0; padding: 0; list-style: none; }
-.step { border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
-.step-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); }
-.step-no { display: inline-flex; align-items: center; justify-content: center; height: var(--h-tag); padding: 0 var(--sp-2); border-radius: var(--radius-full); background: var(--ink); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
-.step-title { color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-md); font-weight: var(--fw-bold); }
-.step-where { margin-left: auto; color: var(--body); font-size: var(--fs-sm); line-height: var(--lh-sm); }
-.step-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.step-cell { min-width: 0; padding: var(--sp-3) var(--sp-4); color: var(--body); }
-.step-cell + .step-cell { border-left: var(--bw) solid var(--hairline); }
-.step-cell h4 { margin: 0 0 var(--sp-2); color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: var(--fw-bold); }
-.step-cell ul, .step-cell ol { margin: 0; padding-left: var(--sp-5); }
-.step-cell .grp { display: block; margin-top: var(--sp-2); color: var(--ink); font-weight: var(--fw-medium); }
-.step-cell .grp:first-child { margin-top: 0; }
-@media (max-width: 1023px) { .step-grid { grid-template-columns: minmax(0, 1fr); } .step-cell + .step-cell { border-left: 0; border-top: var(--bw) solid var(--hairline); } }
 
 @media print {
   body { background: var(--surface); }
@@ -318,14 +303,17 @@ body.spec > nav.tabs { flex: none; display: flex; overflow-x: auto; border-botto
 body.spec > nav.tabs > .tab { flex: none; display: flex; align-items: center; gap: var(--sp-2); white-space: nowrap; }
 body.spec > nav.tabs > .tab.active { color: var(--link-deep); border-bottom-color: var(--link); }
 body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
-.tab-label { min-width: 0; word-break: keep-all; overflow-wrap: normal; }
+.tab-label { min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
 .spec-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 @media (min-width: 1024px) {
   body.spec { display: grid; grid-template-columns: var(--w-rail) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
   body.spec .topbar { grid-column: 1 / -1; }
   body.spec > nav.tabs { flex-direction: column; gap: var(--sp-1); padding: var(--sp-4) var(--sp-2); overflow: auto; border-bottom: 0; border-right: var(--bw) solid var(--hairline); }
-  body.spec > nav.tabs > .tab { flex-wrap: wrap; min-width: 0; padding: var(--sp-2) var(--sp-3); border: 0; border-left: var(--bw-focus) solid transparent; border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); text-align: left; white-space: normal; }
+  /* 레일 항목: [아이콘] | 글자 — 긴 이름·태그는 글자 칸 안에서 줄바꿈(아이콘 아래로 내려가지 않음) */
+  body.spec > nav.tabs > .tab { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; column-gap: 0; row-gap: var(--sp-1); min-width: 0; padding: var(--sp-2) var(--sp-3); border: 0; border-left: var(--bw-focus) solid transparent; border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); text-align: left; white-space: normal; }
   body.spec > nav.tabs > .tab.active { border-left-color: var(--link); background: var(--link-tint); }
+  body.spec > nav.tabs > .tab > .ico { grid-column: 1; height: var(--lh-sm); margin-right: var(--sp-2); }
+  body.spec > nav.tabs > .tab > .tab-label, body.spec > nav.tabs > .tab > .tag { grid-column: 2; justify-self: start; margin-left: 0; }
 }
 
 .spec-chapter { display: none; flex: 1; min-height: 0; flex-direction: column; }
@@ -452,12 +440,6 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .flow-row.here .plist-k { box-shadow: inset var(--bw-accent) 0 var(--link); color: var(--link-deep); }
 .flow-row[disabled] { color: var(--faint); cursor: not-allowed; }
 .flow-row:focus-visible { outline: var(--bw-focus) solid var(--link); outline-offset: calc(var(--bw-focus) * -1); }
-.flow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); list-style: none; margin: 0; padding: 0; }
-.flow + .flow { margin-top: var(--sp-3); }
-.flow li { display: inline-flex; align-items: center; gap: var(--sp-2); }
-.flow li:not(:last-child)::after { content: "→"; color: var(--body); }
-.flow .fchip.here { background: var(--link); border-color: var(--link); color: var(--on-primary); }
-.flow .fchip[disabled] { color: var(--faint); background: var(--hairline-soft); cursor: not-allowed; }
 .menu { position: relative; display: inline-flex; }
 .menu-list { position: absolute; top: 100%; right: 0; z-index: 6; display: flex; flex-direction: column; gap: var(--sp-1); margin-top: var(--sp-1); padding: var(--sp-1); border: var(--bw) solid var(--hairline); border-radius: var(--radius-sm); background: var(--surface); }
 .menu-list[hidden] { display: none; }
@@ -465,9 +447,15 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 
 /* 이용매뉴얼 STEP — 왼쪽 그림(카드·캡션·출처·원본 보기), 오른쪽 STEP 패널 */
 .side-head.step-side-head { justify-content: flex-start; flex-wrap: wrap; gap: var(--sp-2); }
-.side-head .step-no { background: var(--link); }
-.step-body .side .step-where { margin: 0; padding: var(--sp-2) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); background: var(--canvas); }
-.step-body .side .step-cell + .step-cell { border-left: 0; border-top: var(--bw) solid var(--hairline); }
+.step-no { display: inline-flex; align-items: center; justify-content: center; height: var(--h-tag); padding: 0 var(--sp-2); border-radius: var(--radius-full); background: var(--link); color: var(--on-primary); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: var(--fw-medium); }
+.step-title { color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-md); font-weight: var(--fw-bold); }
+.step-where { margin: 0; padding: var(--sp-2) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); background: var(--canvas); color: var(--body); }
+.step-cell { min-width: 0; padding: var(--sp-3) var(--sp-4); color: var(--body); }
+.step-cell + .step-cell { border-top: var(--bw) solid var(--hairline); }
+.step-cell h4 { margin: 0 0 var(--sp-2); color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: var(--fw-bold); }
+.step-cell ul, .step-cell ol { margin: 0; padding-left: var(--sp-5); }
+.step-cell .grp { display: block; margin-top: var(--sp-2); color: var(--ink); font-weight: var(--fw-medium); }
+.step-cell .grp:first-child { margin-top: 0; }
 .step-imgs { display: flex; flex-direction: column; gap: var(--sp-6); width: calc(100% * var(--zoom, 1)); margin: 0 auto; padding: var(--sp-4); }
 .step-fig { margin: 0; }
 .step-fig img { display: block; width: 100%; max-width: calc(var(--w-step-img) * var(--zoom, 1)); height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
