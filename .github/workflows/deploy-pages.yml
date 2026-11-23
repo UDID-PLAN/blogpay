@@ -16,11 +16,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # 1단계: 사이트 파일 준비·업로드
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: Stage site files
@@ -34,5 +32,14 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./_site
+
+  # 2단계: 업로드가 끝난 뒤 별도 작업으로 게시 (GitHub 공식 예시 구조 — 업로드 직후 묶음을 못 찾는 실패 방지)
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
