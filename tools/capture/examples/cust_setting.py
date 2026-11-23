@@ -22,6 +22,8 @@ HELP2 = '스마트스토어센터 &gt; 판매자정보 &gt; API 연동용 판매
 ADDR = ('<div id="@@ID@@" style="border:1px solid #ddd;padding:8px 10px;margin-top:6px;line-height:1.8"><b>주소 :</b> (08389) 서울 구로구 디지털로26길 61 (구로동, 에이스하이엔드타워2차) 1202, 1203호<br>'
         '<b>연락처 :</b> 010-1234-1234 010-1234-1234</div>')
 SEL = lambda t, w='100%': '<select class="form-control input-sm" style="width:%s !important;display:inline-block"><option>%s</option></select>' % (w, t)
+CAL = "background:#fff url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23777' stroke-width='1.5'%3E%3Crect x='3' y='4' width='14' height='13' rx='1'/%3E%3Cpath d='M3 8h14M7 2v4M13 2v4'/%3E%3C/svg%3E\") no-repeat right 8px center/16px !important"
+DATE = lambda w='240px': '<input type="text" class="form-control input-sm jqueryui-date hasDatepicker" style="width:%s;display:inline-block;%s" value="">' % (w, CAL.replace('"', "'"))
 INP = lambda v='', w='200px', ph='': '<input type="text" class="form-control input-sm" style="width:%s;display:inline-block" value="%s" placeholder="%s">' % (w, v, ph)
 
 # ───────── 공통 ─────────
@@ -58,13 +60,13 @@ def pro():
         INP('ncp_1a2b3c4d5e' if connected else '', '200px', '' if connected else '예) ncp_1a2b3c4d5e'), HELP2)
     if connected:
         rows = rows.replace('<input ', '<input disabled ')
-    body = '<div class="alert alert-warning" style="line-height:1.9">%s</div>' % GUIDE1 if not connected else ''
+    body = '<div class="alert alert-warning" style="line-height:1.9;margin-bottom:0">%s</div><div style="height:22px"></div>' % GUIDE1
     body += '<table class="table table-bordered" id="linkTb"><tbody>%s</tbody></table>' % rows
     if not connected:
-        body += '<div style="margin-top:12px"><a class="btn btn-primary btn-sm" id="connBtn">연결하기</a></div>'
+        body += '<div style="margin-top:18px"><a class="btn btn-primary btn-sm" id="connBtn">연결하기</a></div>'
     else:
-        body += '<div id="actBtns" style="margin-top:12px"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div>'
-        body += '<div class="alert alert-warning mt15" style="line-height:1.9" id="commonGuide">%s</div>' % GUIDE2
+        body += '<div id="actBtns" style="margin-top:18px;margin-bottom:26px"><a class="btn btn-default btn-sm" id="disBtn">연결 해제</a> <a class="btn btn-default btn-sm ml5" id="updBtn">판매자정보 업데이트</a></div>'
+        body += '<div class="alert alert-warning" style="line-height:1.9;margin:0" id="commonGuide">%s</div><div style="height:22px"></div>' % GUIDE2
         body += ('<table class="table table-bordered" id="commonTb"><colgroup><col style="width:15%%"><col></colgroup><tbody>'
                  '<tr><th class="text-center">오늘출발 설정</th><td><table class="table table-bordered" style="margin:0"><colgroup><col style="width:140px"><col></colgroup><tbody>'
                  '<tr><th class="text-center">기준시간 *</th><td>평일 %s : %s 까지 결제 완료</td></tr>'
@@ -79,7 +81,7 @@ def pro():
                  '<tr><th class="text-center">A/S 전화번호 *</th><td>%s</td></tr><tr><th class="text-center">A/S 안내문구 *</th><td>%s</td></tr></tbody></table></td></tr>'
                  '<tr><th class="text-center">방문수령지 *</th><td>%s%s</td></tr>'
                  '<tr><th class="text-center">출고지 *</th><td>%s%s</td></tr></tbody></table>') % (
-            SEL('6시~23시 중 택 1', '180px'), SEL('00분 / 30분 중 택 1', '180px'), SEL('월 / 화 / 수 / 목 / 금 중 택 1', '240px'), INP('', '240px', '휴무일 선택'),
+            SEL('6시~23시 중 택 1', '180px'), SEL('00분 / 30분 중 택 1', '180px'), SEL('월 / 화 / 수 / 목 / 금 중 택 1', '240px'), DATE('240px'),
             SEL('한진택배', '240px'), INP('', '160px'), INP('', '160px'),
             SEL('주소록 이름', '100%'), ADDR.replace('@@ID@@', 'addr1'),
             INP('', '200px'), INP('', '100%'),
@@ -99,35 +101,37 @@ def basic():
     act.insert_after(H('<li class="eos-item eos-item-active"><a href="#">외부판매채널 연동</a></li>'))
     sub = wrap.select_one('.sub-wrap')
     sub.clear()
-    row = lambda label, inner, extra='': '<div class="cont-wrap w60">%s<div class="col-xs-3 txt-left">%s</div><div class="col-xs-9">%s</div></div>' % (extra, label, inner)
+    sel = lambda t: '<select style="width:100%%"><option>%s</option></select>' % t
+    inp = lambda v='', ph='', d=False: '<input type="text" value="%s" placeholder="%s"%s>' % (v, ph, ' disabled' if d else '')
+    row = lambda label, inner: '<div class="cont-wrap w60"><div class="col-xs-3 txt-left">%s</div><div class="col-xs-9">%s</div></div>' % (label, inner)
+    hint = lambda t: '<p class="gray" style="margin:6px 0 0;font-size:13px">%s</p>' % t
+    tab = lambda a, b: '<div class="tab"><ul class="w100"><li class="active"><a href="javascript:;">%s</a></li><li><a href="javascript:;">%s</a></li></ul></div>' % (a, b)
     sec = lambda title, inner, i: ('<div class="atc-section"><h3 class="atc-toggle open" data-menunum="%d">%s<div class="col-xs-9 f-right t-right"><div class="arrow"></div></div></h3>'
                                     '<div id="contbox_%d">%s</div></div>') % (i, title, i, inner)
-    dis = 'disabled' if connected else ''
-    link = ''
-    if not connected:
-        link += '<div class="atc-txt-lst"><div class="cont-wrap">%s</div></div>' % GUIDE1
-    link += row('스마트스토어 URL ID', '%s <span class="ml10">%s</span>' % (INP('samplestore' if connected else '', '200px', '' if connected else '예) samplestore ID').replace('<input ', '<input %s ' % dis), HELP1))
-    link += row('API 연동용 판매자 ID', '%s <span class="ml10">%s</span>' % (INP('ncp_1a2b3c4d5e' if connected else '', '200px', '' if connected else '예) ncp_1a2b3c4d5e').replace('<input ', '<input %s ' % dis), HELP2))
-    link += ('<div class="cont-wrap w60" id="actBtns" style="margin-top:12px"><a class="btn btn-sm btn-blue" id="connBtn">연결하기</a></div>' if not connected else
-             '<div class="cont-wrap w60" id="actBtns" style="margin-top:12px"><a class="btn btn-sm btn-outline-blue" id="disBtn">연결 해제</a> <a class="btn btn-sm btn-outline-blue ml5" id="updBtn">판매자정보 업데이트</a></div>')
-    html = sec('네이버 스마트스토어 연동', link, 1)
+    g = lambda t: '<div class="atc-txt-lst" id="%s"><ul><li>%s</li></ul></div>'
+    link = '<div class="atc-txt-lst"><ul><li>%s</li></ul></div>' % GUIDE1.replace('- ','').replace('<br>', '</li><li>')
+    body = row('스마트스토어 URL ID', inp('samplestore' if connected else '', '' if connected else '예) samplestore ID', connected) + hint(HELP1))
+    body += row('API 연동용 판매자 ID', inp('ncp_1a2b3c4d5e' if connected else '', '' if connected else '예) ncp_1a2b3c4d5e', connected) + hint(HELP2))
+    btns = ('<a class="btn btn-sm btn-outline-blue" id="disBtn">연결 해제</a> <a class="btn btn-sm btn-outline-blue ml5" id="updBtn">판매자정보 업데이트</a>' if connected
+            else '<a class="btn btn-blue btn-sm" id="connBtn">연결하기</a>')
+    body += '<div class="cont-wrap w60" id="actBtns" style="margin:20px 0 30px"><div class="col-xs-3"></div><div class="col-xs-9">%s</div></div>' % btns
+    html = sec('네이버 스마트스토어 연동', link + '<div class="contbox">%s</div>' % body, 1)
     if connected:
-        c = '<div class="atc-txt-lst" id="commonGuide"><div class="cont-wrap">%s</div></div>' % GUIDE2
-        c += row('오늘출발 · 기준시간 *', '평일 %s : %s 까지 결제 완료' % (SEL('6시~23시 중 택 1', '170px'), SEL('00분 / 30분 중 택 1', '170px')))
-        c += row('오늘출발 · 휴무요일', SEL('월 / 화 / 수 / 목 / 금 중 택 1', '240px'))
-        c += row('오늘출발 · 휴무일', INP('', '240px', '휴무일 선택'))
-        c += row('반품 택배사 *', SEL('한진택배', '240px'))
-        c += row('반품 배송비(편도) *', INP('', '160px') + ' 원')
-        c += row('교환 배송비(왕복) *', INP('', '160px') + ' 원')
-        c += row('반품안심케어', '<label><input type="radio" name="care"> 설정함</label> <label class="ml10"><input type="radio" name="care" checked> 설정안함</label>')
-        c += row('반품·교환지 *', SEL('주소록 이름', '100%') + ADDR.replace('@@ID@@', 'addr1'))
-        c += row('A/S 전화번호 *', INP('', '200px'))
-        c += row('A/S 안내문구 *', INP('', '100%'))
-        c += row('방문수령지 *', SEL('주소록 이름', '100%') + ADDR.replace('@@ID@@', 'addr2'))
-        c += row('출고지 *', SEL('주소록 이름', '100%') + ADDR.replace('@@ID@@', 'addr3'))
-        html += sec('공통 정보 설정', c, 2)
-    form = H('<form id="snsConnectForm">%s</form>' % html)
-    sub.append(form)
+        guide2 = '<div class="atc-txt-lst" id="commonGuide"><ul><li>%s</li></ul></div>' % GUIDE2.replace('- ','').replace('<br>', '</li><li>')
+        c = row('오늘출발 · 기준시간 *', '<div style="display:flex;gap:8px;align-items:center;white-space:nowrap"><span>평일</span><div style="flex:1">%s</div><span>:</span><div style="flex:1">%s</div><span>까지 결제 완료</span></div>' % (sel('6시~23시 중 택 1'), sel('00분 / 30분 중 택 1')))
+        c += row('오늘출발 · 휴무요일', sel('월 / 화 / 수 / 목 / 금 중 택 1'))
+        c += row('오늘출발 · 휴무일', '<input type="text" class="jqueryui-date hasDatepicker" style="%s" value="">' % CAL.replace('"', "'"))
+        c += row('반품 택배사 *', sel('한진택배'))
+        c += row('반품 배송비(편도) *', inp() )
+        c += row('교환 배송비(왕복) *', inp())
+        c += row('반품안심케어', tab('설정함', '설정안함').replace('<li class="active"><a href="javascript:;">설정함', '<li><a href="javascript:;">설정함').replace('<li><a href="javascript:;">설정안함', '<li class="active"><a href="javascript:;">설정안함'))
+        c += row('반품·교환지 *', sel('주소록 이름') + ADDR.replace('@@ID@@', 'addr1'))
+        c += row('A/S 전화번호 *', inp())
+        c += row('A/S 안내문구 *', inp())
+        c += row('방문수령지 *', sel('주소록 이름') + ADDR.replace('@@ID@@', 'addr2'))
+        c += row('출고지 *', sel('주소록 이름') + ADDR.replace('@@ID@@', 'addr3'))
+        html += sec('공통 정보 설정', guide2 + '<div class="contbox">%s</div>' % c, 2)
+    sub.append(H('<form id="snsConnectForm">%s</form>' % html))
     if connected:
         sub.append(H('<div class="bot-btn-area"><a class="btn btn-blue btn-xl" id="saveBtn">저장</a></div>'))
 
