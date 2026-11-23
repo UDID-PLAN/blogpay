@@ -1,0 +1,16 @@
+{
+  "no": 3,
+  "title": "신규 가입 시 PRO 온보딩 기획",
+  "requestedAt": "2026.08.19",
+  "content": "AS IS : 신규 가입 시 BASIC으로 연결되어 BASIC 서비스 온보딩 진행 \r\nTO BE : 신규 가입 시 PRO로 연결되어 PRO 서비스 온보딩 진행 \r\n→ 추후 논의 후 BASIC 버전 클로징 예정 ",
+  "flow": "https://flow.team/l/QpRVK",
+  "issue": "-",
+  "project": "기능 업데이트",
+  "status": "대기",
+  "qa": "",
+  "references": [],
+  "materials": [],
+  "planLinks": [],
+  "note": "",
+  "versions": []
+}
