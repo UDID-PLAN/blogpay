@@ -441,7 +441,8 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .spec-drawer ul { margin: 0; }
 .spec-drawer .plist { border: 0; border-block: var(--bw) solid var(--hairline); border-radius: var(--radius-none); }
 /* 하단 서랍의 세 표(정책·사용자 흐름·확인 필요)는 같은 2열 형식: 왼쪽 항목 칸(회색, 행 높이만큼) | 오른쪽 내용 */
-.spec-drawer .plist-row { grid-template-columns: var(--col-lg) minmax(0, 1fr); align-items: stretch; gap: 0; padding: 0; }
+.spec-drawer .plist + .table-wrap, .table-wrap + p { margin-top: var(--sp-4); }
+.plist-row { grid-template-columns: var(--col-lg) minmax(0, 1fr); align-items: stretch; gap: 0; padding: 0; }
 .spec-drawer .plist-k, .spec-drawer .plist-v { padding: var(--sp-3) var(--sp-4); }
 .spec-drawer .plist-k { background: var(--hairline-soft); color: var(--ink); font-weight: var(--fw-bold); }
 .spec-drawer .plist-v { color: var(--ink); }
@@ -674,7 +675,7 @@ https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
 
 - 개발 외 META 연동으로 환경 설정 등 기획도 필요할것으로 판단됨.</div></details></td>
   <td class="nowrap"><a href="https://flow.team/l/QxkYF" target="_blank" rel="noopener noreferrer">플로우</a></td>
-  <td><div class="vbtns"><a class="btn primary" href="requests/meta-product-sync/v1.0/meta-product-sync_v1.0.html" target="_blank" rel="noopener noreferrer" title="2026-11-24 · Meta 카탈로그 피드URL 설정 화면(PRO·BASIC), 연동 방식·상품 피드 정책 작성">v1.0</a></div></td>
+  <td><div class="vbtns"><a class="btn primary" href="requests/meta-product-sync/v1.0/meta-product-sync_v1.0.html" target="_blank" rel="noopener noreferrer" title="2026-11-24 · Meta 카탈로그 피드URL 설정 화면(PRO·BASIC), 연동 방식·상품 피드 정책, 카탈로그 설정 방법(기획참고용) 작성">v1.0</a></div></td>
   <td><ul class="reflist"><li><a href="https://drive.google.com/file/d/1PpuvRX48PY3n_4-VfdTz_qphDA3hAMch/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">검토 결과 이미지</a></li></ul></td>
   <td><div class="vbtns vbtns-extract"><a class="btn" href="requests/meta-product-sync/v1.0/meta-product-sync_v1.0.html" download="meta-product-sync_v1.0.html" data-extract title="v1.0 기획서를 HTML 파일로 내려받습니다 (스타일·이미지 내장)">기획 추출</a></div></td></tr>
 <tr data-status="대기" data-project="기능 업데이트" data-q="신규 가입 시 pro 온보딩 기획 as is : 신규 가입 시 basic으로 연결되어 basic 서비스 온보딩 진행 
