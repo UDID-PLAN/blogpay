@@ -419,7 +419,7 @@
           "htmlFile": "manual/step0.html",
           "images": [
             {
-              "image": "screens/feed-on-pc.webp",
+              "image": "screens/manual/00-blogpay.webp",
               "caption": "외부서비스 연동 > Meta 카탈로그 피드URL 설정"
             }
           ]
