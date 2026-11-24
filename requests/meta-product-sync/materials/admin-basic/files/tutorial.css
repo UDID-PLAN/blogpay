@@ -1,0 +1,1353 @@
+@charset "UTF-8";
+.tutorial * {
+    font-family: "맑은 고딕", "Malgun Gothic", "돋움", dotum, sans-serif;
+    letter-spacing: -0.5px;
+}
+.tutorial .text-blue {
+    color: #4982f1;
+}
+.tutorial .pr165 {
+    padding-right: 165px!important;
+}
+/*tutorial modal style*/
+.modal-open .modal.tutorial{
+    overflow: hidden!important;
+}
+.tutorial .modal-lg {
+    width: 1400px;
+}
+.tutorial .fade {
+    -webkit-transition: opacity 0.3s!important;
+    -moz-transition: opacity 0.3s!important;
+    -ms-transition: opacity 0.3s!important;
+    -o-transition: opacity 0.3s!important;
+    transition: opacity 0.3s!important;
+}
+.tutorial .modal-dialog-tutorial {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.tutorial .modal.fade .modal-dialog {
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transition: opacity 0.3s!important;
+    -moz-transition: opacity 0.3s!important;
+    -ms-transition: opacity 0.3s!important;
+    -o-transition: opacity 0.3s!important;
+    transition: opacity 0.3s!important;
+}
+.tutorial .modal.in .modal-dialog {
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transition: opacity 0.3s!important;
+    -moz-transition: opacity 0.3s!important;
+    -ms-transition: opacity 0.3s!important;
+    -o-transition: opacity 0.3s!important;
+    transition: opacity 0.3s!important;
+}
+.tutorial .modal-content {
+    height: 850px;
+    -webkit-background-clip: border-box;
+    -moz-background-clip: border-box;
+    background-clip: border-box;
+}
+.tutorial .modal-slide-area {
+    width: 100%;
+    height: 100%;
+    font-size: 0;
+    white-space: nowrap;
+}
+.tutorial .modal-info-box {
+    height: 100%;
+    font-size: 15px;
+}
+.tutorial .modal-header {
+    height: 85px;
+    padding: 20px 40px;
+    background: #4982f1;
+}
+.tutorial .modal-header h2 {
+    margin-bottom: 0;
+    line-height: normal;
+}
+.tutorial .modal-body {
+    position: relative;
+    height: 100%;
+    padding: 0;
+    overflow-y : auto;
+    text-align: center;
+    white-space: normal;
+}
+.tutorial .modal-btn-area {
+    display: none;
+}
+.tutorial .btn-tutorial {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    padding: 0;
+    border: 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.tutorial .btn-tutorial.btn-prev {
+    background: #585858;
+    left: -45px;
+}
+.tutorial .btn-tutorial.btn-next {
+    background: #4982f1;
+    right: -45px;
+}
+.tutorial .btn-tutorial.btn-next .ico {
+    -webkit-animation: next-effect 0.9s linear infinite;
+    -o-animation: next-effect 0.9s linear infinite;
+    animation: next-effect 0.9s linear infinite;
+}
+/*icon*/
+.tutorial .ico {
+    display: inline-block;
+    vertical-align: middle;
+    text-indent: -99999px;
+    overflow: hidden;
+}
+.tutorial .ico-close-lg {
+    position: relative;
+    top: 5px;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    float: right;
+    cursor: pointer;
+}
+.tutorial .ico-close-lg:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: inline-block;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.tutorial .ico-close-lg:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: inline-block;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.tutorial .ico-smile {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 80px auto 0;
+    background: #fefbb6;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    z-index: 100;
+}
+.tutorial .ico-smile .smile-line {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 12px;
+    margin-top: 22px;
+    overflow: hidden;
+    background: url("../../img/tutorial/ico_smile_eyes.png") no-repeat center;
+}
+.tutorial .ico-smile .smile-line.right-eyes {
+    margin-left: 5px;
+}
+.tutorial .ico-smile .color-motion {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #4982f1;
+    z-index: -1;
+}
+.tutorial .ico-smile .smile-line.smile-mouth {
+    width: 43px;
+    height: 20px;
+    margin-top: 7px;
+    background: url("../../img/tutorial/ico_smile_mouth.png") no-repeat center;
+}
+.tutorial .ico-smile .smile-line.left-eyes .color-motion {
+    -webkit-animation: smile-effect 0.4s 0.3s ease-in-out;
+    -o-animation: smile-effect 0.4s 0.3s ease-in-out;
+    animation: smile-effect 0.4s 0.3s ease-in-out;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.tutorial .ico-smile .smile-line.right-eyes .color-motion {
+    -webkit-animation: smile-effect2 0.6s 0.3s ease-in-out;
+    -o-animation: smile-effect2 0.6s 0.3s ease-in-out;
+    animation: smile-effect2 0.6s 0.3s ease-in-out;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.tutorial .ico-smile .smile-line.smile-mouth .color-motion {
+    -webkit-animation: smile-effect2 1s 0.3s ease-in-out;
+    -o-animation: smile-effect2 1s 0.3s ease-in-out;
+    animation: smile-effect2 1s 0.3s ease-in-out;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.tutorial .check-effect {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin-top: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #fefbb6;
+    box-sizing: content-box;
+}
+
+.tutorial .check-effect .ico-chk-effect {
+    position: absolute;
+    display: block;
+    height: 2px;
+    background-color: #4982f1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    z-index: 10;
+}
+.tutorial .check-effect .ico-chk-effect.left-line {
+    top: 0;
+    left: 0;
+    width: 0;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-animation: left-line-move 0.2s 0.5s;
+    -moz-animation: left-line-move 0.2s 0.5s;
+    -o-animation: left-line-move 0.2s 0.5s;
+    animation: left-line-move 0.2s 0.5s;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.tutorial .check-effect .ico-chk-effect.right-line {
+    top: 0;
+    right: 0;
+    width: 0;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: right-line-move 0.4s 0.5s;
+    -moz-animation: right-line-move 0.4s 0.5s;
+    -o-animation: right-line-move 0.4s 0.5s;
+    animation: right-line-move 0.4s 0.5s;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.tutorial .check-effect .ico-chk-effect.paused {
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused;
+    animation-play-state: paused;
+}
+@media screen and (min-width:0\0){
+    .tutorial .check-effect .ico-chk-effect.left-line {
+        top: 35px;
+        left: 12px;
+        width: 17px;
+    }
+    .tutorial .check-effect .ico-chk-effect.right-line {
+        top: 31px;
+        right: 7px;
+        width: 31px;
+    }
+    .tutorial .ico-smile .color-motion {
+        width: 100%;
+    }
+}
+.tutorial .ico-arrow {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-top: -2px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+}
+.tutorial .btn-tutorial.btn-prev .ico-arrow {
+    -webkit-transform: rotate(135deg);
+    -moz-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    -o-transform: rotate(135deg);
+    transform: rotate(135deg);
+    margin-right: 3px;
+}
+.tutorial .btn-tutorial.btn-next .ico-arrow {
+    position: relative;
+    overflow: visible;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    margin-left: 3px;
+}
+.tutorial .btn-tutorial.btn-next .ico-arrow:after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+}
+.tutorial .ico-info-gray {
+    width: 19px;
+    height: 19px;
+    background: url("../../img/tutorial/tutorial_info_black.png") no-repeat;
+    opacity: 0.25;
+}
+.tutorial .ico-info-black {
+    width: 19px;
+    height: 19px;
+    background: url("../../img/tutorial/tutorial_info_black.png") no-repeat;
+}
+.tutorial .ico-check-sm {
+    width: 11px;
+    height: 8px;
+    background: url("../../img/tutorial/tutorial_check_blue.png") no-repeat;
+    margin-right: 3px;
+}
+.tutorial .btn-tutorial-lg .ico {
+    width: 30px;
+    height: 30px;
+    margin: 0 25px 0 45px;
+}
+.tutorial .ico-tutorial-cate {
+    background: url("../../img/tutorial/ico_tutorial_cate.png") no-repeat center;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg:hover .ico-tutorial-cate {
+    background: url("../../img/tutorial/ico_tutorial_cateon.png") no-repeat center;
+}
+.tutorial .ico-tutorial-prod {
+    background: url("../../img/tutorial/ico_tutorial_prod.png") no-repeat center;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg:hover .ico-tutorial-prod {
+    background: url("../../img/tutorial/ico_tutorial_prodon.png") no-repeat center;
+}
+.tutorial .ico-tutorial-shop {
+    background: url("../../img/tutorial/ico_tutorial_shop.png") no-repeat center;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg:hover .ico-tutorial-shop {
+    background: url("../../img/tutorial/ico_tutorial_shopon.png") no-repeat center;
+}
+.tutorial .ico-tutorial-1n1 {
+    background: url("../../img/tutorial/ico_tutorial_1n1.png") no-repeat center;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg:hover .ico-tutorial-1n1 {
+    background: url("../../img/tutorial/ico_tutorial_1n1on.png") no-repeat center;
+}
+
+.tutorial .ico-cscall {
+    width: 45px;
+    height: 45px;
+    background: url("../../img/tutorial/ico_tutorial_call.png") no-repeat center;
+}
+/*tutorial main*/
+.tutorial .modal-body.tutorial-wide {
+    background: #4982f1;
+    color: #fff;
+}
+.tutorial-logo {
+    text-align: left;
+    padding: 35px 60px;
+}
+.tutorial .tutorial-wide-tit {
+    font-size: 40px;
+    font-weight: 600;
+    margin: 50px 0;
+    padding: 0;
+    border: 0;
+}
+.tutorial .tutorial-wide p {
+    font-size: 20px;
+    line-height: 35px;
+}
+.tutorial .btn-main-start {
+    position: relative;
+    display: inline-block;
+    margin-top: 130px;
+    padding: 20px 100px 20px 90px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    border: 2px solid #fff;
+    z-index: 100;
+}
+.tutorial .btn-main-start:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 0;
+    height: 100%;
+    z-index: -1;
+    background: #fff;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+.tutorial .arrow-move {
+    display: inline-block;
+}
+.tutorial .arrow-move .arrow-next {
+    position: absolute;
+    margin-left: 5px;
+    top: 43.5%;
+    width: 10px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 2px 2px 0 0;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-animation: arrowmove 1.4s linear infinite;
+    -o-animation: arrowmove 1.4s linear infinite;
+    animation: arrowmove 1.4s linear infinite;
+}
+.tutorial .arrow-move .first {
+    margin-left: 13px;
+}
+.tutorial .arrow-move .arrow-next.primera{
+    -webkit-animation: arrowmove 1.4s 0.2s linear infinite;
+    -o-animation: arrowmove 1.4s 0.2s linear infinite;
+    animation: arrowmove 1.4s 0.2s linear infinite;
+}
+.tutorial .btn-main-start:hover {
+    color: #4982f1;
+}
+.tutorial .btn-main-start:hover:after {
+    width: 100%;
+}
+.tutorial .btn-main-start:hover:before {
+    -webkit-animation: none;
+    -o-animation: none;
+    animation: none;
+}
+
+/*tutorial 01*/
+.tutorial .wrap-modal-slider {
+    width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    opacity: 1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.tutorial .main01-slider {
+    padding: 90px 0 0;
+}
+.tutorial .main01-slider .main01-slider-img {
+    width: 90%!important;
+    margin: 0 auto 50px;
+    -webkit-box-shadow: 5px 5px 25px rgba(0,0,0,0.1);
+    -moz-box-shadow: 5px 5px 25px rgba(0,0,0,0.1);
+    box-shadow: 5px 5px 25px rgba(0,0,0,0.1);
+}
+.tutorial .slick-dots {
+    bottom: inherit;
+    top: 50px;
+}
+.tutorial .slick-dots li {
+    width: 10px;
+    height: 10px;
+}
+.tutorial .slick-dots li button {
+    width: 10px;
+    height: 10px;
+    background: #cacaca;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.tutorial .slick-dots li.slick-active button{
+    background: #4982f1;
+}
+.slick-dots li button:before {
+    content: none!important;
+}
+.tutorial .main01-slider h3 {
+    font-size: 40px;
+    border: 0;
+}
+.tutorial .main01-slider h3 strong {
+    position: relative;
+    padding: 0 15px;
+}
+.tutorial .main01-slider h3 strong:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 65%;
+    background: #dae5fb;
+    z-index: -1;
+}
+.tutorial .main01-slider p {
+    font-size: 18px;
+    margin: 40px 0 60px;
+}
+
+/*setting common style*/
+.modal.tutorial input[type="password"],
+.modal.tutorial input[type="text"],
+.tutorial select,
+.tutorial textarea {
+    font-size: 13px;
+    border: 1px solid #e0e2e3;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #222020;
+    background: #fff;
+    outline: none;
+}
+.modal.tutorial input[type="password"],
+.modal.tutorial input[type="text"],
+.tutorial select {
+    padding: 0 20px;
+    height: 45px;
+}
+.tutorial select {
+    display: inline-block;
+    width: 380px;
+    padding: 0 40px 0 20px;
+    background: url("../../img/tutorial/tutorial_select.png") no-repeat 95% center;
+}
+.tutorial select:focus {
+    background: url("../../img/tutorial/tutorial_selecton.png") no-repeat 95% center;
+}
+.tutorial textarea {
+    padding: 25px 20px;
+}
+.modal.tutorial input[type="password"]:focus,
+.modal.tutorial input[type="text"]:focus,
+.tutorial select:focus {
+    border-color: #4982f1;
+}
+.modal.tutorial input::-webkit-input-placeholder {
+    text-align: left;
+    color: #ccc;
+}
+.modal.tutorial input:-ms-input-placeholder {
+    text-align: left;
+    color: #ccc;
+}
+.modal.tutorial input:-moz-read-only { /* For Firefox */
+    background: #f4f6f8;
+}
+.modal.tutorial input:read-only {
+    background: #f4f6f8;
+}
+.tutorial .text-box {
+    position: relative;
+    display: inline-block;
+    vertical-align:top;
+}
+.tutorial .text-box-xs {
+    width: 25%;
+}
+.tutorial .text-box-sm {
+    width: 35%;
+}
+.tutorial .text-box-md {
+    width: 50%;
+}
+.tutorial .text-box-lg {
+    width: 70%;
+}
+.tutorial .text-box-block {
+    display: block;
+    width: 100%;
+}
+.tutorial .text-box input.input-error {
+    border-color: #4982f1;
+}
+.tutorial .alarm-text {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    padding: 6px 15px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    letter-spacing: -1px;
+}
+.tutorial .text-box .alarm-text:before {
+    content: "";
+    position: absolute;
+    top: 37px;
+    right: -5px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url("../../img/tutorial/tutorial_info.png") no-repeat;
+}
+.tutorial .alarm-text:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: 10px;
+    display: block;
+    width: 0;
+    border-style: solid;
+    border-width: 5px 3px 0;
+    border-color: #000 transparent;
+    opacity: 0.6;
+    z-index: 1;
+}
+.tutorial .guide-open {
+    cursor: pointer;
+}
+.tutorial h4 .alarm-text {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: inherit;
+    margin-left: 20px;
+}
+.tutorial h4 .alarm-text:after {
+    position: absolute;
+    top: 11px;
+    left: -5.2px;
+    right: inherit;
+    bottom: inherit;
+    transform: rotate(90deg);
+}
+.tutorial h5 .alarm-text {
+    display: none;
+    position: absolute;
+    right: auto;
+    left:-7px;
+}
+.tutorial h5 .alarm-text:after {
+    position: absolute;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+.tutorial em.connect {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+.tutorial .text-box .input-text {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: 13px;
+    color: #999;
+}
+.tutorial .text-box .input-text + input {
+    padding: 0 40px 0 20px;
+    text-align: right;
+}
+.tutorial .text-box + .input-text {
+    display: inline-block;
+    vertical-align: bottom;
+    font-size: 13px;
+    margin-left: 15px;
+    margin-bottom: 14px;
+}
+/*input check, radio*/
+.tutorial label {
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.tutorial .input-chk + .input-chk {
+    margin-left: 40px;
+}
+.tutorial .input-chk input {
+    display: none;
+}
+.tutorial .input-chk input + span {
+    width: auto;
+    height: auto;
+}
+.tutorial .input-chk input + span:before {
+    content: '';
+    display: inline-block;
+}
+.tutorial .input-chk input[type="checkbox"] + span {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 15px;
+    font-size: 12px;
+    font-weight: 400;
+}
+.tutorial .input-chk input[type="checkbox"] + span:before {
+    vertical-align: bottom;
+    margin-right: 9px;
+    width: 15px;
+    height: 15px;
+    background: url("../../img/tutorial/tutorial_chk_sm.png");
+}
+.tutorial .input-chk input[type="checkbox"]:checked + span:before {
+    background: url("../../img/tutorial/tutorial_chkon_sm.png") no-repeat;
+}
+
+.tutorial .input-chk input[type="radio"] + span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+    font-weight: 400;
+}
+.tutorial .input-chk input[type="radio"] + span:before {
+    vertical-align: middle;
+    margin: -1px 9px 0 0;
+    width: 20px;
+    height: 20px;
+    background: url("../../img/tutorial/tutorial_radio.png");
+}
+.tutorial .input-chk input[type="radio"]:checked + span:before {
+    background: url("../../img/tutorial/tutorial_radioon.png") no-repeat;
+}
+.tutorial .info-font-md .input-chk input[type="radio"] + span {
+    font-size: 22px;
+    font-weight: 600;
+}
+.tutorial .info-font-md .input-chk input[type="radio"] + span:before {
+    margin: -5px 15px 0 0;
+}
+.tutorial .radio-tab {
+    margin-top: 25px;
+}
+.tutorial .radio-tab li {
+    display: inline-block;
+}
+.tutorial .radio-tab li + li {
+    margin-left: 5px;
+}
+.tutorial .radio-tab li input[type="radio"] + span {
+    display: inline-block;
+    width: 210px;
+    height: auto;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #999;
+    text-align: center;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+.tutorial .radio-tab li input[type="radio"] + span:before {
+    content: none;
+}
+.tutorial .radio-tab li input[type="radio"]:checked + span {
+    color: #fff;
+    background: #4982f1;
+    border-color: #4982f1;
+}
+.tutorial .radio-tab li input[type="radio"]:checked + span:after {
+    content: "";
+    display: inline-block;
+    width: 15px;
+    height: 12px;
+    background: url("../../img/tutorial/tutorial_check_yellow.png") no-repeat;
+    margin-left: 5px;
+}
+/*button*/
+.tutorial .set-info-box .btn {
+    display: inline-block;
+    vertical-align: middle;
+    height: 45px;
+    padding: 0 40px;
+    font-size: 13px;
+    font-weight: 600;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+.tutorial .set-info-box .text-box + .btn {
+    margin-left: 10px;
+}
+.tutorial .btn-black {
+    color: #fff;
+    background: #282728;
+    border-color: #282728;
+}
+/*table style*/
+.tutorial .tutorial-table {
+    width: 100%;
+    max-width: none;
+    min-width: auto;
+    font-size: 13px;
+    text-align: left;
+    border: 0;
+}
+.tutorial .tutorial-table + .tutorial-table {
+    margin-top: 30px;
+}
+.tutorial .tutorial-table caption {
+    display: table-caption;
+    width: auto;
+    height: auto;
+    position: static;
+    text-indent: 0;
+    text-align: left;
+}
+.tutorial .tutorial-table tr th,
+.tutorial .tutorial-table tr td {
+    height: 50px;
+    padding: 15px 20px;
+    border: solid #e0e2e3;
+    border-width: 1px 0;
+}
+.tutorial .tutorial-table .border-side {
+    border-left: 1px solid #e0e2e3!important;
+    border-right: 1px solid #e0e2e3!important;
+}
+.tutorial .tutorial-table tr:first-of-type th,
+.tutorial .tutorial-table tr:first-of-type td {
+    border-top: 2px solid #000;
+}
+.tutorial .tutorial-table tr:last-of-type th,
+.tutorial .tutorial-table tr:last-of-type td {
+    border-bottom: 1px solid #000;
+}
+.tutorial .tutorial-table tr th {
+    font-weight: 600;
+    background: #f9fafb;
+    border-right-width: 1px;
+}
+/*guide text*/
+.tutorial .guide-text {
+    position: relative;
+    padding: 20px 25px 20px 50px;
+    margin-top: 30px;
+    font-size: 13px;
+    line-height: 30px;
+    color: #888;
+    background: #f5f5f5;
+}
+.tutorial .guide-text .text-black {
+    color: #555;
+}
+.tutorial .guide-text p + p {
+    margin-top: 20px;
+}
+.tutorial .guide-text i {
+    position: absolute;
+    top: 27px;
+    left: 20px;
+}
+.tutorial div[class*="col-"] + .guide-text.guide-block {
+    float: left;
+    width: 100%;
+}
+.tutorial .motion-guide {
+    display: none;
+    color: #222020;
+    border: 1px solid #f1f0d5;
+    background: #fefddd;
+}
+.tutorial .guide-text li:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 3px;
+    height: 3px;
+    margin-right: 5px;
+    background: #bfbfbf;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+/*setting-box*/
+.tutorial .setting-box .modal-header h2 {
+    float: left;
+}
+.tutorial .setting-box .modal-header ul {
+    font-size: 0;
+    float: right;
+}
+.tutorial .set-step li {
+    display: inline-block;
+    margin-right: 75px;
+    text-align: center;
+    opacity: 0.5;
+}
+.tutorial .set-step li:after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    width: 35px;
+    height: 2px;
+    margin: 10px 0 0 20px;
+    background: #fff;
+}
+.tutorial .set-step li:last-of-type {
+    margin-right: 0;
+}
+.tutorial .set-step li:last-of-type:after {
+    content: none;
+}
+.tutorial .set-step li.active {
+    opacity: 1;
+}
+.tutorial .set-step li.active strong:after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+    background: url("../../img/tutorial/chk_step.png") no-repeat center;
+}
+.tutorial .set-step li span {
+    display: block;
+    font-size: 12px;
+}
+.tutorial .set-step li strong {
+    font-size: 18px;
+}
+.tutorial .set-tit-box {
+    height: 100%;
+    padding: 100px 40px 100px 70px;
+    text-align: left;
+    background: #f8f8f8;
+}
+.tutorial .info-font-lg {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    padding: 0;
+    color: #222020;
+    border: 0;
+}
+.tutorial .info-font-lg em {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 27px;
+}
+.tutorial .info-font-lg:after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 1px;
+    margin: 60px 0;
+    background: #000;
+}
+.tutorial .info-font-md {
+    position: relative;
+    vertical-align: middle;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+.tutorial .info-font-sm {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222020;
+}
+.tutorial .set-tit-box p {
+    font-size: 16px;
+    line-height: 30px;
+    word-break:keep-all;
+}
+.tutorial .set-tit-box p .text-blue {
+    letter-spacing: -1px;
+}
+.tutorial .set-tit-box p + p {
+    margin-top: 25px;
+}
+.tutorial .set-info-box {
+    height: 100%;
+    padding: 65px 80px 65px 65px;
+    background: #fefefe;
+    text-align: left;
+}
+.tutorial .set-info-box .info-box {
+    width: 100%;
+    margin-bottom: 45px;
+}
+.tutorial .set-info-box .info-box:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.tutorial .set-info-box .info-box div[class*="col-"] {
+   float: left;
+}
+.tutorial .set-info-box .info-box > div.col-6 {
+    width: 47%;
+}
+.tutorial .set-info-box .info-box > div.col-4 {
+    width: 33%;
+}
+.tutorial .set-info-box .info-box .col-4:first-of-type,
+.tutorial .set-info-box .info-box .col-6:first-of-type {
+    margin-right: 6%;
+}
+.tutorial .payment-list:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.tutorial .payment-list li {
+    float: left;
+    width: 160px;
+    height: 160px;
+    margin: 0 25px 25px 0;
+    text-align: center;
+    border: 1px solid #cacaca;
+    background: #fff;
+}
+.tutorial .payment-list li.active {
+    border-color: #4982f1;
+}
+.tutorial .payment-list li:nth-child(5n) {
+    margin-right: 0;
+}
+.tutorial .payment-list .input-chk {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.tutorial .payment-list .input-chk input[type="checkbox"] + span {
+    display: block;
+    min-height: 23px;
+    padding: 10px;
+    margin:0;
+    text-align: right;
+}
+.tutorial .payment-list .input-chk input[type="checkbox"] + span:before {
+    width: 23px;
+    height: 23px;
+    margin: 0;
+    background: url("../../img/tutorial/tutorial_chk_round.png") no-repeat;
+    opacity: 0.25;
+}
+.tutorial .payment-list .input-chk input[type="checkbox"]:checked + span:before {
+    background: url("../../img/tutorial/tutorial_chk_roundon.png") no-repeat;
+    opacity: 1;
+}
+.tutorial .payment-list em {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+}
+.tutorial .payment-list li.pay-necessary {
+    color: #969696;
+    background: #f5f5f5;
+}
+.tutorial .payment-list li.pay-necessary.active {
+    border-color: #cacaca;
+}
+.tutorial .payment-list li.pay-necessary img {
+    opacity: 0.2;
+}
+.tutorial .payment-list li.pay-necessary .input-chk input[type="checkbox"] + span:before {
+    content: "필수";
+    width: auto;
+    height: auto;
+    font-size: 11px;
+    color: #fff;
+    background: #4982f1;
+    padding: 1px 5px;
+    letter-spacing: 0;
+    opacity: 1;
+}
+
+/*tutorial end*/
+.tutorial .tutorial-end .check-effect {
+    margin-top: 80px;
+}
+.tutorial .tutorial-end .tutorial-wide-tit {
+    margin: 20px 0 50px;
+    font-weight: 400;
+}
+.tutorial .tutorial-end .tutorial-wide-tit b {
+    display: block;
+}
+.tutorial .btn-tutorial-lg {
+    position: relative;
+    width: 360px;
+    padding: 15px 0;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}
+.tutorial .btn-tutorial-lg:after {
+    content: "";
+    position: absolute;
+    top: 40%;
+    right: 30px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: solid #222020;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.tutorial .btn-end-list li + li {
+    margin-top: 25px;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg {
+    background: #fff;
+    font-size: 16px;
+    text-align: left;
+}
+.tutorial .btn-end-list li .btn-tutorial-lg:hover {
+    font-weight: 600;
+}
+.tutorial .btn-end-list + .btn-tutorial-lg {
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    border: 2px solid #fff;
+}
+.tutorial .btn-end-list + .btn-tutorial-lg:after {
+    border-color: #fff;
+}
+.tutorial .cs-center {
+    position: absolute;
+    right: 110px;
+    bottom: 60px;
+}
+.tutorial .cs-center > * {
+    display: block;
+    margin-left: 60px;
+    text-align: left;
+}
+.tutorial .cs-center i {
+    float: left;
+    margin-left: 0;
+}
+.tutorial .cs-center span {
+    font-size: 15px;
+}
+.tutorial .cs-center strong {
+    font-size: 25px;
+    margin-top: -5px;
+}
+.tutorial .cs-center:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.tutorial .btn-end {
+    overflow: hidden;
+    z-index: 100;
+}
+.tutorial .btn-end:after {
+    content: "";
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background: #fff;
+    border: 0;
+    z-index: -1;
+    -webkit-transform: rotate(0) translateX(0);
+    -moz-transform: rotate(0) translateX(0);
+    -ms-transform: rotate(0) translateX(0);
+    -o-transform: rotate(0) translateX(0);
+    transform: rotate(0) translateX(0);
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.tutorial .btn-end:hover {
+    color: #4982f1;
+}
+.tutorial .btn-end:hover:after {
+    width: 100%;
+    left: 0;
+
+}
+/*keyframe*/
+@keyframes smile-effect {
+    0% {
+        width: 0;
+    }
+    10% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes smile-effect2 {
+    0% {
+        width: 0;
+    }
+    15% {
+        width: 0;
+    }
+    65% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes arrowmove {
+    0% {
+        opacity: 1;
+        transform: translateX(0px) rotate(45deg);
+    }
+    25%{
+        opacity: 0;
+        transform:translateX(10px) rotate(45deg);
+    }
+    26%{
+        opacity: 0;
+        transform:translateX(-10px) rotate(45deg);
+    }
+    55% {
+        opacity: 1;
+        transform: translateX(0px) rotate(45deg);
+    }
+}
+@keyframes left-line-move {
+    0% {
+        top: 30px;
+        left: 14px;
+        width: 0;
+    }
+    50% {
+        top: 34px;
+        left: 13px;
+        width: 13px;
+    }
+    100% {
+        top: 35px;
+        left: 12px;
+        width: 17px;
+    }
+}
+@keyframes right-line-move {
+    0% {
+        width: 0;
+        right: 33px;
+        top: 41px;
+    }
+    50% {
+        width: 0;
+        right: 33px;
+        top: 41px;
+    }
+    60% {
+        width: 15px;
+        right: 22px;
+        top: 37px;
+    }
+    100% {
+        top: 31px;
+        right: 7px;
+        width: 31px;
+    }
+}
+@keyframes next-effect {
+    0% {
+        transform: rotate(-45deg) translate(0, 0);
+    }
+    15% {
+        transform: rotate(-45deg) translate(3px, 3px);
+    }
+    30% {
+        transform: rotate(-45deg) translate(0, 0);
+    }
+}

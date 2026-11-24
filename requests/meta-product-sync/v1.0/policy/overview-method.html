@@ -1,8 +1,6 @@
 <div class="plist">
-<div class="plist-row"><span class="plist-k">배경</span><div class="plist-v">판매자 문의 : 블로그페이 상품을 Meta(페이스북·인스타그램) 카탈로그에 자동으로 등록하고, 가격·품절·판매중지도 반영하고 싶음</div></div>
-<div class="plist-row"><span class="plist-k">1차 적용</span><div class="plist-v"><strong>피드URL 방식</strong> (개발팀 검토 2안)<br>블로그페이는 쇼핑몰별 <strong>상품 피드URL</strong>만 제공합니다. 카탈로그 생성과 피드URL 등록은 판매자가 Meta 커머스 관리자에서 직접 진행하고, Meta가 등록된 주기(최소 1시간)에 맞춰 피드를 가져갑니다.</div></div>
-<div class="plist-row"><span class="plist-k">최종 목표</span><div class="plist-v"><strong>FBE + 배치 API</strong> (개발팀 검토 1안)<br>판매자가 Meta 계정을 한 번 연결하면 픽셀·카탈로그 설정이 자동으로 되고, 상품이 바뀔 때마다 바로 전송합니다. Meta 담당자 협의·허용 리스트 등록·앱 검수가 먼저 필요해 1차 범위에서 제외합니다.</div></div>
-<div class="plist-row"><span class="plist-k">전환 대비</span><div class="plist-v">피드의 상품 id는 <strong>상품번호</strong>로 고정해 2차 전환 후에도 같은 상품으로 인식되게 합니다.<br>2차 전환 시 판매자에게 기존 피드 데이터 소스 삭제를 안내합니다. (두 방식을 함께 쓰면 상품이 중복·충돌함, 카페24 안내 기준)</div></div>
-<div class="plist-row"><span class="plist-k">사전 조건</span><div class="plist-v">[포털사이트(SNS) 연동 설정]의 <strong>페이스북 메타태그(도메인 인증)</strong>와 <strong>페이스북 픽셀ID</strong> 입력. 카탈로그를 만들 때 픽셀의 데이터 세트를 연결합니다. (기존 기능, 신규 개발 없음)</div></div>
-<div class="plist-row"><span class="plist-k">문의 대응</span><div class="plist-v"><ol><li>자동 연동·피드URL 제공 : 피드URL 방식으로 지원</li><li>가격·품절·판매중지 반영 : 피드 갱신과 Meta 수집 주기에 따라 반영</li><li>상품 링크 : 단축주소(bp2.kr) 대신 <strong>쇼핑몰 상품 상세 주소</strong> 사용</li></ol></div></div>
+<div class="plist-row"><span class="plist-k">배경</span><div class="plist-v"><a href="https://flow.team/l/QxkYF" target="_blank" rel="noopener noreferrer">Flow 요청 글</a></div></div>
+<div class="plist-row"><span class="plist-k">1차</span><div class="plist-v">개발팀 <strong>2번 (상품 피드 제공)</strong> : 블로그페이가 피드URL을 제공하고, 판매자가 Meta 커머스 관리자에 직접 등록</div></div>
+<div class="plist-row"><span class="plist-k">2차</span><div class="plist-v">개발팀 <strong>1번 (Meta API 자동 연동)</strong> 고도화 검토</div></div>
 </div>
+<figure><img src="screens/dev-review.webp" alt="Meta 카탈로그 연동 개발 검토 결과"><figcaption>개발팀 검토 결과</figcaption></figure>

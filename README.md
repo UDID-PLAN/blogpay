@@ -138,6 +138,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 - 챕터: `{ id, title, icon?, sheets[], policyHtml?, flow?, badge?, noteHtml? }` — 챕터 `flow`는 사용자 흐름 칩 목록, `badge`는 1차 탭 옆 태그(`{ label, tone }`, 예: 이용매뉴얼 `기획참고용`)
 - 아이콘(`icon`): 챕터·시트·상태에 이름으로 지정합니다. 사용 가능: `grid` `link` `bag` `book` `shield` `layout` `layout-split` `login` `user-plus` `doc-check` (전체 목록 `tools/icons.mjs`, 없는 이름이면 빌드 실패)
 - 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
+  - html 본문의 이미지는 버전 폴더 기준 상대경로(`<img src="screens/xxx.webp">`)로 적으면 빌드 시 내장됩니다.
 - 화면 시트: `{ id, tab, icon?, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
   - `intro` 항목은 문자열 또는 `{ t, tryHtml }` — `tryHtml`은 같은 버전 폴더의 예시 HTML을 내장해 "직접 입력해 보기" 링크로 새 탭에서 엽니다. (예: 추가 회원정보 입력)
   - 한 기기만 있는 화면(예: 카카오 동의 화면은 모바일만)은 없는 기기 버튼이 비활성됩니다.

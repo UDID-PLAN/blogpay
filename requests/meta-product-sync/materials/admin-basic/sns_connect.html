@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://sample.shop.blogpay.co.kr/controller/information/sns_connect -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>블로그페이 관리자</title>
+    <meta http-equiv="Cache-Control" content="No-Cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="imagetoolbar" content="no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noimageindex">
+    <meta name="robots" content="noarchive">
+    <meta name="viewport" content="width=1645">
+    <meta name="format-detection" content="telephone=no">
+    
+    
+
+
+<link rel="stylesheet" type="text/css" href="./files/jquery-ui.min.css" media="all">
+
+
+
+
+
+
+
+
+
+
+<!---->
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+<!--  -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+
+
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="./files/basic.css">
+<link rel="stylesheet" type="text/css" href="./files/style.css">
+
+    
+    
+    
+            <link rel="stylesheet" type="text/css" href="./files/tutorial.css">
+        <link rel="stylesheet" type="text/css" href="./files/slick.css">
+        <link rel="stylesheet" type="text/css" href="./files/slick-theme.css">
+        
+    
+<style>.eos-menu{font-size:undefined;color:undefined;}.eos-menu .eos-item a{color:undefined;}.eos-menu .eos-menu-content{z-index:10;}.eos-menu .eos-group-content .eos-item{background:undefined;}.eos-menu .eos-menu-title, .eos-menu .eos-group-title, .eos-menu .eos-item{height:undefined;line-height:undefined;background:undefined;border-color:undefined;}.eos-menu .eos-menu-title .fa, .eos-menu .eos-group-title .fa, .eos-menu .eos-item .fa{line-height:undefined;}.eos-menu .eos-menu-title:hover, .eos-menu .eos-group-title:hover, .eos-menu .eos-item:hover{color:undefined;background:undefined;border-color:undefined;}</style></head>
+<body class="basic-view" style="">
+<div class="modal wrap-loading" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
+    <div><img src="./files/viewLoading.gif"></div>
+</div>
+
+<div class="design-loading" style="display:none">
+    <div><img src="./files/viewLoading.gif"></div>
+</div>
+
+<!--header-->
+
+
+<!--header-->
+<div class="basic-hd">
+    <h1><a href="https://sample.shop.blogpay.co.kr/controller/main"><span class="sr-only">blogpay BASIC</span></a></h1>
+    <div class="hd-menu">
+        <div class="user">
+            <div class="menu-toggle">
+                <span><em>홍길동(sample)</em>님</span>
+            </div>
+            <div class="open-box">
+                <ul class="open">
+                    <li><a href="https://sample.shop.blogpay.co.kr/controller/information/info">정보수정</a></li>
+                    <li><a href="javascript:;" id="logout_button" style="cursor: pointer;">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="link-box">
+                            <button type="button" class="btn-memo" id="managerMemo" data-toggle="modal" data-target="#managerMemoDiv">메모장</button>
+                         <a href="https://sample.shop.blogpay.co.kr/controller/guide" class="btn-guide">이용안내</a>
+        </div>
+                <div id="srchMenuDiv" style="position:relative">
+            <div class="srch">
+                <span class="sr-only">메뉴찾기</span>
+                <span class="ico"></span>
+                <input type="input" id="searchOpen" placeholder="메뉴를 검색하세요." readonly="">
+            </div>
+
+            <div id="menu_div" class="layer-form ui-draggable" style="display:none;">
+                <div class="layer-header" style="cursor:move;" id="menuTitle">
+                    <div>
+                        검색
+                        <button id="menu_div_close" class="btn-close"><span class="sr-only">닫기</span></button>
+                    </div>
+                    <div class="inp-wrap ico">
+                        <input type="text" id="searchMenu" placeholder="검색어를 입력해주세요." autocomplete="off">
+                        <a href="javascript:;" id="menuSearchBtn"><em class="search"></em></a>
+                    </div>
+                </div>
+
+                <div class="layer-body" id="menu_result" style="display: none">
+                    <div class="detail-lst">
+                        <p>메뉴</p>
+                        <ul id="search_menu_list" style="display: none;" class="lst-dot">
+                        </ul>
+                        <ul id="none_menu_list" class="lst-no">
+                            <li class="no-data">검색 결과가 없습니다.</li>
+                        </ul>
+                    </div>
+                    <div id="related_menu" style="display:none;" class="detail-lst">
+                        <p>키워드</p>
+                        <ul id="related_menu_list" class="lst-dot">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="basic-hd-btn">
+            <input type="hidden" id="adminVer" name="adminVer" value="basic">
+            <a href="javascript:;" class="TransAdmin btn-vertrans" flag="pro">PRO 바로가기</a>
+
+            <!--  사장님 왈 : 픽셀 관리자버튼 상시노출로 바꿔주세요.2025-07-09  -->
+            <a href="https://sample.shop.blogpay.co.kr/controller/information/goPickSell" class="btn-adm-picxell" target="_blank" title="새창열림">마이픽셀 관리자</a>
+
+        </div>
+    </div>
+</div>
+<!--sidebar-->
+<aside>
+    <div class="eos-menu" id="menu">
+        <ul>
+                            <li class=" menuControll">
+                    <a href="javascript:;" class="eos-group-title mn-prod">상품관리<!--<span class="new">N</span>--><span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/goods/gregist2">상품등록</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/goods/goodsExcel">상품 일괄 등록</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/goods/glist">상품리스트</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/goods/category">카테고리 관리</a></li>
+                        </ul>
+                    </div>
+                </li>
+                                <li class=" menuControll">
+                    <a href="javascript:;" class="eos-group-title mn-order">주문관리<span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_all">전체주문</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_goods">상품별 주문관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_ready?sOrderState=1">미입금확인</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/bankalarmData?sDateS=2026-11-23&amp;sDateE=2026-11-23&amp;sUpdateStatec=1&amp;sUpdateStaten=1">무통장 입금내역</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_pay?sOrderState=4">배송관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_claim?sOrderState_basic%5B%5D=32&amp;sOrderState_basic%5B%5D=64">취소/반품/교환/환불</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_cashlist">현금영수증 발급현황</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/order/orderlist_memo">메모관리</a></li>
+                        </ul>
+                    </div>
+                </li>
+                                <li class=" menuControll">
+                    <a href="javascript:;" class="eos-group-title mn-mem">회원관리<span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/member/member">회원관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/member/membergrade">회원등급관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/member/memberApproval">회원승인관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/member/memberout">탈퇴회원관리</a></li>
+                        </ul>
+                    </div>
+                </li>
+                            <li class=" ">
+                <a href="https://sample.shop.blogpay.co.kr/controller/shop/pageboard" class="eos-group-title mn-board">게시판관리</a>
+            </li>
+                            <li class=" menuControll">
+                    <a href="javascript:" class="eos-group-title mn-benef">혜택관리<span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/reserve/savedMoney">적립금</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/coupon/coupon">쿠폰</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/event/saleList">할인</a></li>
+                        </ul>
+                    </div>
+                </li>
+                            <li class=" menuControll">
+                    <a href="javascript:;" class="eos-group-title mn-stats">통계분석<span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/sales/sales2?sOrderPayDate=1&amp;sIncludeSm=1">기간별 매출</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/sales/memberSales">회원별 매출</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/sales/goodsSales">상품별 매출</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/sales/goodsCateSales">카테고리별 매출</a></li>
+                        </ul>
+                    </div>
+                </li>
+                        <li class=" menuControll">
+                <a href="javascript:;" class="eos-group-title mn-design">쇼핑몰 설정<span class="arrow"></span></a>
+                <div class="eos-group-content">
+                    <ul>
+                        <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/shop/newDesign">디자인관리</a></li>
+                        <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/shop/imgPopup">팝업관리</a></li>
+                    </ul>
+                </div>
+            </li>
+                            <li class="eos-active menuControll">
+                    <a href="javascript:;" class="eos-group-title mn-set">환경설정<span class="arrow"></span></a>
+                    <div class="eos-group-content">
+                        <ul>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/information/info">기본정보</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/information/delivery_new">배송관련설정</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/information/pg">결제설정</a></li>
+                            <li class="eos-item eos-item-active"><a href="https://sample.shop.blogpay.co.kr/controller/information/sns_connect">외부서비스 연동</a></li>
+                                <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/information/manageOauth">SNS로그인연동 관리</a></li>
+                            <li class="eos-item "><a href="https://sample.shop.blogpay.co.kr/controller/information/loginList">로그인 이력관리</a></li>
+                            <li class="eos-item ">
+                                <a href="https://sample.shop.blogpay.co.kr/controller/sms/smsservice">SMS/알림톡</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                        </ul>
+    </div>
+    <div class="bot-box">
+        <div class="wrap">
+            <a href="javascript:;" class="my_shop" onclick="window.open('https://sample.shop.blogpay.co.kr','new','scrollbars=yes resizable=no width=400 height=700');return false">MY 모바일 쇼핑몰</a>
+            <a href="javascript:;" class="copy_clipboard" data-name="쇼핑몰" data-clipboard-text="https://sample.shop.blogpay.co.kr">쇼핑몰 주소복사하기</a>
+            <a href="javascript:;" class="copy_clipboard" data-name="배송조회" data-clipboard-text="https://bp2.kr/sample">배송조회 주소복사하기</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdINPg7btYHSxpSqy3TzaFQzGhS5HUMbhx5UF4csVMr9KWfFA/viewform" class="btn-edu-apply" target="_blank" title="새창열림">쇼핑몰 교육 신청하기</a>
+            <a href="https://blogpay.co.kr/downLoad.php?download=picksell_about.pdf" class="btn-picksell-proposal">마이픽셀 제안서 다운받기</a>
+        </div>
+        <div class="service-login-area">
+            <a href="https://seller.payapp.kr/a/signIn" data-type="payapp" target="_blank" title="새창열림">
+                <img src="./files/btn_login_payapp.png" alt="페이앱 로그인">
+            </a>
+            <a href="javascript:;" class="sso-login" data-type="prosell" title="새창열림">
+                <img src="./files/btn_login_prosell.png" alt="프로셀 로그인">
+            </a>
+            <a href="javascript:;" class="sso-login" data-type="ucansign" title="새창열림">
+                <img src="./files/btn_login_ucansign.png" alt="유캔싸인 로그인">
+            </a>
+            <a href="https://sample.shop.blogpay.co.kr/controller/information/goPickSell" target="_blank" data-type="picksell" title="새창열림">
+                <img src="./files/btn_login_picksell.png" alt="픽셀 로그인">
+            </a>
+            <a href="https://linkstory.co.kr/login" target="_blank" data-type="linkstory" title="새창열림">
+                <img src="./files/btn_login_linkstory.png" alt="링크스토리 로그인">
+            </a>
+        </div>
+        <div class="cs"><img src="./files/img_cs02.png" alt="블로그페이 고객센터"></div>
+    </div>
+</aside>
+
+
+
+<div class="toast-container"></div>
+
+<!-- 관리자 메모장 모달 -->
+<div class="modal fade" id="managerMemoDiv" tabindex="-1" role="dialog" aria-labelledby="memInfo_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-1100">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    메모장
+                    <small class="pdl10 fs12">총 20개까지 저장 가능합니다</small>
+                </h4>
+                <button type="button" data-id="memInfo_modal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pd-none modal-overflow">
+                                <div class="atc-section">
+                    <div class="contbox tit-section">
+                        <div class="f-left">
+                            <button type="button" class="btn btn-sm btn-white" id="managerMemoAllDelete">전체삭제</button>
+                            <button type="button" class="btn btn-sm btn-white" id="managerMemoChkDelete" disabled="">선택삭제</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="memo-list">
+                    <ul id="memoAllList">
+                                                <li class="memo-list__item " id="memoNewItem">
+                            <div class="memo-list__txt-box">
+                                                                    <!--새메모-->
+                                    <div class="memo-list__textarea">
+                                        <textarea class="form-control" rows="12" id="newMemoContent" placeholder="여기에 메모하세요"></textarea>
+                                        <span class="memo-content-count" id="newMemoCnt">0/300</span>
+                                    </div>
+                                                            </div>
+                        </li>
+                                                <!--메모 기본 view-->
+                                            </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sendSMSForm" tabindex="-1" role="dialog" aria-labelledby="sendSMSForm" aria-hidden="true" alreadyload="0">
+    <div class="modal-dialog" style="width: 310px">
+        <div class="modal-content" id="sendSMSFormContent">
+            <div class="modal-header">
+                <h4 class="modal-title">SMS 보내기</h4>
+                <button type="button" data-id="accountModal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="smsForm">
+                    <input type="hidden" name="searchtarget" value="">
+                    <input type="hidden" name="searchpk" value="">
+                    <input type="hidden" name="searchform" value="">
+                    <div class="sms-wrap">
+                        <div class="sms-view-box">
+                            <textarea rows="3" class="textareaByte" name="smsMessage" id="smsMessage"></textarea>
+                            <div class="sms_modal_simple">
+                                <em class="sms_simple">SMS</em>
+                                <span class="byte_simple">0/90bytes</span>
+                            </div>
+                        </div>
+                        <div class="cont-wrap">
+                            <div class="gray small mb5">받는 사람</div>
+                            <div><input type="text" name="smsReceive" id="smsReceive" value=""></div>
+                        </div>
+                        <div class="cont-wrap">
+                            <div class="gray small mb5">보내는 사람</div>
+                            <div><input type="text" name="smsSender" id="smsSender" value="01000000000" readonly=""></div>
+                        </div>
+                        <div class="cont-wrap mt10">
+                            <a href="javascript:;" class="btn btn-blue btn-lg event-duplicate" id="smsSendBtn">발송하기</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="closebtn" data-dismiss="modal" class="btn btn-white">닫기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="sendSMSForms" tabindex="-1" role="dialog" aria-labelledby="sendSMSForms" aria-hidden="true" alreadyload="0">
+    <div class="modal-dialog" style="width: 310px">
+        <div class="modal-content" id="sendSMSFormContent">
+            <div class="modal-header">
+                <h4 class="modal-title">SMS 보내기</h4>
+                <button type="button" data-id="accountModal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body sms_wrap">
+                <span style="font-size: 10pt; color: red;">이모지 발송은 지원되지 않습니다.</span>
+                <br><br>
+                <form id="smsForms">
+                    <div class="sms-wrap">
+                        <div class="sms-view-box">
+                            <textarea rows="3" class="textareaByte" name="smsMessages" id="smsMessages"></textarea>
+                            <div class="sms_modal_simple">
+                                <em class="sms_simple">SMS</em>
+                                <span class="byte_simple">0/90bytes</span>
+                            </div>
+                        </div>
+                        <div class="cont-wrap">
+                            <div class="gray small mb5">보내는 사람</div>
+                            <div><input type="text" name="smsSenders" id="smsSenders" value="01000000000" readonly=""></div>
+                        </div>
+                        <div class="cont-wrap mt10">
+                            <a href="javascript:;" class="btn btn-blue btn-lg event-duplicate" id="smsSendBtns">발송하기</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="closebtn" data-dismiss="modal" class="btn btn-white">닫기</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="phoneNum" style="display:none;"></div>
+
+
+<!--발송내역조회 문자내용보기-->
+<div class="modal fade" id="viewSMSdetail" tabindex="-1" role="dialog" aria-labelledby="viewSMSdetail" aria-hidden="true" alreadyload="0">
+    <div class="modal-dialog" style="width: 310px">
+        <div class="modal-content" id="sendSMSFormContent">
+            <div class="modal-header">
+                <h4 class="modal-title">SMS 보기</h4>
+                <button type="button" data-id="accountModal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body sms_wrap">
+                <form id="smsForms">
+                    <div class="sms-wrap">
+                        <div class="sms-view-box">
+                            <textarea name="view_sms" readonly=""></textarea>
+                            <div>
+                                <em>SMS</em>
+                                <span>0/90bytes</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="closebtn" data-dismiss="modal" class="btn btn-white">닫기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--발송내역조회 알림톡내용보기-->
+<div class="modal fade" id="viewATALKdetail" tabindex="-1" role="dialog" aria-labelledby="viewSMSdetail" aria-hidden="true" alreadyload="0">
+    <div class="modal-dialog" style="width:390px">
+        <div class="modal-content" id="sendSMSFormContent">
+            <div class="modal-header">
+                <h4 class="modal-title">알림톡 보기</h4>
+                <button type="button" data-id="accountModal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body sms_wrap">
+                <form id="smsForms">
+                    <div class="atalk-wrap">
+                        <div class="atalk-view-box" style="word-break:break-all;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="closebtn" data-dismiss="modal" class="btn btn-white">닫기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal-sms-charge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">SMS 충전하기</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="cont-wrap">
+                    <div class="col-xs-3 txt-left">충전내용</div>
+                    <div class="col-xs-9 tab">
+                        <ul>
+                            <li class="active" id="smsActive"><a href="javascript:;" class="pdt10">SMS</a></li>
+                            <li id="talkActive"><a href="javascript:;">알림톡</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-3 txt-left">충전금액<br><span class="txt blue">(VAT 별도)</span></div>
+                    <div class="col-xs-9">
+                        <select id="smsBox">
+                                                    </select>
+                        <select id="talkBox" style="display: none">
+                                                    </select>
+                        <p class="txt blue">신용카드/휴대폰으로만 결제가 가능합니다.</p>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-3">이용약관</div>
+                    <div class="col-xs-9">
+                        <label><input type="checkbox" id="agree"><span>SMS 이용약관에 동의합니다.</span></label>
+                        <a href="javascript:;" class="btn btn-white btn-sm f-right" id="agree_content">내용 보기</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-blue" id="sendPay">충전</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- modal SMS삽입코드보기 -->
+<div class="modal fade" id="modal-smscode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">SMS 삽입코드 보기</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="tmpTextArea">
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">주문번호</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERNO]">[ORDERNO]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">쇼핑몰 이름</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[SHOPNAME]">[SHOPNAME]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">주문일시</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERDATE]">[ORDERDATE]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">쇼핑몰 주소</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[SHOPURL]">[SHOPURL]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">택배사</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[CARRYCOMP]">[CARRYCOMP]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">주문자 이름</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERNAME]">[ORDERNAME]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">송장번호</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[CARRYNO]">[CARRYNO]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">작성자 이름</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERDATE]">[ORDERDATE]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">은행명</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERBANK]">[ORDERBANK]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">결제금액</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERPRICE]">[ORDERPRICE]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small w30 inline-block">계좌번호</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERACCOUNT]">[ORDERACCOUNT]</a></label>
+                    </div>
+                    <div class="col-xs-6">
+                        <span class="gray small w40 inline-block">상품명</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[GOODNAME]">[GOODNAME]</a></label>
+                    </div>
+                </div>
+                <div class="cont-wrap">
+                    <div class="col-xs-6">
+                        <span class="gray small mr10 inline-block">예금주</span>
+                        <label class="label label-gray2 label-radius"><a class="copyText" id="[ORDERACCOUNTNAME]">[ORDERACCOUNTNAME]</a></label>
+                    </div>
+                </div>
+                <p class="blue-box fs13 mt15">삽입코드를 클릭하시면 자동으로 복사됩니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //modal SMS삽입코드보기 -->
+
+
+
+<!--수신번호내역-->
+<div class="modal fade" id="showNumListModal" tabindex="-1" role="dialog" aria-labelledby="memberCouponModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-400">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">수신번호내역</h4>
+                <button type="button" data-id="showNumListModal" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body modal-overflow2 num_list">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- alert창 모달  -->
+<div class="modal fade" id="sms_basic_modal" tabindex="-1" role="dialog" aria-labelledby="basic_modal" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <input type="hidden" id="modal_mode" value="">
+            <input type="hidden" id="modal_no" value="">
+            <div class="modal-header">
+                <h4 class="modal-title" id="sms_basic_modal_title">제목</h4>
+                <button type="button" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="txt-alert">
+                    <p id="sms_basic_modal_content"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">취소</a>
+                <a href="javascript:;" class="btn btn-blue" id="sms_basic_modal_result">확인</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--sms 발송창 엑셀 업로드 모달-->
+<div class="modal fade" id="excel_sms_modal" tabindex="-1" role="dialog" aria-labelledby="basic_modal" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <input type="hidden" id="modal_mode" value="">
+            <input type="hidden" id="modal_no" value="">
+            <div class="modal-header">
+                <h4 class="modal-title" id="sms_basic_modal_title">엑셀파일 업로드</h4>
+                <button type="button" class="close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="cont-wrap">
+                    <div class="col-xs-4 txt-left">
+                        엑셀파일
+                        <label class="btn btn-sm btn-white btn-fileup inline-block ml7">
+                            <input name="excelList" id="excelList" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                            파일선택
+                        </label>
+                    </div>
+                    <div class="col-xs-8 txt-left">
+                        <input name="listExcel" value="" type="hidden" id="listExcel">
+                        <p id="filename" class="txt-line1 line-h25"></p>
+                    </div>
+                </div>
+                <p class="blue-box fs13 mt10">업로드하는 엑셀파일에는 A열에 수신번호가 입력되어 있어야 합니다.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">취소</a>
+                <a href="javascript:;" class="btn btn-blue" id="excelUploadBtn">확인</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container container-basic">
+  <div class="basic-wrap basic-sub">
+      <h2>연동설정</h2>
+      <div class="sub-wrap">
+          <form method="post" id="snsConnectForm" name="snsConnectForm">
+              <input type="hidden" name="mode" id="mode" value="snsUpdate">
+              <div class="atc-section">
+                  <h3 class="atc-toggle open" data-val="포털사이트연동설정" data-menunum="1">
+                      포털사이트(SNS) 연동 설정
+                      <div class="col-xs-9 f-right t-right">
+                          <div class="arrow"></div>
+                      </div>
+                  </h3>
+                  <div id="contbox_1" style="">
+                      <div class="atc-txt-lst">
+                          <div class="cont-wrap flex items-center">
+                              <div class="col-xs-1">
+                                  <svg width="58" height="auto" viewBox="0 0 522 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <g clip-path="url(#clip0_708_25)">
+                                          <path d="M150 0L110.78 100H144.11L148.85 86.76H186.44L191.18 100H224.51L185.29 0H150ZM156.47 62.75L167.65 31.51L178.83 62.75H156.47Z" fill="#03CF5D"></path>
+                                          <path d="M363.24 62.01H408.82V37.99H363.24V24.51H409.31V0H331.37V100H410.29V75.49H363.24V62.01Z" fill="#03CF5D"></path>
+                                          <path d="M264.22 65.75L240.69 0H207.35L246.57 100H281.86L321.08 0H287.75L264.22 65.75Z" fill="#03CF5D"></path>
+                                          <path d="M68.14 53.52L30.88 0H0V100H32.35V46.48L69.61 100H100.49V0H68.14V53.52Z" fill="#03CF5D"></path>
+                                          <path d="M495.8 65.69L498.83 64.42C510.45 59.56 516.36 49.03 516.36 35.67C516.36 23.04 511.75 13.69 502.67 7.89001C494.22 2.50001 483.27 -0.00999451 468.2 -0.00999451H425.99V100H457.36V72.06H468.63L487.75 100H521.08L495.8 65.69ZM474.02 46.56H456.86V25.49H474.02C479.84 25.49 484.56 30.21 484.56 36.03C484.56 41.85 479.84 46.57 474.02 46.57V46.56Z" fill="#03CF5D"></path>
+                                      </g>
+                                      <defs>
+                                          <clippath id="clip0_708_25">
+                                              <rect width="521.08" height="100" fill="white"></rect>
+                                          </clippath>
+                                      </defs>
+                                  </svg>
+                              </div>
+                              <div class="col-xs-1">
+                                  <a href="https://sample.shop.blogpay.co.kr/document/naver_metatag_analytics_guide.pdf?2026042801" target="_blank" class="btn btn-sm btn-outline-blue inline-block ml5" title="새창열림">가이드보기</a>
+                              </div>
+                              <div class="col-xs-8">
+                                  - <u><a href="https://searchadvisor.naver.com/" target="_blank" title="새창열림" style="color:inherit"><strong>네이버 메타태그</strong></a></u> : 브라우저와 검색 엔진을 사용할 수 있도록 여러 정보를 포함하고 있습니다.<br>
+                                  - <u><a href="https://analytics.naver.com/service/index.html" target="_blank" title="새창열림" style="color:inherit"><strong>네이버 애널리틱스 ID</strong></a></u> : 방문자의 사이트 이용 형태와 유입경로 등 실시간 분석을 제공합니다.
+                              </div>
+                          </div>
+                          <div class="cont-wrap flex items-center">
+                              <div class="col-xs-1">
+                                  <svg width="56" height="auto" viewBox="0 0 272 92" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;top:1px">
+                                      <path d="M115.75 47.18C115.75 59.95 105.76 69.36 93.5 69.36C81.24 69.36 71.25 59.95 71.25 47.18C71.25 34.32 81.24 25 93.5 25C105.76 25 115.75 34.32 115.75 47.18ZM106.01 47.18C106.01 39.2 100.22 33.74 93.5 33.74C86.78 33.74 80.99 39.2 80.99 47.18C80.99 55.08 86.78 60.62 93.5 60.62C100.22 60.62 106.01 55.07 106.01 47.18Z" fill="#EA4335"></path>
+                                      <path d="M163.75 47.18C163.75 59.95 153.76 69.36 141.5 69.36C129.24 69.36 119.25 59.95 119.25 47.18C119.25 34.33 129.24 25 141.5 25C153.76 25 163.75 34.32 163.75 47.18ZM154.01 47.18C154.01 39.2 148.22 33.74 141.5 33.74C134.78 33.74 128.99 39.2 128.99 47.18C128.99 55.08 134.78 60.62 141.5 60.62C148.22 60.62 154.01 55.07 154.01 47.18Z" fill="#FBBC05"></path>
+                                      <path d="M209.75 26.34V66.16C209.75 82.54 200.09 89.23 188.67 89.23C177.92 89.23 171.45 82.04 169.01 76.16L177.49 72.63C179 76.24 182.7 80.5 188.66 80.5C195.97 80.5 200.5 75.99 200.5 67.5V64.31H200.16C197.98 67 193.78 69.35 188.48 69.35C177.39 69.35 167.23 59.69 167.23 47.26C167.23 34.74 177.39 25 188.48 25C193.77 25 197.97 27.35 200.16 29.96H200.5V26.35H209.75V26.34ZM201.19 47.26C201.19 39.45 195.98 33.74 189.35 33.74C182.63 33.74 177 39.45 177 47.26C177 54.99 182.63 60.62 189.35 60.62C195.98 60.62 201.19 54.99 201.19 47.26Z" fill="#4285F4"></path>
+                                      <path d="M225 3V68H215.5V3H225Z" fill="#34A853"></path>
+                                      <path d="M262.02 54.48L269.58 59.52C267.14 63.13 261.26 69.35 251.1 69.35C238.5 69.35 229.09 59.61 229.09 47.17C229.09 33.98 238.58 24.99 250.01 24.99C261.52 24.99 267.15 34.15 268.99 39.1L270 41.62L240.35 53.9C242.62 58.35 246.15 60.62 251.1 60.62C256.06 60.62 259.5 58.18 262.02 54.48ZM238.75 46.5L258.57 38.27C257.48 35.5 254.2 33.57 250.34 33.57C245.39 33.57 238.5 37.94 238.75 46.5Z" fill="#EA4335"></path>
+                                      <path d="M35.29 41.41V32H67C67.31 33.64 67.47 35.58 67.47 37.68C67.47 44.74 65.54 53.47 59.32 59.69C53.27 65.99 45.54 69.35 35.3 69.35C16.32 69.35 0.360001 53.89 0.360001 34.91C0.360001 15.93 16.32 0.470001 35.3 0.470001C45.8 0.470001 53.28 4.59 58.9 9.96L52.26 16.6C48.23 12.82 42.77 9.88 35.29 9.88C21.43 9.88 10.59 21.05 10.59 34.91C10.59 48.77 21.43 59.94 35.29 59.94C44.28 59.94 49.4 56.33 52.68 53.05C55.34 50.39 57.09 46.59 57.78 41.4L35.29 41.41Z" fill="#4285F4"></path>
+                                  </svg>
+                              </div>
+                              <div class="col-xs-1">
+                                  <a href="https://sample.shop.blogpay.co.kr/document/google_metatag_analytics_guide.pdf?2026042801" target="_blank" class="btn btn-sm btn-outline-blue inline-block ml5" title="새창열림">가이드보기</a>
+                              </div>
+                              <div class="col-xs-8">
+                                  - <u><a href="https://search.google.com/search-console/about?hl=ko" target="_blank" title="새창열림" style="color:inherit"><strong>구글 메타태그</strong></a></u> : 브라우저와 검색 엔진을 사용할 수 있도록 여러 정보를 포함하고 있습니다.<br>
+                                  - <u><a href="https://analytics.google.com/analytics/web/provision/#/provision" target="_blank" title="새창열림" style="color:inherit"><strong>구글 애널리틱스 ID</strong></a></u> : 비즈니스 데이터 분석에 필요한 도구를 이용할 수 있습니다.
+                              </div>
+                          </div>
+                          <div class="cont-wrap flex items-center">
+                              <div class="col-xs-1">
+                                  <svg width="66" height="auto" viewBox="0 0 843 199" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M71.43 46.68C61.78 46.68 58.99 50.96 58.99 60.4V76.06H84.73L82.15 101.36H59V178.14H28.11V101.36H7.29999V76.06H28.11V60.83C28.11 35.31 38.4 21.83 67.11 21.83C73.1263 21.8159 79.1377 22.1732 85.11 22.9V46.71L71.43 46.68Z" fill="#1877F2"></path>
+                                      <path d="M86.87 123.88C86.87 95.36 100.38 73.88 128.69 73.88C144.13 73.88 153.56 81.82 158.07 91.68V76.06H187.66V178.14H158.07V162.7C153.78 172.57 144.13 180.29 128.69 180.29C100.38 180.29 86.87 158.84 86.87 130.29V123.88ZM117.75 130.75C117.75 145.97 123.32 156.05 137.69 156.05C150.35 156.05 156.78 146.83 156.78 132.25V122C156.78 107.42 150.35 98.2 137.69 98.2C123.32 98.2 117.75 108.28 117.75 123.5V130.75Z" fill="#1877F2"></path>
+                                      <path d="M252 73.91C264 73.91 275.37 76.49 281.59 80.77L274.73 102.65C268.296 99.5861 261.266 97.9747 254.14 97.93C237.41 97.93 230.14 107.58 230.14 124.1V130.1C230.14 146.62 237.43 156.27 254.14 156.27C261.266 156.225 268.296 154.614 274.73 151.55L281.59 173.42C275.37 177.71 264.01 180.29 252 180.29C215.75 180.29 199.24 160.77 199.24 129.46V124.74C199.24 93.43 215.75 73.91 252 73.91Z" fill="#1877F2"></path>
+                                      <path d="M285.66 131V122C285.66 93.05 302.17 74 335.85 74C367.59 74 381.53 93.3 381.53 121.61V137.91H316.53C317.18 151.85 323.4 158.07 340.53 158.07C352.12 158.07 364.34 155.71 373.35 151.85L379 173C370.85 177.3 354.12 180.51 339.33 180.51C300.24 180.5 285.66 161 285.66 131ZM316.54 117.7H353.86V115.13C353.86 103.98 349.36 95.13 335.86 95.13C321.91 95.14 316.54 103.94 316.54 117.66V117.7Z" fill="#1877F2"></path>
+                                      <path d="M496 130.32C496 158.84 482.28 180.32 454 180.32C438.56 180.32 427.84 172.6 423.55 162.73V178.17H394.39V24.8L425.27 22V90.2C429.77 81.2 439.64 73.9 454.01 73.9C482.32 73.9 496.01 95.35 496.01 123.9L496 130.32ZM465.12 123.24C465.12 108.87 459.55 98.15 444.75 98.15C432.09 98.15 425.23 107.15 425.23 121.74V132.46C425.23 147.04 432.09 156.05 444.75 156.05C459.55 156.05 465.12 145.33 465.12 130.96V123.24Z" fill="#1877F2"></path>
+                                      <path d="M506.33 129.67V124.53C506.33 95.14 523.06 73.91 557.16 73.91C591.26 73.91 608 95.14 608 124.53V129.67C608 159.05 591.27 180.29 557.17 180.29C523.07 180.29 506.33 159.05 506.33 129.67ZM577.11 122.38C577.11 108.87 571.53 98.15 557.11 98.15C542.69 98.15 537.16 108.87 537.16 122.38V131.82C537.16 145.33 542.74 156.05 557.11 156.05C571.48 156.05 577.11 145.33 577.11 131.82V122.38Z" fill="#1877F2"></path>
+                                      <path d="M618.27 129.67V124.53C618.27 95.14 635 73.91 669.1 73.91C703.2 73.91 719.93 95.14 719.93 124.53V129.67C719.93 159.05 703.2 180.29 669.1 180.29C635 180.29 618.27 159.05 618.27 129.67ZM689.05 122.38C689.05 108.87 683.47 98.15 669.1 98.15C654.73 98.15 649.16 108.87 649.16 122.38V131.82C649.16 145.33 654.73 156.05 669.1 156.05C683.47 156.05 689.05 145.33 689.05 131.82V122.38Z" fill="#1877F2"></path>
+                                      <path d="M762.39 124.74L792.84 76.06H825.65L793.7 126.46L826.94 178.14H794.13L762.39 128.14V178.14H731.5V24.8L762.39 22V124.74Z" fill="#1877F2"></path>
+                                  </svg>
+                              </div>
+                              <div class="col-xs-1">
+                                  <a href="https://sample.shop.blogpay.co.kr/document/facebook_metatag_pixel_guide.pdf?2026042801%3E" target="_blank" class="btn btn-sm btn-outline-blue inline-block ml5" title="새창열림">가이드보기</a>
+                              </div>
+                              <div class="col-xs-8">
+                                  - <u><a href="https://developers.facebook.com/?no_redirect=1" target="_blank" title="새창열림" style="color:inherit"><strong>페이스북 메타태그</strong></a></u> : 브라우저와 검색 엔진을 사용할 수 있도록 여러 정보를 포함하고 있습니다.<br>
+                                  - <u><a href="https://www.facebook.com/business/help/742478679120153?id=1205376682832142&amp;helpref=faq_content" target="_blank" title="새창열림" style="color:inherit"><strong>페이스북 픽셀 ID</strong></a></u> : 웹사이트에서 사람들이 취한 행동을 파악하여 광고의 효과를 측정하기 위해 사용합니다.
+                              </div>
+                          </div>
+                          <div class="cont-wrap flex items-center">
+                              <div class="col-xs-1">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="46" height="14" viewBox="0 0 46 14" fill="none">
+                                      <path d="M2.43933 0.000976562C2.55108 2.80539 2.46282 5.61122 2.56959 8.45122C2.85216 8.11099 3.14186 7.77575 3.41589 7.42911C4.28355 6.33083 5.08786 5.18629 5.89502 4.04388C6.05802 3.81327 6.17261 3.79903 6.38899 3.95349C6.85165 4.28447 7.32356 4.60263 7.80259 4.9087C7.98765 5.02685 7.95918 5.11155 7.84814 5.26459C7.06163 6.35005 6.19966 7.37644 5.36546 8.42489C5.20886 8.62134 5.18039 8.74661 5.35478 8.96299C6.26301 10.089 7.25737 11.1425 8.1414 12.2891C8.32077 12.5219 8.31151 12.6265 8.06737 12.7988C7.56699 13.1504 7.04383 13.4807 6.63954 13.9526H6.42601C5.1626 12.4165 3.89919 10.8812 2.62154 9.32814C2.47634 9.47476 2.5162 9.62281 2.5098 9.75236C2.44929 10.9375 2.49841 12.1233 2.5041 13.3084C2.50552 13.6081 2.41371 13.6906 2.12259 13.68C1.54249 13.6579 0.960251 13.6579 0.380151 13.68C0.0876091 13.6913 -0.000651589 13.6095 0.00219553 13.3091C0.0171429 11.6727 0.00931333 10.0371 0.00931333 8.40069C0.00931333 5.89878 0.0171429 3.39688 6.01905e-05 0.895683C-0.00278693 0.551182 0.0947269 0.419503 0.429975 0.375373C0.992993 0.299924 1.5496 0.181769 2.10906 0.0814077C2.17739 0.0693074 2.25284 0.0728663 2.29697 0.00168834H2.43933V0.000976562Z" fill="#371D1E"></path>
+                                      <path d="M25.0738 13.9516C23.7919 12.4006 22.5107 10.8497 21.2031 9.26737C21.1042 9.42894 21.1348 9.55991 21.1348 9.68091C21.1319 10.8902 21.1227 12.0995 21.1405 13.3089C21.1448 13.6135 21.0487 13.6897 20.759 13.679C20.1668 13.6576 19.5732 13.6583 18.9809 13.679C18.709 13.6882 18.6436 13.5985 18.645 13.3373C18.6557 11.476 18.6507 9.61472 18.6507 7.7527C18.6507 5.45223 18.6578 3.15247 18.6429 0.852C18.6407 0.535258 18.7446 0.417103 19.0429 0.374396C19.6287 0.289694 20.2102 0.177233 20.7931 0.0726015C20.8465 0.0626366 20.8956 0.0249123 20.9462 0C20.9939 0 21.0408 0 21.0885 0C21.1825 2.7375 21.1113 5.47572 21.1312 8.21322C21.1312 8.28084 21.1134 8.35558 21.2038 8.44242C21.3626 8.25878 21.5241 8.07941 21.6772 7.89221C22.6915 6.65372 23.6061 5.34048 24.5385 4.04077C24.7015 3.813 24.8154 3.7945 25.0325 3.95109C25.493 4.2842 25.9635 4.6045 26.4425 4.90986C26.6319 5.03086 26.5998 5.11698 26.4838 5.26361C25.6553 6.31562 24.8389 7.37688 24.0047 8.42391C23.8453 8.62392 23.826 8.7492 23.9969 8.96202C24.9022 10.0902 25.8952 11.1436 26.7821 12.2875C26.9607 12.5181 26.9564 12.6206 26.7087 12.7928C26.2069 13.1409 25.6859 13.4726 25.2873 13.9509H25.0738V13.9516Z" fill="#371D1E"></path>
+                                      <path d="M45.9997 9.7517C45.8872 10.1368 45.7982 10.5304 45.658 10.9055C44.5085 13.9854 40.4122 14.8573 38.1196 12.4842C37.1487 11.4799 36.7949 10.1916 36.8362 8.82069C36.8867 7.15085 37.4918 5.70879 38.8769 4.70304C41.4485 2.83676 45.0594 4.22544 45.8523 7.36012C45.8979 7.54091 45.8915 7.73736 45.9997 7.90107V9.7517ZM43.4643 9.12248C43.4707 8.13026 43.3227 7.45123 43.0287 6.90387C42.6856 6.2654 42.1867 5.84616 41.4308 5.84403C40.662 5.84189 40.173 6.28177 39.8741 6.9423C39.3225 8.16087 39.2854 9.41218 39.7104 10.6763C39.978 11.4728 40.551 11.8949 41.3802 11.9326C42.1589 11.9682 42.6643 11.5283 43.0123 10.8806C43.3447 10.262 43.4636 9.59012 43.4636 9.1232L43.4643 9.12248Z" fill="#371D1E"></path>
+                                      <path d="M30.0563 13.9507C30.0371 13.9365 30.02 13.9137 29.9993 13.9102C28.1829 13.6254 27.7366 12.0425 27.8284 10.7826C27.9523 9.07931 29.0021 8.14759 30.8642 8.05222C31.551 8.01734 32.2393 8.00809 32.9269 8.01022C33.1817 8.01093 33.2508 7.91271 33.2579 7.67782C33.2807 6.84575 32.7831 6.28273 31.9105 6.18807C30.9937 6.08842 30.1154 6.26636 29.2691 6.60446C29.0384 6.69699 28.9438 6.66211 28.8633 6.42794C28.7445 6.0813 28.5993 5.74249 28.4441 5.4108C28.3594 5.2293 28.3708 5.12253 28.5494 5.00509C30.084 3.9908 31.7482 3.78083 33.4807 4.30114C34.6544 4.65418 35.1533 5.62647 35.3847 6.75535C35.579 7.70202 35.5825 8.66363 35.5747 9.62454C35.5648 10.8694 35.537 12.1143 35.5349 13.36C35.5349 13.6077 35.4751 13.6945 35.2217 13.6788C34.8793 13.6582 34.532 13.6496 34.191 13.6803C33.8415 13.7123 33.675 13.5578 33.6422 13.2397C33.6109 12.9372 33.5027 12.9671 33.2928 13.1051C32.6714 13.5151 31.9852 13.7664 31.2507 13.8845C31.183 13.8952 31.119 13.9294 31.0528 13.9522H30.0563V13.9507ZM33.2166 10.4502C33.2166 10.2246 33.2173 9.99965 33.2166 9.77401C33.2166 9.66582 33.2173 9.55692 33.0685 9.53556C32.082 9.39179 31.1446 9.48432 30.3574 10.1662C29.9901 10.4844 29.9061 10.9029 30.0784 11.3641C30.2435 11.8069 30.5467 12.0104 31.0642 12.0346C31.5859 12.0588 32.0692 11.9086 32.5497 11.7278C33.0315 11.5463 33.3454 11.2723 33.2202 10.6993C33.2031 10.6203 33.218 10.5335 33.2166 10.4509V10.4502Z" fill="#371D1E"></path>
+                                      <path d="M11.4073 13.9523C11.3874 13.9394 11.3696 13.9209 11.3475 13.9145C9.46558 13.3707 8.60647 11.4447 9.45633 9.65952C9.91614 8.69363 10.7859 8.32635 11.7568 8.1235C12.5753 7.95267 13.406 7.94484 14.2345 7.99395C14.5484 8.01246 14.6182 7.90142 14.6153 7.61742C14.6082 6.80243 14.1413 6.28212 13.2914 6.18746C12.3625 6.08354 11.4749 6.27287 10.6165 6.60883C10.4073 6.69068 10.3147 6.68712 10.2372 6.44654C10.1062 6.04225 9.92753 5.65362 9.76809 5.25929C9.7204 5.14185 9.69762 5.05359 9.84923 4.97174C11.302 4.18807 12.8238 3.7916 14.4665 4.1959C15.9015 4.54894 16.7834 5.68494 16.8923 7.16829C16.9969 8.59185 16.8745 10.0111 16.8759 11.4326C16.8759 12.0725 16.8624 12.7131 16.888 13.3522C16.8994 13.6362 16.7998 13.6932 16.5464 13.6789C16.204 13.6597 15.8545 13.6398 15.5164 13.6832C15.1022 13.7359 15.0431 13.4533 14.9854 13.1835C14.937 12.9579 14.863 12.9451 14.6836 13.0526C14.0537 13.4298 13.4024 13.7615 12.6885 13.953H11.4073V13.9523ZM14.5804 10.4717H14.579C14.579 10.2353 14.5811 9.99832 14.5783 9.76201C14.5769 9.66806 14.5783 9.57054 14.4523 9.54207C13.6402 9.35843 12.2059 9.5314 11.5931 10.2966C11.3155 10.6432 11.2956 11.0219 11.4628 11.4297C11.628 11.8326 11.944 11.9949 12.3469 12.0305C12.8401 12.0746 13.3106 11.9628 13.7669 11.7863C14.5534 11.4817 14.5811 11.4383 14.5811 10.6133C14.5811 10.5663 14.5811 10.5186 14.5811 10.4717H14.5804Z" fill="#371D1E"></path>
+                                  </svg>
+                              </div>
+                              <div class="col-xs-1">
+                                  <a href="https://sample.shop.blogpay.co.kr/document/%EC%B9%B4%EC%B9%B4%EC%98%A4%20%ED%94%BD%EC%85%80ID%20%EC%9D%B4%EC%9A%A9%20%EA%B0%80%EC%9D%B4%EB%93%9C.pdf" target="_blank" class="btn btn-sm btn-outline-blue inline-block ml5" title="새창열림">가이드보기</a>
+                              </div>
+                              <div class="col-xs-8">
+                                  - <u><a href="https://business.kakao.com/info/pixelsdk/" target="_blank" title="새창열림" style="color:inherit"><strong>카카오 픽셀 ID</strong></a></u> : 사용자의 행태 정보를 파악하고 측정할 수 있는 분석 도구 입니다.
+                              </div>
+                          </div>
+                          <div class="cont-wrap flex items-center">
+                              <div class="col-xs-1">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="46" height="17" viewBox="0 0 46 17" fill="none">
+                                      <g clip-path="url(#clip0_5923_62)">
+                                          <path d="M21.406 8.8H26.488V7.904H23.044V2.36H31.57V3.76H24.78V4.446H31.458V5.818H24.78V6.504H31.71V7.904H28.252V8.8H33.334V10.214H21.406V8.8ZM22.96 12.426V10.998H31.724V15.184H29.96V12.426H22.96ZM33.3082 8.8H38.3902V7.904H34.9462V2.36H43.4722V3.76H36.6822V4.446H43.3602V5.818H36.6822V6.504H43.6122V7.904H40.1542V8.8H45.2362V10.214H33.3082V8.8ZM34.8622 12.426V10.998H43.6262V15.184H41.8622V12.426H34.8622Z" fill="#00BF39"></path>
+                                          <g clip-path="url(#clip1_5923_62)">
+                                              <path d="M17 0H0V17H17V0Z" fill="#00BF39"></path>
+                                              <path d="M9.7988 8.71488L6.98904 4.68112H4.65936V12.2169H7.10056V8.18448L9.91032 12.2169H12.2386V4.68112H9.7988V8.71488Z" fill="white"></path>
+                                          </g>
+                                      </g>
+                                      <defs>
+                                          <clippath id="clip0_5923_62">
+                                              <rect width="46" height="17" fill="white"></rect>
+                                          </clippath>
+                                          <clippath id="clip1_5923_62">
+                                              <rect width="17" height="17" rx="2" fill="white"></rect>
+                                          </clippath>
+                                      </defs>
+                                  </svg>
+                              </div>
+                              <div class="col-xs-1">
+                                  <a href="https://sample.shop.blogpay.co.kr/document/naverTalkGuide.pdf" target="_blank" class="btn btn-sm btn-outline-blue inline-block ml5" title="새창열림">가이드보기</a>
+                              </div>
+                              <div class="col-xs-8">
+                                  - <u><a href="https://partner.talk.naver.com/" target="_blank" title="새창열림" style="color:inherit"><strong>네이버 톡톡</strong></a></u> : 네이버 ID 기반 무료 채팅 서비스로 고객과 실시간 상담이 가능합니다.
+                              </div>
+                          </div>
+                      </div>
+                      <div class="contbox pdb35">
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">포털 검색</div>
+                              <div class="col-xs-9 tab">
+                                  <input type="hidden" name="useRobot" id="useRobot" value="1">
+                                  <ul class="w100">
+                                      <li class="isUseRobot active" data-use="1"><a href="javascript:;">허용</a></li>
+                                      <li class="isUseRobot" data-use="0"><a href="javascript:;">비허용</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">네이버 메타태그</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="metatag" id="metatag" value="" placeholder="메타태그 content 부분만 입력">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">네이버 애널리틱스 발급ID</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="naverId" id="naverId" value="">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">페이스북 메타태그</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="facebookMetaTag" id="facebookMetaTag" value="" placeholder="메타태그 content 부분만 입력">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">페이스북 픽셀ID</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="fbpixel" id="fbpixel" value="">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">구글 메타태그</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="googleMetaTag" id="googleMetaTag" value="" placeholder="메타태그 content 부분만 입력">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">구글 애널리틱스 추적ID</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="googleId" id="googleId" value="">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">카카오 픽셀ID</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="kakaoPixel" id="kakaoPixel" value="" placeholder="숫자로 된 카카오 픽셀 고유 코드(track_id) 입력">
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60">
+                              <div class="col-xs-3 txt-left">네이버 톡톡 연동</div>
+                              <div class="col-xs-9">
+                                  <input type="text" name="naverTalkId" id="naverTalkId" value="" placeholder="* 네이버톡톡 계정ID를 입력해주세요.">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="bot-btn-area" id="savebtn_1" data-menunum="1" style="">
+                  <a href="javascript:;" id="saveBtn" class="btn btn-blue btn-xl">저장</a>
+              </div>
+          </form>
+          <form method="post" name="nForm" id="nForm">
+              <div class="atc-section">
+                  <input type="hidden" name="mode" value="nSave">
+                  <input type="hidden" name="idx_naver" value="">
+                  <input type="hidden" name="potalSite" value="naver">
+                  <input type="hidden" name="dBSummayURL" value="https://sample.shop.blogpay.co.kr/nPartner/naverSummaryEp">
+                  <input type="hidden" name="mode_daum" value="save">
+                  <input type="hidden" name="idx_daum" value="">
+                  <input type="hidden" name="potalSite_daum" value="daum">
+                  <input type="hidden" name="dBSummayURL_daum" value="https://sample.shop.blogpay.co.kr/nPartner/daumSummaryEp">
+                  <h3 class="atc-toggle open" data-val="쇼핑DBURL설정" data-menunum="2">
+                      쇼핑 DBURL 설정(Beta)
+                      <div class="col-xs-9 f-right t-right">
+                          <div class="arrow"></div>
+                      </div>
+                  </h3>
+                  <div id="contbox_2" style="">
+                      <div class="atc-txt-lst">
+                          <ul>
+                              <p class="red mb5">네이버 지식쇼핑 또는 다음 쇼핑하우 광고를 진행하실 경우만 설정하시면 됩니다.</p>
+                              <strong>1. DBURL 설정</strong>
+                              <li>네이버 쇼핑 또는 다음 쇼핑하우로 상품정보를 전달할 DBURL을 설정합니다.<br></li>
+                              <li>네이버 쇼핑 또는 다음 쇼핑하우 서비스를 이용하는 고객이 사용할 수 있습니다.<br></li>
+                              <li>네이버 쇼핑 또는 다음 쇼핑하우 신청을 진행 중이거나 완료된 경우 반드시 DBURL 설정을 [사용함]으로 설정해야 합니다.<br></li>
+                              <li>DBURL 설정을 [사용안함]으로 설정 시, 네이버 쇼핑 또는 다음 쇼핑하우 신청이 진행 중인 경우에는 신청절차가 중단되거나 이미 사용중인 기존 서비스가 중단될 수 있습니다.<br></li>
+                              <strong>2. DBURL 업데이트 안내</strong>
+                              <li>DBURL 설정을 [사용함]으로 설정한 경우 DBURL 경로 업데이트가 최대 하루까지 소요될 수 있습니다.<br></li>
+                              <li>DBURL 상품정보는 매체사의 업데이트 시간에 따라 반영 시간이 달라질 수 있습니다.</li>
+                              <strong>3. DBURL 적용 방법</strong>
+                              <li>네이버쇼핑 : <br>
+                                  DBURL 경로는 '네이버 쇼핑 파트너존(관리자) &gt; 상품관리 &gt; 상품정보 수신 현황'에서 등록 요청 버튼 클릭 후 팝업에 입력합니다. <br>
+                                  DBURL 생성이 완료되면 DBURL 우측에 업데이트 시간이 표기됩니다. DBURL 생성이 완료된 후에 네이버에 등록하시기 바랍니다. <br>
+                                  DBURL 경로가 업데이트 되지 않는 경우에는 다시 저장 버튼을 클릭합니다
+                              </li>
+                              <li>다음 쇼핑하우 : <br>
+                                  상품URL 생성이 완료되면 shophow@daumcorp.com 으로 전달해주시기 바랍니다.<br>
+                                  업데이트 스케줄은 하루에1번, 수집시각은 입점시 협의에 의해 결정합니다.<br>
+                                  수집 시 UTF-8로 수집되도록 쇼핑하우에 요청바랍니다.
+                              </li>
+                              <strong>4. DBURL 필수 항목</strong>
+                              <li>아래의 항목은 반드시 값이 존재해야 하며 값이 없을 경우 등록이 되지 않으니 다시 한번 확인하여 주세요.<br>
+                              </li><li>상품 등록시 카테고리 지정(필수)해야 정상 등록됩니다.<br>
+                              </li><li>네이버쇼핑 : <br>
+                                  해외 아이콘을 사용하실 경우 상품등록 시 개인 통관번호를 '사용'으로 설정하셔야 합니다.<br>
+                                  <span class="red">title : 상품명, price_pc : 상품가격( 0원 인경우 값이 없는것으로 판단합니다.)<br></span>
+                              </li>
+                              <li>다음 쇼핑하우 : <br>
+                                  <span class="red">pname : 상품명, price : 상품가격( 0원 인경우 값이 없는것으로 판단합니다.),igurl : 이미지<br></span>
+                              </li>
+                          </ul>
+                      </div>
+                      <div class="contbox">
+                          <div class="cont-wrap w60 mt20">
+                              <div class="col-xs-3 txt-left">네이버 쇼핑 DBURL 설정</div>
+                              <div class="col-xs-9 tab">
+                                  <input type="hidden" name="state" id="state" value="1">
+                                  <ul class="w100">
+                                      <li class="npartner active" name="state" id="npartnerY" data-target="naverUrlTr" data-val="1"><a href="javascript:;">사용</a></li>
+                                      <li class="npartner" name="state" id="npartnerN" data-target="naverUrlTr" data-val="0"><a href="javascript:;">사용안함</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div class="cont-wrap w60 naverUrlTr" style="">
+                              <div class="col-xs-3 txt-left">DBURL 경로</div>
+                              <div class="col-xs-7" id="uniqueurl" style="display: block;">
+                                  <input type="text" name="dBURL" value="https://sample.shop.blogpay.co.kr/nPartner/naverEp" readonly="">
+                              </div>
+                              <a href="javascript:;" class="resetDburlDomain btn btn-white btn-lg ml10" data-portal="naver">도메인 변경</a>
+                          </div>
+                          <div class="cont-wrap w60 naverUrlTr" style="">
+                              <div class="col-xs-3 txt-left">네이버 쇼핑 구매후기 개수 연동</div>
+                              <div class="col-xs-9 tab">
+                                  <input type="hidden" name="reviewCount" id="reviewCount" value="0">
+                                  <ul class="w100">
+                                      <li class="reviewCount" data-val="1"><a href="javascript:;">사용</a></li>
+                                      <li class="reviewCount active" data-val="0"><a href="javascript:;">사용안함</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div class="cont-detail">
+                              <div class="cont-wrap w60">
+                                  <div class="col-xs-3 txt-left">다음 쇼핑하우 DBURL 설정</div>
+                                  <div class="col-xs-9 tab">
+                                      <input type="hidden" name="state_daum" id="state_daum" value="1">
+                                      <ul class="w100">
+                                          <li class="dpartner active" name="state_daum" id="dpartnerY" data-target="daumUrlTr" data-val="1"><a href="javascript:;">사용</a></li>
+                                          <li class="dpartner" name="state_daum" id="dpartnerN" data-target="daumUrlTr" data-val="0"><a href="javascript:;">사용안함</a></li>
+                                      </ul>
+                                  </div>
+                              </div>
+                              <div class="cont-wrap w60" style="" id="daumUrlTr">
+                                  <div class="col-xs-3 txt-left">DBURL 경로</div>
+                                  <div class="col-xs-7" id="uniqueurl2" style="display: block;">
+                                      <input type="text" name="dBURL_daum" value="https://sample.shop.blogpay.co.kr/nPartner/daumEP" readonly="">
+                                  </div>
+                                  <a href="javascript:;" class="resetDburlDomain btn btn-white btn-lg ml10" data-portal="daum">도메인 변경</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="bot-btn-area" id="savebtn_2" data-menunum="2" style="">
+                  <a href="javascript:;" id="saveBtn" class="btn btn-blue btn-xl" data-form="nForm">저장</a>
+              </div>
+          </form>
+          <form method="post" name="scriptForm" id="scriptForm">
+              <div class="atc-section">
+                  <input type="hidden" name="mode" value="setScript">
+                  <h3 class="atc-toggle open" data-val="외부스크립트" data-menunum="3">
+                      외부 스크립트
+                      <div class="col-xs-9 f-right t-right">
+                          <div class="arrow"></div>
+                      </div>
+                  </h3>
+                  <div id="contbox_3" style="">
+                      <div class="atc-txt-lst">
+                          <span class="red">
+                              script 오류로 인하여 제대로 동작되지 않는 경우 직접 수정하셔야 합니다.<br>
+                              특별한 데이터가 없이 공백만 있을 경우 사용안함으로 표기됩니다.<br>
+                              &lt;script&gt;&lt;/script&gt;태그는 포함되어 있지 않으므로 직접 넣어주셔야 합니다.
+                          </span>
+                      </div>
+                      <div class="contbox">
+                          <div class="cont-wrap">
+                              <div class="tab">
+                                  <ul>
+                                      <li class="isUseScript active" data-use="1"><a href="javascript:;">사용</a></li>
+                                      <li class="isUseScript" data-use="0"><a href="javascript:;">사용안함</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div id="scriptDiv" style="">
+                              <div class="cont-wrap cont-detail">
+                                  <div class="col-xs-2 txt-left">공통 스크립트<br>(사이트 하단)</div>
+                                  <div class="col-xs-10 tab">
+                                      <textarea name="scriptData" id="scriptData" style="width:100%;height:250px"></textarea>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="bot-btn-area" id="savebtn_3" data-menunum="3" style="">
+                  <a href="javascript:;" id="scriptSaveBtn" class="btn btn-blue btn-xl" data-form="scriptFrom">저장</a>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+    <div id="btn_gregist" class="float-btn display-none" style="">
+        <a href="javascript:;" id="btnMoveRegist" data-url="/controller/goods/gregist2" class="btn btn-blue"><em>상품등록하기</em></a>
+    </div>
+
+
+
+<div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModal" aria-hidden="true">
+</div>
+
+<!--footer-->
+<footer class="footer-basic">
+    <p>Copyright (c) UDID Corp. All Rights Reserved. Inspired by Charlie C</p>
+    
+</footer>
+<!--floating btn to top-->
+<div class="go-top" style="display: block; margin-bottom: 0px;"></div>
+
+
+<button id="fantalk-chat-launcher" data-fantalk-chat="launcher" aria-label="BlogPay 고객지원" style="position: fixed !important; inset: auto 20px 20px auto !important; width: 56px !important; height: 56px !important; border-radius: 9999px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: none !important; background: rgb(0, 100, 255) !important; color: rgb(255, 255, 255) !important; cursor: pointer !important; box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 20px !important; z-index: 2147483646 !important; display: flex !important; align-items: center !important; justify-content: center !important; transition: transform 0.15s !important;"><span style="display: flex !important;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span></button><iframe id="fantalk-chat-panel" data-fantalk-chat="panel" src="./files/chat-widget.html" title="BlogPay 고객지원" style="position: fixed !important; top: 0px !important; right: 20px !important; width: 1px !important; height: 1px !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; border-image: none !important; z-index: 2147483647 !important; background: rgb(255, 255, 255) !important; display: none !important; visibility: hidden !important; pointer-events: none !important;"></iframe></body></html>

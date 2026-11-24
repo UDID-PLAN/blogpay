@@ -1,26 +1,19 @@
 <div class="plist">
-<div class="plist-row"><span class="plist-k">기준</span><div class="plist-v">블로그페이 상품정보를 기준으로 보냅니다. <strong>상품 1개 = 피드 1행</strong>이며, 옵션 조합별로 나누지 않고 옵션값은 보내지 않습니다.</div></div>
-<div class="plist-row"><span class="plist-k">반영 흐름</span><div class="plist-v">상품 등록·수정·삭제 → 피드 다시 만들기 (<strong>1시간마다</strong>) → Meta 수집 (판매자가 정한 주기, 매시간 안내) → 카탈로그 반영</div></div>
-<div class="plist-row"><span class="plist-k">업로드 방식</span><div class="plist-v"><strong>바꾸기</strong> : 피드에 없는 상품은 다음 수집 때 카탈로그에서 삭제됩니다. 커머스 관리자에서 피드URL로 카탈로그를 만들면 기본값이 바꾸기입니다.</div></div>
-<div class="plist-row"><span class="plist-k">피드 제외</span><div class="plist-v"><strong>전시안함·삭제 상품</strong>, 아래 필수 값이 없는 상품</div></div>
+<div class="plist-row"><span class="plist-k">기준</span><div class="plist-v">상품 1개 = 피드 1행 (옵션값 미전송)</div></div>
+<div class="plist-row"><span class="plist-k">업로드 방식</span><div class="plist-v"><strong>바꾸기</strong> : 피드에 없는 상품은 다음 수집 때 카탈로그에서 삭제</div></div>
+<div class="plist-row"><span class="plist-k">피드 제외</span><div class="plist-v">전시안함·삭제 상품, 필수 값이 없는 상품</div></div>
 </div>
 <div class="table-wrap"><table><thead><tr><th>Meta 카탈로그 필드</th><th>블로그페이 상품정보</th><th>처리 기준</th></tr></thead><tbody>
-<tr><td>id *</td><td>상품번호</td><td>판매자가 바꿀 수 있는 상품코드는 쓰지 않습니다.</td></tr>
-<tr><td>item_group_id</td><td>-</td><td>보내지 않습니다. 옵션 상품도 대표 상품 정보 1행만 보냅니다.</td></tr>
-<tr><td>title *</td><td>상품명 *</td><td>그대로 보냅니다.</td></tr>
-<tr><td>description *</td><td>추가 상품 설명</td><td>값이 없으면 피드에서 제외합니다. 화면 안내 배너에서 필수 입력을 안내합니다.</td></tr>
-<tr><td>availability *</td><td>품절여부</td><td>블로그페이 품절 기준을 따릅니다. 판매 → in stock / 품절 → out of stock</td></tr>
-<tr><td>condition *</td><td>-</td><td>new로 고정합니다.</td></tr>
-<tr><td>price * / sale_price</td><td>이전 판매가 / 판매가 *</td><td>이전 판매가가 판매가보다 크면 price = 이전 판매가, sale_price = 판매가. 아니면 price = 판매가. 형식 : 1000 KRW</td></tr>
-<tr><td>link *</td><td>상품 URL</td><td>쇼핑몰 상품 상세 주소를 보냅니다. 단축주소(bp2.kr)는 쓰지 않습니다.</td></tr>
-<tr><td>image_link *</td><td>대표 이미지</td><td>그대로 보냅니다.</td></tr>
-<tr><td>brand *</td><td>브랜드 / 제조사 / 상점명</td><td>브랜드가 없으면 제조사, 제조사도 없으면 상점명을 보냅니다.</td></tr>
-<tr><td>google_product_category</td><td>-</td><td>보내지 않습니다.</td></tr>
+<tr><td>id *</td><td>상품번호</td><td>-</td></tr>
+<tr><td>item_group_id</td><td>-</td><td>미전송</td></tr>
+<tr><td>title *</td><td>상품명</td><td>-</td></tr>
+<tr><td>description *</td><td>추가 상품 설명</td><td>값 없으면 피드 제외</td></tr>
+<tr><td>availability *</td><td>품절여부</td><td>in stock / out of stock</td></tr>
+<tr><td>condition *</td><td>-</td><td>new 고정</td></tr>
+<tr><td>price * / sale_price</td><td>이전 판매가 / 판매가</td><td>-</td></tr>
+<tr><td>link *</td><td>상품 URL</td><td>-</td></tr>
+<tr><td>image_link *</td><td>대표 이미지</td><td>-</td></tr>
+<tr><td>brand *</td><td>브랜드 / 제조사 / 상점명</td><td>브랜드 → 제조사 → 상점명 순</td></tr>
+<tr><td>google_product_category</td><td>-</td><td>미전송</td></tr>
 </tbody></table></div>
-<div class="table-wrap"><table><thead><tr><th>블로그페이 상품 상태</th><th>피드</th><th>Meta 카탈로그</th></tr></thead><tbody>
-<tr><td>판매</td><td>포함 (in stock)</td><td>노출</td></tr>
-<tr><td>품절</td><td>포함 (out of stock)</td><td>품절로 표시, 상품 유지</td></tr>
-<tr><td>전시안함 · 삭제</td><td>제외</td><td>다음 수집 때 삭제</td></tr>
-<tr><td>필수 값 없음 (상품명 · 추가 상품 설명 · 판매가 0원 · 대표 이미지)</td><td>제외</td><td>등록되지 않음</td></tr>
-</tbody></table></div>
-<p>* 필수 값 · 근거 : <a href="https://developers.facebook.com/docs/marketing-api/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a>, <a href="https://blogpay.co.kr/dev/goods.html" target="_blank" rel="noopener noreferrer">블로그페이 개발자 문서 (상품)</a></p>
+<p>* Meta 필수 값 · 근거 : <a href="https://developers.facebook.com/docs/marketing-api/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a></p>

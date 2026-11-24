@@ -57,7 +57,8 @@ export function renderSpec(spec, { dir, fail, warn }) {
     if (s.kind === 'revisions') return revisions();
     const f = path.resolve(dir, s.htmlFile || '');
     if (!s.htmlFile || !fs.existsSync(f)) fail(`문서 시트 본문 파일이 없습니다: ${s.htmlFile}`);
-    return fs.readFileSync(f, 'utf8');
+    // 본문 안의 상대경로 <img src="screens/..."> 는 빌드 시 내장(data URI)한다
+    return fs.readFileSync(f, 'utf8').replace(/(<img\b[^>]*?\ssrc=")(?!data:|https?:|\/\/)([^"]+)"/g, (m, pre, rel) => `${pre}${imgData(rel, `${s.title} 본문`)}"`);
   };
   const docSheet = (sh, first) => {
     uniq(sh.id);
