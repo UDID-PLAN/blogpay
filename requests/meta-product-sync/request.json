@@ -6,7 +6,7 @@
   "flow": "https://flow.team/l/QxkYF",
   "issue": "-",
   "project": "기능 업데이트",
-  "status": "대기",
+  "status": "진행",
   "qa": "",
   "references": [
     {
@@ -14,8 +14,46 @@
       "url": "https://drive.google.com/file/d/1PpuvRX48PY3n_4-VfdTz_qphDA3hAMch/view?usp=drivesdk"
     }
   ],
-  "materials": [],
+  "materials": [
+    {
+      "kind": "정책정리",
+      "label": "Figma META 로 상품 연동 개발의 건 > v1.0 (연동 방식 검토·화면설계·피드 정책)",
+      "url": "https://www.figma.com/design/WTlvrYddGVCU2TQgkZEpdV",
+      "note": "v1.0 근거"
+    },
+    {
+      "kind": "자료조사",
+      "label": "Meta Catalog Reference (카탈로그 필드)",
+      "url": "https://developers.facebook.com/docs/marketing-api/catalog/reference"
+    },
+    {
+      "kind": "자료조사",
+      "label": "Meta 예약 피드 업로드 (바꾸기·업데이트)",
+      "url": "https://developers.facebook.com/docs/marketing-api/catalog/guides/scheduled-feeds"
+    },
+    {
+      "kind": "자료조사",
+      "label": "블로그페이 개발자 문서 (상품)",
+      "url": "https://blogpay.co.kr/dev/goods.html"
+    },
+    {
+      "kind": "관리자UI",
+      "label": "블로그페이 PRO 관리자 외부서비스 연동 (마스킹본)",
+      "path": "requests/meta-product-sync/materials/",
+      "note": "build.py로 상태를 주입해 캡처"
+    }
+  ],
   "planLinks": [],
   "note": "",
-  "versions": []
+  "versions": [
+    {
+      "version": "v1.0",
+      "date": "2026-11-24",
+      "reason": "-",
+      "changes": "최초 작성",
+      "summary": "Meta 카탈로그 피드URL 설정 화면, 연동 방식·상품 피드 정책 작성",
+      "author": "최수빈",
+      "reviewer": "-"
+    }
+  ]
 }
