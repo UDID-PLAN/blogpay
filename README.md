@@ -153,7 +153,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 - 디스크립션(`annotations[]`): `{ n, title, lines[], opens?, cases?, go? }` — `go: { label, sheet, state?, n? }`는 같은 챕터의 다른 화면으로 이동하는 버튼 — `lines` 항목은 문자열(`{{강조 문구}}`로 빨간 강조, `**굵게**`) 또는 `{t, ref}`(다른 시트 참조), `{t, sub}`(하위 항목), `{t, copy}`(긴 안내·알림 문구 → [복사] 버튼만 표시, 누르면 토스트)
   - `cases: [{ label, image?, marks? }]` — 같은 화면이 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인 판매회원)을 디스크립션 버튼으로 전환합니다. 첫 항목은 현재 화면(image 생략). 전환하면 **해당 번호 마커만** 남고, 위치가 달라지면 `marks`로 지정합니다. 다른 번호를 누르면 기본 화면으로 돌아갑니다.
 - 문서 섹션 `plain: true` — 아코디언 없이 본문만 펼칩니다.
-- 단계 시트(`type: "step"`): `{ id, tab, tabSub?, no, title, badge?, where, htmlFile, images[{ image, caption?, source? }] }` — 2차 탭은 `tab`(STEP 0)과 `tabSub`(짧은 이름) 두 줄. 왼쪽 이미지(폭 통일, 캡션·출처·원본 보기, 배율), 오른쪽 STEP 패널(할 일 / 입력값 / 주의사항 `.step-cell`). 예: 이용매뉴얼
+- 단계 시트(`type: "step"`): `{ id, tab, tabSub?, no, title, badge?, where, htmlFile, images[{ image, caption?, source? }] }` — 2차 탭은 `tab`(STEP 0)과 `tabSub`(짧은 이름) 두 줄. 왼쪽 이미지(폭 통일, 캡션·출처·원본 보기, 배율), 오른쪽 STEP 패널(할 일 / 입력값 / 주의사항 또는 참고 `.step-cell`). 예: 이용매뉴얼
 - 확인 필요(`questions`)의 `v`와 정책 HTML 값에는 핵심어를 굵게(`**…**` / `<strong>`) 표시합니다.
 - 챕터 `noteHtml` — 2차 탭 위에 한 줄 요약 바(`.note-bar`)를 둡니다. 예: 설정 순서
 - 개요 챕터에는 개정이력과, 화면 하나에 귀속시킬 수 없는 공통정책만 둡니다. 화면별 정책은 해당 화면 시트의 정책 탭에 씁니다. (기존 문서를 옮겨 적는 중에는 연동정책을 개요에 두고, 화면 탭을 만들 때마다 관련 정책을 해당 탭으로 옮깁니다.)

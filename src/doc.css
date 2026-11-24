@@ -463,7 +463,7 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .step-cell .grp:first-child { margin-top: 0; }
 .step-imgs { display: flex; flex-direction: column; gap: var(--sp-6); width: calc(100% * var(--zoom, 1)); margin: 0 auto; padding: var(--sp-4); }
 .step-fig { margin: 0; }
-.step-fig img { display: block; width: 100%; max-width: none; height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.step-fig img { display: block; width: 100%; height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
 .step-fig figcaption { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 var(--sp-2); margin-top: var(--sp-2); text-align: center; color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .fig-cap { flex-basis: 100%; }
 .fig-src { color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); }
@@ -486,7 +486,7 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .acc-body .table-wrap:last-child { margin-bottom: 0; }
 
 .plist { display: flex; flex-direction: column; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
-.plist + .table-wrap, .table-wrap + p { margin-top: var(--sp-4); }
+.plist + .table-wrap { margin-top: var(--sp-4); }
 .plist-row { display: grid; grid-template-columns: var(--col-md) minmax(0, 1fr); gap: var(--sp-4); align-items: start; padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); }
 .plist-row:last-child { border-bottom: 0; }
 .plist-k { color: var(--ink); font-weight: var(--fw-medium); }
