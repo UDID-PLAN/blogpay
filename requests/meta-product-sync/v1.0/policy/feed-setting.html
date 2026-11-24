@@ -3,19 +3,21 @@
 <div class="plist-row"><span class="plist-k">업로드 방식</span><div class="plist-v"><strong>바꾸기</strong> : 피드에 없는 상품은 다음 수집 때 카탈로그에서 삭제</div></div>
 <div class="plist-row"><span class="plist-k">피드 제외</span><div class="plist-v">전시안함·삭제 상품, 필수 값이 없는 상품</div></div>
 </div>
-<h4>상품 데이터 매칭</h4>
-<div class="plist">
-<div class="plist-row"><span class="plist-k">Meta 카탈로그 필드</span><div class="plist-v"><strong>블로그페이 상품정보</strong></div></div>
-<div class="plist-row"><span class="plist-k">id *</span><div class="plist-v">상품번호</div></div>
-<div class="plist-row"><span class="plist-k">item_group_id</span><div class="plist-v">미전송 (옵션 상품도 대표 상품 정보 1행)</div></div>
-<div class="plist-row"><span class="plist-k">title *</span><div class="plist-v">상품명</div></div>
-<div class="plist-row"><span class="plist-k">description *</span><div class="plist-v">추가 상품 설명 · <span class="ref">값 없으면 피드 제외</span></div></div>
-<div class="plist-row"><span class="plist-k">availability *</span><div class="plist-v">품절여부 (in stock / out of stock)</div></div>
-<div class="plist-row"><span class="plist-k">condition *</span><div class="plist-v">new 고정</div></div>
-<div class="plist-row"><span class="plist-k">price * / sale_price</span><div class="plist-v">이전 판매가 / 판매가</div></div>
-<div class="plist-row"><span class="plist-k">link *</span><div class="plist-v">상품 URL</div></div>
-<div class="plist-row"><span class="plist-k">image_link *</span><div class="plist-v">대표 이미지 · <span class="ref">값 없으면 피드 제외</span></div></div>
-<div class="plist-row"><span class="plist-k">brand *</span><div class="plist-v">브랜드 값이 없으면 브랜드 → 제조사 → 상점명 순으로 전송</div></div>
-<div class="plist-row"><span class="plist-k">google_product_category</span><div class="plist-v">미전송</div></div>
-<div class="plist-row"><span class="plist-k">근거</span><div class="plist-v">* Meta 필수 값 : <a href="https://developers.facebook.com/docs/marketing-api/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a></div></div>
-</div>
+<table class="ptable">
+<colgroup><col class="c-k"><col><col></colgroup>
+<thead><tr><th>Meta 카탈로그 필드</th><th>블로그페이 상품정보</th><th>처리 기준</th></tr></thead>
+<tbody>
+<tr><th>id *</th><td>상품번호</td><td>-</td></tr>
+<tr><th>item_group_id</th><td>-</td><td>미전송 (옵션 상품도 대표 상품 정보 1행)</td></tr>
+<tr><th>title *</th><td>상품명</td><td>-</td></tr>
+<tr><th>description *</th><td>추가 상품 설명</td><td><span class="ref">값 없으면 피드 제외</span></td></tr>
+<tr><th>availability *</th><td>품절여부</td><td>in stock / out of stock</td></tr>
+<tr><th>condition *</th><td>-</td><td>new 고정</td></tr>
+<tr><th>price * / sale_price</th><td>이전 판매가 / 판매가</td><td>-</td></tr>
+<tr><th>link *</th><td>상품 URL</td><td>-</td></tr>
+<tr><th>image_link *</th><td>대표 이미지</td><td><span class="ref">값 없으면 피드 제외</span></td></tr>
+<tr><th>brand *</th><td>브랜드 / 제조사 / 상점명</td><td>브랜드 값이 없으면 브랜드 → 제조사 → 상점명 순으로 전송</td></tr>
+<tr><th>google_product_category</th><td>-</td><td>미전송</td></tr>
+</tbody>
+</table>
+<p>* Meta 필수 값 · 근거 : <a href="https://developers.facebook.com/docs/marketing-api/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a></p>

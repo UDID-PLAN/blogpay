@@ -72,7 +72,6 @@
   --fw-bold: 600;
 
   /* 간격 */
-  --w-step-img: 1020px;
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -105,7 +104,7 @@
   --w-mobile: 390px;
   --w-pin: 24px;
   --mark-fill: rgba(0, 112, 243, 0.08);
-  --w-rail: 200px;
+  --w-rail: clamp(182px, 13vw, 212px);
   --h-dock: 48px;
   --w-icon: 16px;
   --scrim: rgba(23, 23, 23, 0.4);
@@ -445,6 +444,12 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .spec-drawer .plist-k, .spec-drawer .plist-v { padding: var(--sp-3) var(--sp-4); }
 .spec-drawer .plist-k { background: var(--hairline-soft); color: var(--ink); font-weight: var(--fw-bold); }
 .spec-drawer .plist-v { color: var(--ink); }
+/* 서랍 다열 정책표 (.ptable): 제목행 + 제목열(회색, --col-lg) — 설명이 늘면 열을 추가 */
+.ptable { width: 100%; border-collapse: collapse; table-layout: fixed; border-block: var(--bw) solid var(--hairline); background: var(--surface); }
+.plist + .ptable, .ptable + .ptable, .ptable + p { margin-top: var(--sp-4); }
+.ptable col.c-k { width: var(--col-lg); }
+.ptable th, .ptable td { padding: var(--sp-3) var(--sp-4); border-bottom: var(--bw) solid var(--hairline); text-align: left; vertical-align: top; color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); }
+.ptable thead th, .ptable tbody th { background: var(--hairline-soft); font-weight: var(--fw-bold); }
 .flow-row { width: 100%; margin: 0; border: 0; border-bottom: var(--bw) solid var(--hairline); border-radius: var(--radius-none); background: var(--surface); color: var(--ink); font-family: inherit; font-size: var(--fs-sm); line-height: var(--lh-sm); text-align: left; cursor: pointer; }
 .flow-row .plist-v { font-weight: var(--fw-regular); }
 .flow-row:hover .plist-v, .flow-row.here .plist-v { background: var(--link-tint); color: var(--link-deep); }
@@ -469,7 +474,7 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .step-cell .grp:first-child { margin-top: 0; }
 .step-imgs { display: flex; flex-direction: column; gap: var(--sp-6); width: calc(100% * var(--zoom, 1)); margin: 0 auto; padding: var(--sp-4); }
 .step-fig { margin: 0; }
-.step-fig img { display: block; width: 100%; max-width: calc(var(--w-step-img) * var(--zoom, 1)); height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
+.step-fig img { display: block; width: 100%; max-width: none; height: auto; margin: 0 auto; border: var(--bw) solid var(--hairline); border-radius: var(--radius-md); background: var(--surface); }
 .step-fig figcaption { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 var(--sp-2); margin-top: var(--sp-2); text-align: center; color: var(--ink); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .fig-cap { flex-basis: 100%; }
 .fig-src { color: var(--body); font-size: var(--fs-xs); line-height: var(--lh-xs); }

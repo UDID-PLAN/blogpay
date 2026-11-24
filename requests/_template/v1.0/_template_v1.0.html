@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACZElEQVR42u1WvWoyQRTdmdlNTLZJIWxhCCv4g4WBPICVxNIuDxFb67yErVoKgqVEbazEJn0Qu4DCQiRBJdndcWbupBgQST43uol8TU41MDN77rn3nrujaX/430BBewgh9O8DUkop5WFDI4QQQn6kIBaLmaYppfykg1I6m81c19U0DWMMAGGi0zTt/v4eAFarlRCCb8D3/clk0mq1crmc4ghJ0O12pZRCCLkdpVJpfX5vgk6nAwCMMQB4fX19fn6ezWbz+Vx9erVaAQAAZDKZAB3fqFs3UqFQSCaT6XQ6lUoVi0XHcXRdZ4whhG5ubgII9B01zefzxWKh1u1227KsarUKAFLK8/PzgIu7EhwfHxuGgTHGGFNKp9OpcgNCyHGckEXudDpSSs45AFiWtd49OjrqdrsqfMZYOp3+hRTd3d29vLwghEzTvL6+zmaznHPHccrl8ng83tsNnxR87U5K6cPDQz6f/5EPNgl833dd13Vdz/MUB2PM87xaraZqs21q7VqDfD4fj8cTiUQymSwUCoPBYM1dqVT29tpXAtu2Nw+Ypvn09CSEYIxxzi8uLrblatf0nZ6eEkIMwyCEnJycvL+/D4dDjLEQghByeXmpXBm+izzPE0IIIdRa07TNCRFQgF0JbNtWwWKMLcu6vb29uroCANWgj4+PyndhxrUadpRS3/d936eUqi7inKt1o9EIWeReryelVI7dhn6/f3Z2FtCmQSlSIavMbMoHgOVyORqNms1mvV4HAITQtvwEuSMajUYika+/TEXw9va2HukHeQBgjHVd/9bAYZ4tKt6DP1v+8Fv4AMuI6gWKbUDPAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<title>템플릿 요청 건 (복사해서 사용) v1.0 · BlogPay 기획서</title>
+<link rel="stylesheet" href="../../../src/doc.css">
+</head>
+<body>
+<header class="topbar">
+  <span class="brand">BlogPay<small>기획서</small></span>
+  <span class="topbar-meta">v1.0 · 2026-11-19</span>
+</header>
+<div class="shell has-toc">
+  <nav class="toc" aria-label="목차">
+    <div class="toc-title">Contents</div>
+    <ol><li><a href="#sec-1">개정이력</a></li><li><a href="#sec-2">개요</a><ol><li><a href="#sec-3">서비스 목적</a></li><li><a href="#sec-4">적용 범위</a></ol></li><li><a href="#sec-5">유저 플로우</a></li><li><a href="#sec-6">화면별 정책</a><ol><li><a href="#sec-7">목록 화면</a></li><li><a href="#sec-8">상세 화면</a></ol></li><li><a href="#sec-9">확인 필요 사항</a></li></ol>
+  </nav>
+  <main class="content">
+    <div class="eyebrow">BlogPay · 요청 건 기획서</div>
+    <h1>템플릿 요청 건 (복사해서 사용)</h1>
+    <p class="meta">버전 v1.0 · 업데이트 2026-11-19</p>
+    <h2 id="sec-1">개정이력</h2>
+    <div class="table-wrap"><table>
+<thead><tr><th>버전</th><th>변경일자</th><th>변경사유</th><th>변경내용</th><th>작성자</th><th>검토자</th></tr></thead>
+<tbody><tr>
+  <td>v1.0</td><td>2026-11-19</td><td>-</td>
+  <td>최초 작성</td><td>작성자</td><td>-</td></tr></tbody></table></div>
+
+    <h2 id="sec-2">개요</h2>
+    <div class="grid">
+      <div class="card"><h3 id="sec-3">서비스 목적</h3><p>이 영역에 요청 배경과 해결할 문제를 한두 문장으로 적습니다.</p></div>
+      <div class="card"><h3 id="sec-4">적용 범위</h3><p>이번 범위와 비범위를 구분해 적습니다.</p></div>
+    </div>
+    <div class="callout">
+      <p><span class="tag fact">확인된 사실</span> <span class="tag policy">기존 정책</span> <span class="tag proposal">제안</span> <span class="tag tbd">미정</span> <span class="tag check">확인 필요</span></p>
+      <p>상태 태그는 사실·정책·제안·미정을 한눈에 구분하기 위한 용도이며, 필요한 곳에만 사용합니다.</p>
+    </div>
+
+    <h2 id="sec-5">유저 플로우</h2>
+    <figure>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgMTIwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjEyMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLsg5jtlIwg7ZSM66Gc7JqwIj4KICA8cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxnIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iIzE3MTcxNyIgc3Ryb2tlLXdpZHRoPSIxIj4KICAgIDxyZWN0IHg9IjIwIiB5PSI0MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI0MCIgcng9IjYiLz4KICAgIDxyZWN0IHg9IjI0NSIgeT0iNDAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNDAiIHJ4PSI2Ii8+CiAgICA8cmVjdCB4PSI0NzAiIHk9IjQwIiB3aWR0aD0iMTUwIiBoZWlnaHQ9IjQwIiByeD0iNiIvPgogIDwvZz4KICA8ZyBmaWxsPSIjMTcxNzE3IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgPHRleHQgeD0iOTUiIHk9IjY1Ij7si5zsnpE8L3RleHQ+CiAgICA8dGV4dCB4PSIzMjAiIHk9IjY1Ij7sspjrpqw8L3RleHQ+CiAgICA8dGV4dCB4PSI1NDUiIHk9IjY1Ij7smYTro4w8L3RleHQ+CiAgPC9nPgogIDxnIHN0cm9rZT0iIzhmOGY4ZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIGZpbGw9Im5vbmUiPgogICAgPHBhdGggZD0iTTE3MCA2MCBIMjQ1Ii8+PHBhdGggZD0iTTM5NSA2MCBINDcwIi8+CiAgPC9nPgo8L3N2Zz4K" alt="샘플 플로우">
+      <figcaption>그림 1. 이미지는 빌드 시 파일 안에 내장됩니다. (용량 절감을 위해 webp 권장)</figcaption>
+    </figure>
+
+    <h2 id="sec-6">화면별 정책</h2>
+    <h3 id="sec-7">목록 화면</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>조건</td><td>노출 대상</td><td>조건에 맞는 항목만 노출한다.</td></tr>
+        <tr><td>동작</td><td>선택 후 저장</td><td>저장 시 필수 항목을 확인하고, 누락되면 안내 후 중단한다.</td></tr>
+        <tr><td>예외</td><td>처리 실패</td><td>실패 사유를 안내하고 재시도할 수 있게 한다.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="sec-8">상세 화면</h3>
+    <ul>
+      <li>화면 디스크립션은 사용자의 조작에 따라 기능이 어떻게 동작하는지 중심으로 간결하게 적는다.</li>
+      <li>상태·조건·예외는 표 또는 목록으로 정리한다.</li>
+    </ul>
+
+    <h2 id="sec-9">확인 필요 사항</h2>
+    <div class="callout warn">
+      <p><strong>개발 확인</strong> — 개발팀에 확인이 필요한 항목을 이 영역에 모읍니다.</p>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
