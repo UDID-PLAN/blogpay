@@ -29,7 +29,7 @@
               "open": true
             },
             {
-              "title": "연동 방식",
+              "title": "구현 범위",
               "kind": "html",
               "htmlFile": "policy/overview-method.html",
               "open": false
