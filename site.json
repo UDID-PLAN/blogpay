@@ -33,19 +33,39 @@
   ],
   "statuses": [
     {
-      "name": "대기",
+      "name": "업무대기",
       "tone": "mute"
     },
     {
-      "name": "진행",
-      "tone": "blue"
-    },
-    {
-      "name": "보류",
+      "name": "업무보류",
       "tone": "amber"
     },
     {
-      "name": "완료",
+      "name": "기획진행",
+      "tone": "blue"
+    },
+    {
+      "name": "기획검토",
+      "tone": "blue"
+    },
+    {
+      "name": "기획완료",
+      "tone": "blue"
+    },
+    {
+      "name": "개발진행",
+      "tone": "violet"
+    },
+    {
+      "name": "개발검수",
+      "tone": "violet"
+    },
+    {
+      "name": "배포대기",
+      "tone": "cyan"
+    },
+    {
+      "name": "배포완료",
       "tone": "ink"
     }
   ]
