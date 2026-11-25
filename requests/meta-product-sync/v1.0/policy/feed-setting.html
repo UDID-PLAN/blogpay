@@ -5,19 +5,19 @@
 </div>
 <table class="ptable">
 <colgroup><col class="c-k"><col><col></colgroup>
-<thead><tr><th>Meta 카탈로그 필드</th><th>블로그페이 상품정보</th><th>처리 기준</th></tr></thead>
+<thead><tr><th>Meta 카탈로그 필드</th><th>블로그페이 상품정보</th><th>비고</th></tr></thead>
 <tbody>
-<tr><th>id *</th><td>상품번호</td><td>-</td></tr>
-<tr><th>item_group_id</th><td>-</td><td>미전송 (옵션 상품도 대표 상품 정보 1행)</td></tr>
-<tr><th>title *</th><td>상품명</td><td>-</td></tr>
+<tr><th>id *</th><td>상품번호</td><td></td></tr>
+<tr><th>title *</th><td>상품명</td><td></td></tr>
 <tr><th>description *</th><td>추가 상품 설명</td><td><span class="ref">값 없으면 피드 제외</span></td></tr>
-<tr><th>availability *</th><td>품절여부</td><td>in stock / out of stock</td></tr>
+<tr><th>availability *</th><td>품절여부</td><td></td></tr>
 <tr><th>condition *</th><td>-</td><td>new 고정</td></tr>
-<tr><th>price * / sale_price</th><td>이전 판매가 / 판매가</td><td>-</td></tr>
-<tr><th>link *</th><td>상품 URL</td><td>-</td></tr>
+<tr><th>price * / sale_price</th><td>이전 판매가 / 판매가</td><td></td></tr>
+<tr><th>link *</th><td>상품 URL</td><td></td></tr>
 <tr><th>image_link *</th><td>대표 이미지</td><td><span class="ref">값 없으면 피드 제외</span></td></tr>
 <tr><th>brand *</th><td>브랜드 / 제조사 / 상점명</td><td>브랜드 값이 없으면 브랜드 → 제조사 → 상점명 순으로 전송</td></tr>
-<tr><th>google_product_category</th><td>-</td><td>미전송</td></tr>
+<tr><th>additional_image_link</th><td>추가 이미지</td><td>값 있으면 전송</td></tr>
+<tr><th>product_type</th><td>쇼핑몰 카테고리명</td><td>값 있으면 전송</td></tr>
 </tbody>
 </table>
-<p>* Meta 필수 값 · 근거 : <a href="https://developers.facebook.com/docs/marketing-api/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a></p>
+<p>* Meta 필수 값 · 근거 : <a href="https://developers.facebook.com/documentation/ads-commerce/catalog/reference" target="_blank" rel="noopener noreferrer">Meta Catalog Reference</a></p>
