@@ -203,6 +203,7 @@ td ul, td ol { margin: 0; }
 .tag.tone-cyan { color: var(--ink); border-color: var(--cyan-soft); background: var(--cyan-soft); }
 .tag.tone-ink, .tag.policy { color: var(--on-primary); border-color: var(--ink); background: var(--ink); }
 .tag.tone-red, .tag.check { color: var(--error); border-color: var(--error); background: var(--surface); }
+.tag.tone-gray { color: var(--body); border-color: var(--hairline); background: var(--hairline); }
 .tag.tone-mute { color: var(--body); border-color: var(--hairline); background: var(--surface); }
 
 /* 화면 캡처 */

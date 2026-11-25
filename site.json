@@ -38,7 +38,7 @@
     },
     {
       "name": "업무보류",
-      "tone": "amber"
+      "tone": "gray"
     },
     {
       "name": "기획진행",
@@ -46,23 +46,23 @@
     },
     {
       "name": "기획검토",
-      "tone": "blue"
+      "tone": "cyan"
     },
     {
       "name": "기획완료",
-      "tone": "blue"
+      "tone": "violet"
     },
     {
       "name": "개발진행",
-      "tone": "violet"
+      "tone": "amber"
     },
     {
       "name": "개발검수",
-      "tone": "violet"
+      "tone": "red"
     },
     {
       "name": "배포대기",
-      "tone": "cyan"
+      "tone": "mute"
     },
     {
       "name": "배포완료",
