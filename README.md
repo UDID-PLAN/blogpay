@@ -134,7 +134,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
 화면 구성(v1.1부터): 왼쪽 1차 탭(챕터 레일, 모바일은 상단 가로 스크롤) · 2차 탭(아이콘·밑줄) · 화면 머리줄(제목·경로 / 상태·알림·PC/모바일 / 원본 보기·배율 50~200%) · 미리보기와 번호 핀 · 오른쪽 화면 설명 · 하단 독(정책·사용자 흐름·확인 필요, 개수 자동 표시).
 
 
-- 최상위: `title` · `version` · `date` · `revisions[]` · `chapters[]`
+- 최상위: `title` · `version` · `date` · `revisions[]`(최신 버전이 맨 앞) · `chapters[]`
 - 챕터: `{ id, title, icon?, sheets[], policyHtml?, flow?, badge?, noteHtml? }` — 챕터 `flow`는 사용자 흐름 칩 목록, `badge`는 1차 탭 옆 태그(`{ label, tone }`, 예: 이용매뉴얼 `기획참고용`)
 - 아이콘(`icon`): 챕터·시트·상태에 이름으로 지정합니다. 사용 가능: `grid` `link` `bag` `book` `shield` `layout` `layout-split` `login` `user-plus` `doc-check` (전체 목록 `tools/icons.mjs`, 없는 이름이면 빌드 실패)
 - 문서 시트(개요 등): `sections[{ title, kind: revisions|html, htmlFile, open }]` — 개정이력은 `open:true`(펼침), 정책 아코디언은 `open:false`(접힘)
