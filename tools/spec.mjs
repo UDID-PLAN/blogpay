@@ -40,7 +40,9 @@ export function renderSpec(spec, { dir, fail, warn }) {
   const inline = (t) => esc(t).replace(/\{\{(.+?)\}\}/g, '<span class="ref">$1</span>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
   // {t, copy:"문구"}: 안내 배너·알림처럼 긴 문구는 본문 대신 [복사] 버튼만 표시. 누르면 토스트 알림({{}} 강조는 복사 시 제거)
   const copyBox = (l) => `${l.t ? inline(l.t) : ''}<button type="button" class="fchip copy-btn" data-copy="${esc(l.copy.replace(/\{\{(.+?)\}\}/g, '$1').replace(/\*\*(.+?)\*\*/g, '$1'))}">${ico('copy')}복사</button>`;
-  const line = (l) => (typeof l === 'string' ? inline(l) : l.copy ? copyBox(l) : l.ref ? `<span class="ref">${esc(l.t)}</span>` : inline(l.t));
+  // {t, link:"URL", label?}: 이동할 페이지가 있을 때 [이동] 버튼 표시. 새 탭으로 연다
+  const linkBox = (l) => `${l.t ? inline(l.t) : ''}<a class="fchip copy-btn link-btn" href="${esc(l.link)}" target="_blank" rel="noopener noreferrer">${icon('external')}${esc(l.label || '이동')}</a>`;
+  const line = (l) => (typeof l === 'string' ? inline(l) : l.copy ? copyBox(l) : l.link ? linkBox(l) : l.ref ? `<span class="ref">${esc(l.t)}</span>` : inline(l.t));
   const li = (x) => `<li>${line(x)}${x && x.sub && x.sub.length ? `<ul>${x.sub.map(li).join('')}</ul>` : ''}</li>`;
   const list = (arr) => (arr && arr.length ? `<ul>${arr.map(li).join('')}</ul>` : '<p class="mute">해당 없음</p>');
 

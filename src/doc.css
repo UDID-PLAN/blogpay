@@ -410,6 +410,7 @@ body.spec > nav.tabs > .tab .tag { margin-left: var(--sp-1); }
 .annos ul { margin: 0; padding-left: var(--sp-4); color: var(--body); }
 .annos li li { display: list-item; margin: 0 0 var(--sp-1); padding: 0; border: 0; cursor: inherit; }
 .ref { color: var(--error); font-weight: var(--fw-bold); }
+a.link-btn { text-decoration: none; color: inherit; }
 .copy-btn { gap: var(--sp-1); height: var(--h-tag); margin-left: var(--sp-2); padding: 0 var(--sp-2); vertical-align: middle; font-size: var(--fs-xs); line-height: var(--lh-xs); }
 .toast { position: fixed; left: 50%; bottom: var(--sp-8); transform: translateX(-50%); z-index: 100; padding: var(--sp-2) var(--sp-4); border-radius: var(--radius-sm); background: var(--ink); color: var(--on-primary); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .toast[hidden] { display: none; }
