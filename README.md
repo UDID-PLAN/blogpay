@@ -141,7 +141,7 @@ Vercel DESIGN.md의 색상 토큰만 사용하며, 규칙은 `src/doc.css` 상�
   - html 본문의 이미지는 버전 폴더 기준 상대경로(`<img src="screens/xxx.webp">`)로 적으면 빌드 시 내장됩니다.
 - 하단 서랍 정책(`policyHtml`)은 2열 `.plist`가 기본입니다. 비교할 값이 여러 개면 `.ptable`(제목행 + 회색 제목열, 제목열 폭 `--col-lg`)을 쓰고, 설명할 항목이 늘면 열을 추가합니다.
 - 화면 시트: `{ id, tab, icon?, title, menuPath, kind: new|extend, intro[], devices{ pc, mobile }.states[], annotations[], blocks{ policy[], policyHtml, flow, questions[] } }`
-  - `intro` 항목은 문자열 또는 `{ t, tryHtml }` — `tryHtml`은 같은 버전 폴더의 예시 HTML을 내장해 "직접 입력해 보기" 링크로 새 탭에서 엽니다. (예: 추가 회원정보 입력)
+  - `intro` 항목은 문자열, `{ t, warn: true }`(노란 주의 배너) 또는 `{ t, tryHtml }` — `tryHtml`은 같은 버전 폴더의 예시 HTML을 내장해 "직접 입력해 보기" 링크로 새 탭에서 엽니다. (예: 추가 회원정보 입력)
   - 한 기기만 있는 화면(예: 카카오 동의 화면은 모바일만)은 없는 기기 버튼이 비활성됩니다.
   - 비어 있는 블록은 탭이 비활성화됩니다. "해당 없음"을 쓰지 않습니다.
 - 상태(`states[]`): `{ id, label, icon?, alt?, image, group?, marks[{ n, x, y, w, h, opens?, pin? }], annotations?[], overlays?[{ id, label, image, box:{ x, y, w } }] }`

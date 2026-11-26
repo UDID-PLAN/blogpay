@@ -114,7 +114,10 @@ export function renderSpec(spec, { dir, fail, warn }) {
     const views = keys.filter((k) => devs[k]).flatMap((k) => devs[k].states.map((s, i) => view(sh.id, k, s, k === d0 && i === 0))).join('');
     // intro 항목: 문자열 또는 {t, tryHtml} — tryHtml은 직접 입력해 볼 수 있는 예시 HTML(같은 폴더 파일)을 새 탭으로 연다
     const tryHtml = (x) => { const f = path.resolve(dir, x.tryHtml); if (!fs.existsSync(f)) fail(`예시 HTML 파일이 없습니다: ${x.tryHtml}`); return `<button type="button" class="fchip try-link" data-try-html="${Buffer.from(fs.readFileSync(f)).toString('base64')}">${icon('external')}${esc(String(x.t).replace(/\s*↗\s*$/, ''))}</button>`; };
-    const intro = (sh.intro || []).length ? `<div class="side-note">${sh.intro.filter((x) => !(x && x.tryHtml)).map((x) => inline(typeof x === 'string' ? x : x.t)).join('<br>')}${sh.intro.filter((x) => x && x.tryHtml).map(tryHtml).join('')}</div>` : '';
+    // {t, warn:true}: 주의 안내는 노란 배너로 표시
+    const plainIntro = (sh.intro || []).filter((x) => !(x && (x.tryHtml || x.warn)));
+    const warnIntro = (sh.intro || []).filter((x) => x && x.warn).map((x) => `<div class="callout warn">${inline(x.t)}</div>`).join('');
+    const intro = (sh.intro || []).length ? `<div class="side-note">${plainIntro.map((x) => inline(typeof x === 'string' ? x : x.t)).join('<br>')}${warnIntro}${sh.intro.filter((x) => x && x.tryHtml).map(tryHtml).join('')}</div>` : '';
     // 케이스 전환: 같은 화면에서 조건에 따라 달라지는 모습(예: 사용함/사용안함, 사업자/개인)을 디스크립션 버튼으로 전환. 첫 번째 케이스는 현재 화면(image 생략)
     // 케이스 전환 시 해당 번호 마커만 남긴다. case.marks로 케이스 이미지의 위치를 지정(생략하면 기본 위치)
     const caseBtns = (a) => (a.cases && a.cases.length ? `<div class="cases">${a.cases.map((c, i) => `<button type="button" class="fchip${i === 0 ? ' active' : ''}" data-case="${c.image ? imgData(c.image, `${sh.id} case ${c.label}`) : ''}" data-case-n="${a.n}"${c.marks ? ` data-case-marks="${esc(JSON.stringify(c.marks))}"` : ''}>${esc(c.label)}</button>`).join('')}</div>` : '');
