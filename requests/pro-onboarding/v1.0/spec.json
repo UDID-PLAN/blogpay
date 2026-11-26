@@ -1,11 +1,11 @@
 {
  "title": "관리자 PRO 온보딩",
  "version": "1.0",
- "date": "2026-11-25",
+ "date": "2026-11-26",
  "revisions": [
   {
    "version": "v1.0",
-   "date": "2026-11-25",
+   "date": "2026-11-26",
    "reason": "-",
    "changes": "최초 작성",
    "author": "최수빈",
@@ -804,11 +804,11 @@
          "link": "https://malltest.shop.blogpay.co.kr/controller/goods/gregist2"
         },
         {
-         "t": "2 쇼핑몰제작 다해드림 : 다해드림 안내 페이지 (새 창)",
+         "t": "2 쇼핑몰제작 다해드림 : 다해드림 안내 페이지",
          "link": "https://blogpay.co.kr/submenu/info/dahaedream.html"
         },
         {
-         "t": "3 1:1 문의하기 : 팬톡 블로그페이 1:1 채팅 (새 창)",
+         "t": "3 1:1 문의하기 : 팬톡 블로그페이 1:1 채팅",
          "link": "https://fantalk.im/chat/eb87f74604bb5ef59f2c90d8bd265b9256764a69b9fffe43165108dde071ed03"
         },
         {
