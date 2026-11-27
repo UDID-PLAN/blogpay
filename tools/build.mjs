@@ -214,8 +214,9 @@ function cmdIndex() {
   const contentCell = (text) => {
     const lines = String(text || '').split('\n').map((x) => x.trim()).filter((x) => x && x !== '===');
     if (!lines.length) return '<span class="mute">-</span>';
-    let head = lines.slice(0, 2).join(' / ');
-    if (head.length > 60) head = head.slice(0, 60) + '…';
+    let head = lines[0];
+    if (head.length > 60) head = head.slice(0, 60);
+    if (lines.length > 1 || lines[0].length > 60) head += '…'; // 한 줄을 넘으면 말줄임
     return `<details class="cell-content"><summary>${esc(head)}</summary><div>${linkify(String(text).trim())}</div></details>`;
   };
 
