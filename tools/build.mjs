@@ -214,10 +214,8 @@ function cmdIndex() {
   const contentCell = (text) => {
     const lines = String(text || '').split('\n').map((x) => x.trim()).filter((x) => x && x !== '===');
     if (!lines.length) return '<span class="mute">-</span>';
-    let head = lines[0];
-    if (head.length > 60) head = head.slice(0, 60);
-    if (lines.length > 1 || lines[0].length > 60) head += '…'; // 한 줄을 넘으면 말줄임
-    return `<details class="cell-content"><summary>${esc(head)}</summary><div>${linkify(String(text).trim())}</div></details>`;
+    const head = lines.join(' / '); // 한 줄 표시는 CSS(말줄임)가 처리
+    return `<details class="cell-content"><summary><span class="ell">${esc(head)}</span></summary><div>${linkify(String(text).trim())}</div></details>`;
   };
 
   for (const r of reqs) {

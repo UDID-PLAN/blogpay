@@ -251,7 +251,10 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
 .index-table col.w-lg { width: var(--col-lg); }
 .index-table th, .index-table td { overflow-wrap: break-word; }
 .index-table td.nowrap { white-space: nowrap; }
-.cell-content summary { margin: 0; }
+.cell-content summary { margin: 0; display: flex; gap: var(--sp-1); align-items: center; cursor: pointer; }
+.cell-content summary::before { content: "▶"; flex: none; font-size: var(--fs-xs); color: var(--faint); }
+.cell-content[open] summary::before { content: "▼"; }
+.cell-content .ell { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .cell-content div { margin-top: var(--sp-2); white-space: pre-line; word-break: break-all; }
 .vbtns { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .vbtns + .vbtns { margin-top: var(--sp-2); }
@@ -569,7 +572,7 @@ https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
   <td><span class="tag tone-blue">기능 업데이트</span></td>
   <td><span class="tag tone-ink">기획완료</span></td>
   <td><strong>카카오싱크 연동 개발 요청</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>카카오싱크 연동 개발 요청 드립니다.…</summary><div>카카오싱크 연동 개발 요청 드립니다.
+  <td class="col-content"><details class="cell-content"><summary><span class="ell">카카오싱크 연동 개발 요청 드립니다. / 카카오싱크 개발가이드 / https://developers.kakao.com/docs/latest/ko/kakaosync/common / 카카오싱크 개발자 문의 게시판 / https://devtalk.kakao.com/c/kakao-sync/115</span></summary><div>카카오싱크 연동 개발 요청 드립니다.
 
 카카오싱크 개발가이드
 <a href="https://developers.kakao.com/docs/latest/ko/kakaosync/common" target="_blank" rel="noopener noreferrer">https://developers.kakao.com/docs/latest/ko/kakaosync/common</a>
@@ -596,7 +599,7 @@ https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
   <td><span class="tag tone-blue">기능 업데이트</span></td>
   <td><span class="tag tone-gray">보류</span></td>
   <td><strong>네이버 스마트 스토어 연동 서비스 분석</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>1. 작업명…</summary><div>1. 작업명
+  <td class="col-content"><details class="cell-content"><summary><span class="ell">1. 작업명 / 네이버 스마트 스토어 연동 서비스 분석 / 2. 작업내용 / - 연동 상품 가져오기 / - 상품 내보내기 / - 리뷰내용 가져오기 [ 리뷰 내용 가져오기는 스크래핑 및 유료 솔루션 ] / 이거 다시 알아보고 블로그페이에서 어떻게 써야하는지 체크해보고 기획서를 블로그페이에 맞게 한번 만들어봐요</span></summary><div>1. 작업명
 네이버 스마트 스토어 연동 서비스 분석
 
 2. 작업내용
@@ -649,7 +652,7 @@ https://devtalk.kakao.com/c/kakao-sync/115 - 2026.11.03 기능 업데이트">
   <td><span class="tag tone-blue">기능 업데이트</span></td>
   <td><span class="tag tone-ink">기획완료</span></td>
   <td><strong>META 로 상품 연동 개발의 건</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>[ 니즈 배경 ]…</summary><div>[ 니즈 배경 ] 
+  <td class="col-content"><details class="cell-content"><summary><span class="ell">[ 니즈 배경 ] / - 팬톡으로 아래와 같이 문의 옴. / 안녕하세요. 블로그페이 쇼핑몰과 Meta 상품 카탈로그 자동 연동 관련 문의드립니다. / - 블로그페이 ID: bonitabongbong / - 쇼핑몰 도메인: https://dovia.kr / - Instagram: @dovia.kr / 현재 Meta 도메인 인증과 Instagram Shop 연결은 완료했으며, 카탈로그에 수동 등록한 상품은 릴스 제품 태그 및 쇼핑몰 상세페이지 연결까지 정상 작동합니다. / 신상품마다 카탈로그에 별도로 등록하는 번거로움을 줄이고 싶어 아래 내용을 문의드립니다. / 1. 블로그페이 상품을 Meta(Facebook·Instagram) 카탈로그에 자동 연동하는 기능이나 제휴 서비스가 있나요? / 2. Meta에 등록할 수 있는 상품 피드 URL(CSV·XML 등)을 제공하나요? 제공한다면 설정 방법을 안내 부탁드립니다. / 3. 기본 연동 기능이 없다면, 공식 상품 조회 API로 별도 자동 연동 프로그램을 개발해도 되나요? API 이용 신청·권한·비용·제한 사항이 있나요? / 4. 신상품 추가뿐 아니라 가격 변경, 품절·판매중지 상태도 자동 반영할 수 있나요? / 5. 연동되는 상품 링크를 단축주소(bp2.kr)가 아닌, 인증된 dovia.kr의 상품 상세페이지 주소로 지정할 수 있나요? / 가능한 방법과 필요한 절차, 추가 비용을 안내 부탁드립니다. 감사합니다. / - 1번, 2번 에 대해 현재는 지원하지 않고 있는 기능이어서 / 개발 가능한지 검토 지시 (사장님) / [ 검토 결과 ] / (이미지) / - 개발 외 META 연동으로 환경 설정 등 기획도 필요할것으로 판단됨.</span></summary><div>[ 니즈 배경 ] 
  - 팬톡으로 아래와 같이 문의 옴.
 
 ===
@@ -698,7 +701,7 @@ to be : 신규 가입 시 pro로 연결되어 pro 서비스 온보딩 진행
   <td><span class="tag tone-blue">기능 업데이트</span></td>
   <td><span class="tag tone-ink">기획완료</span></td>
   <td><strong>신규 가입 시 PRO 온보딩 기획</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>AS IS : 신규 가입 시 BASIC으로 연결되어 BASIC 서비스 온보딩 진행…</summary><div>AS IS : 신규 가입 시 BASIC으로 연결되어 BASIC 서비스 온보딩 진행 
+  <td class="col-content"><details class="cell-content"><summary><span class="ell">AS IS : 신규 가입 시 BASIC으로 연결되어 BASIC 서비스 온보딩 진행 / TO BE : 신규 가입 시 PRO로 연결되어 PRO 서비스 온보딩 진행 / → 추후 논의 후 BASIC 버전 클로징 예정 / 블로그페이 가입하고 처음 판매자 관리자 페이지 들어오면 베이직으로 접속이 되고 온보딩이 나오고 있는데 이 부분을 처음 판매자 관리자 페이지 들어오면 프로 페이지로 들어오게하고 온보딩이 나오면 될거 같아요 프로, 베이직 두개 버전으로 나뉘어져있어서 하나로 통합하기위함이에요</span></summary><div>AS IS : 신규 가입 시 BASIC으로 연결되어 BASIC 서비스 온보딩 진행 
 TO BE : 신규 가입 시 PRO로 연결되어 PRO 서비스 온보딩 진행 
 → 추후 논의 후 BASIC 버전 클로징 예정 
 
@@ -727,7 +730,7 @@ TO BE : 신규 가입 시 PRO로 연결되어 PRO 서비스 온보딩 진행
   <td><span class="tag tone-blue">기능 업데이트</span></td>
   <td><span class="tag tone-mute">대기</span></td>
   <td><strong>선물하기 기능</strong></td>
-  <td class="col-content"><details class="cell-content"><summary>구매자가 상품을 직접 받는 게 아니라, 상대방에게 선물로 보내는 구매 방식…</summary><div>구매자가 상품을 직접 받는 게 아니라, 상대방에게 선물로 보내는 구매 방식
+  <td class="col-content"><details class="cell-content"><summary><span class="ell">구매자가 상품을 직접 받는 게 아니라, 상대방에게 선물로 보내는 구매 방식 / 핵심 포인트만 말하면: / - 일반 구매: 내가 사고 내가 받음 / - 선물하기: 내가 결제하고 상대방이 받음 / - 방식: 받는 사람에게 카카오톡/SMS/링크로 선물 수락 페이지 전달 / - 받는 사람 역할: 배송지 입력, 옵션 선택, 수락/거절 가능 / - 목적: 생일, 기념일, 감사 선물처럼 구매 전환을 쉽게 만듦 / - 강점: 상대방 주소를 몰라도 선물 가능해서 구매 장벽이 낮음 / - 중요한 요소: 선물 메시지, 배송지 입력, 유효기간, 취소/환불 정책 / - 주의점: 미수락 시 자동취소, 옵션 변경, 품절 처리 기준을 명확히 해야 함 / 선물하기는 상품 구매를 “내가 쓰는 쇼핑”에서 “상대에게 보내는 쇼핑”으로 확장하는 기능</span></summary><div>구매자가 상품을 직접 받는 게 아니라, 상대방에게 선물로 보내는 구매 방식
 
 핵심 포인트만 말하면:
 - 일반 구매: 내가 사고 내가 받음

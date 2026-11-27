@@ -240,7 +240,10 @@ details > summary { cursor: pointer; margin-top: var(--sp-2); color: var(--body)
 .index-table col.w-lg { width: var(--col-lg); }
 .index-table th, .index-table td { overflow-wrap: break-word; }
 .index-table td.nowrap { white-space: nowrap; }
-.cell-content summary { margin: 0; }
+.cell-content summary { margin: 0; display: flex; gap: var(--sp-1); align-items: center; cursor: pointer; }
+.cell-content summary::before { content: "▶"; flex: none; font-size: var(--fs-xs); color: var(--faint); }
+.cell-content[open] summary::before { content: "▼"; }
+.cell-content .ell { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .cell-content div { margin-top: var(--sp-2); white-space: pre-line; word-break: break-all; }
 .vbtns { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .vbtns + .vbtns { margin-top: var(--sp-2); }
